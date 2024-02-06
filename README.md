@@ -2,6 +2,7 @@ This is a template for creating an [HTML GitBook style](https://bookdown.org/yih
 If you need help getting git/GitHub to work with RStudio see: [Happy Git and GitHub for the useR](https://happygitwithr.com/) by Jenny Bryan.
 
 
+
 ## ABSOLUTE ESSENTIALS
 
 *If you have any difficulties or have feedback of any kind, please file an issue or communicate through [Discussions](https://github.com/jtr13/bookdown-template/discussions).*
