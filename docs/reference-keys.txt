@@ -1,3 +1,12 @@
 introduction
-randomized-control-trials
 regression-discontinuity-design
+political-fragmentation-and-government-stability-evidence-from-local-governments-in-spain
+introduction-1
+rdd-methodology-and-paper-summary
+good-practices-before-starting
+descriptive-statistics
+empirical-strategy
+main-results
+robustness-checks
+references
+regression-discontinuity-design-1
