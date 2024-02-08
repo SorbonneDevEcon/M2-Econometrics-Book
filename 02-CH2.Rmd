@@ -9,6 +9,8 @@ library(knitr)
 
 _Carolina Arboleda Lenis, Elif C¸anga, Mariana Navarro Torres & Martina Pugliese; December 2023_
 
+new text
+
 ### Highlights {-}
 
 #### **Replication Paper** {-}
