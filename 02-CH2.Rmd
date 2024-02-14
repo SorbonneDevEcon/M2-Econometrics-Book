@@ -1,9 +1,6 @@
 # Regression Discontinuity Design
 
-```{r, include=FALSE}
-library(Statamarkdown)
-library(knitr)
-```
+
 
 ```{r, child='_CCR.Rmd'}
 ```
