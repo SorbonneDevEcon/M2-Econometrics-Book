@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 From the article to practice: exploring the replication code | M2 Econometrics Book</title>
+  <meta name="description" content="Chapter 3 From the article to practice: exploring the replication code | M2 Econometrics Book" />
+  <meta name="generator" content="bookdown 0.37 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 From the article to practice: exploring the replication code | M2 Econometrics Book" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 From the article to practice: exploring the replication code | M2 Econometrics Book" />
+  
+  
+  
+
+<meta name="author" content="authors" />
+
+
+<meta name="date" content="2024-02-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="regression-discontinuity-design.html"/>
+<link rel="next" href="regression-discontinuity-design-1.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">M2-Econometrics-Book</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html"><i class="fa fa-check"></i><b>2</b> Regression Discontinuity Design</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#political-fragmentation-and-government-stability-evidence-from-local-governments-in-spain"><i class="fa fa-check"></i><b>2.1</b> Political Fragmentation and Government Stability: Evidence from Local Governments in Spain</a>
+<ul>
+<li class="chapter" data-level="" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#highlights"><i class="fa fa-check"></i>Highlights</a></li>
+<li class="chapter" data-level="2.1.1" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#introduction-1"><i class="fa fa-check"></i><b>2.1.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.1.2" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#rdd-methodology-and-paper-summary"><i class="fa fa-check"></i><b>2.1.2</b> RDD Methodology and Paper Summary</a></li>
+<li class="chapter" data-level="2.1.3" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#good-practices-before-starting"><i class="fa fa-check"></i><b>2.1.3</b> Good Practices Before Starting</a></li>
+<li class="chapter" data-level="2.1.4" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#descriptive-statistics"><i class="fa fa-check"></i><b>2.1.4</b> Descriptive Statistics</a></li>
+<li class="chapter" data-level="2.1.5" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#empirical-strategy"><i class="fa fa-check"></i><b>2.1.5</b> Empirical Strategy</a></li>
+<li class="chapter" data-level="2.1.6" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#main-results"><i class="fa fa-check"></i><b>2.1.6</b> Main Results</a></li>
+<li class="chapter" data-level="2.1.7" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#robustness-checks"><i class="fa fa-check"></i><b>2.1.7</b> Robustness Checks</a></li>
+<li class="chapter" data-level="2.1.8" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#references"><i class="fa fa-check"></i><b>2.1.8</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#winners-and-losers-from-agrarian-reform-evidence-from-danish-land-inequality-16821895"><i class="fa fa-check"></i><b>2.2</b> Winners and losers from Agrarian Reform: Evidence from Danish land inequality 1682–1895</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#introduction-2"><i class="fa fa-check"></i><b>2.2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2.2" data-path="regression-discontinuity-design.html"><a href="regression-discontinuity-design.html#identification-strategy"><i class="fa fa-check"></i><b>2.2.2</b> Identification strategy</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html"><i class="fa fa-check"></i><b>3</b> From the article to practice: exploring the replication code</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#getting-started-database-access-and-required-packages"><i class="fa fa-check"></i><b>3.1</b> Getting started: database access and required packages</a></li>
+<li class="chapter" data-level="3.2" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#understanding-the-replication-process-code-analysis-of-table-1"><i class="fa fa-check"></i><b>3.2</b> Understanding the replication process: code analysis of Table 1</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#ols-regressions-by-replicating-the-columns-12-and-4-of-table-1"><i class="fa fa-check"></i><b>3.2.1</b> OLS regressions by replicating the columns 1,2 and 4 of Table 1</a></li>
+<li class="chapter" data-level="3.2.2" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#iv-regressions-by-replicating-columns-35-and-6-of-table-1"><i class="fa fa-check"></i><b>3.2.2</b> IV regressions by replicating columns 3,5 and 6 of Table 1</a></li>
+<li class="chapter" data-level="3.2.3" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#formatting-table-1-an-additional-but-optional-step"><i class="fa fa-check"></i><b>3.2.3</b> Formatting Table 1, an additional but optional step</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#understanding-the-replication-process-code-analysis-of-figure-5"><i class="fa fa-check"></i><b>3.3</b> Understanding the replication process: code analysis of Figure 5</a></li>
+<li class="chapter" data-level="3.4" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#understanding-the-replication-process-code-analysis-of-table-a.3"><i class="fa fa-check"></i><b>3.4</b> Understanding the replication process: code analysis of Table A.3</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#creation-of-a-loop"><i class="fa fa-check"></i><b>3.4.1</b> Creation of a loop</a></li>
+<li class="chapter" data-level="3.4.2" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#formatting-table-a.3-an-additional-but-optional-step"><i class="fa fa-check"></i><b>3.4.2</b> Formatting table A.3, an additional but optional step</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#understanding-the-replication-process-code-analysis-of-table-a.4"><i class="fa fa-check"></i><b>3.5</b> Understanding the replication process: code analysis of Table A.4</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#ols-regressions-by-replicating-the-columns-1-and-2-of-table-a.4"><i class="fa fa-check"></i><b>3.5.1</b> OLS regressions by replicating the columns 1 and 2 of Table A.4</a></li>
+<li class="chapter" data-level="3.5.2" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#iv-regressions-by-replicating-the-columns-3-and-4-of-the-table-a.4"><i class="fa fa-check"></i><b>3.5.2</b> IV regressions by replicating the columns 3 and 4 of the Table A.4</a></li>
+<li class="chapter" data-level="3.5.3" data-path="from-the-article-to-practice-exploring-the-replication-code.html"><a href="from-the-article-to-practice-exploring-the-replication-code.html#formatting-table-a.4-an-additional-but-optional-step"><i class="fa fa-check"></i><b>3.5.3</b> Formatting Table A.4, an additional but optional step</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="regression-discontinuity-design-1.html"><a href="regression-discontinuity-design-1.html"><i class="fa fa-check"></i><b>4</b> Regression Discontinuity Design</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">M2 Econometrics Book</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="from-the-article-to-practice-exploring-the-replication-code" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> From the article to practice: exploring the replication code<a href="from-the-article-to-practice-exploring-the-replication-code.html#from-the-article-to-practice-exploring-the-replication-code" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="getting-started-database-access-and-required-packages" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Getting started: database access and required packages<a href="from-the-article-to-practice-exploring-the-replication-code.html#getting-started-database-access-and-required-packages" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="section-2" class="section level4" number="3.1.0.1">
+<h4><span class="header-section-number">3.1.0.1</span> </h4>
+<p>In order to open the Stata database and execute the following lines of
+code, several packages need to be downloaded and installed. In this
+section, we guide you through the process of accessing the database and
+briefly refer to these packages.<br />
+The Stata code to open the database uses a global variable <code>‘dirData’</code>
+to store the path to the directory where the <code>‘"Dataset_AA_ALC_AT"’</code>
+database is located. Users can change the value of the <code>‘dirData’</code>
+variable based on the location of their own data directory. Thus, by
+simply modifying the value of <code>‘dirData’</code> to match their personal path,
+the users can open the database without having to modify the rest of the
+code. Subsequently, several Stata packages are necessary to execute the
+replication code successfully.<br />
+The first package needed is the <strong>estout</strong> package. This package allows
+to make regression tables using regressions previously stored in the
+Stata memory.<br />
+The second package required is the <strong>ivreg2</strong> package. This package
+allows to run instrumental variables regressions.<br />
+The third package is the <strong>coefplot</strong> package. This package is used to
+create coefficients plots which visually represent the estimated
+coefficients and their confidence intervals.<br />
+The fourth package is <strong>outreg2</strong>. This package is used to produce
+illustrative tables of regression outputs. This package is able to write
+LaTex-format tables.<br />
+All the packages can be installed using the following lines of code.</p>
+<pre id="lst:stata_code" style="stata" caption="Stata code in order to access to the database and to install packages" label="lst:stata_code"><code>
+***Open the database***
+global dirData &quot;C:/Your Directory Here/&quot; 
+use &quot;${dirData}Dataset_AA_ALC_AT&quot;, clear
+
+***Install the required packages***
+ssc install estout
+
+ssc install ivreg2
+
+ssc install coefplot
+
+ssc install outreg2</code></pre>
+</div>
+</div>
+<div id="understanding-the-replication-process-code-analysis-of-table-1" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Understanding the replication process: code analysis of Table 1<a href="from-the-article-to-practice-exploring-the-replication-code.html#understanding-the-replication-process-code-analysis-of-table-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre id="lst:stata_code" style="stata" caption="Stata code for Table 1" label="lst:stata_code"><code>***Table 1***
+
+eststo clear
+
+***Column (1) : OLS***
+eststo ols1: qui reg D.Theil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+
+eststo ols2: qui reg D.AggTheil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast i.region i.year if year==1834, vce(robust)
+
+***Column (2) : First-stage***
+eststo fiv1: qui reg ln_TotalFarmHK MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+
+***Column (4) : Reduced form***
+eststo ziv1: qui reg D.Theil_c MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+
+***Column (3) : Second-stage (with diffTheil)***
+eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+
+***Column (5) : Second-stage (with diffAggTheil)***
+eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+ 
+ ***Column (6) : Second-stage (with Gini)***
+eststo ginihkdiff: qui ivregress 2sls D.Gini ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+
+***Formation of Table 1***
+esttab ols1 fiv1 ivdiff1 ziv1 ivdiff2 ginihkdiff, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(12) wrap keep(MLmean ln_TotalFarmHK) mtitles(&quot;OLS&quot; &quot;first stage&quot; &quot;second stage (diffTheil)&quot; &quot;reduced form (diff Theil)&quot; &quot;second stage (diffAggTheil)&quot; &quot;second stage (diffGini)&quot; ) stats(N r2 Fstat, labels(&quot;Observations&quot; &quot;R-squared&quot; &quot;KP F-statistic&quot;) fmt(%9.0fc 2 2)) indicate(&quot;Region FE = 2.region&quot; &quot;Geography = LnDistCPH&quot; , labels(Y N)) label</code></pre>
+<div id="ols-regressions-by-replicating-the-columns-12-and-4-of-table-1" class="section level3 hasAnchor" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> OLS regressions by replicating the columns 1,2 and 4 of Table 1<a href="from-the-article-to-practice-exploring-the-replication-code.html#ols-regressions-by-replicating-the-columns-12-and-4-of-table-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre id="lst:stata_code" style="stata" caption="First part of Stata code for Table 1" label="lst:stata_code" escapechar="\%"><code>***Table 1***
+
+eststo clear
+
+***Column (1) : OLS***
+eststo ols1: qui reg D.Theil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+
+eststo ols2: qui reg D.AggTheil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast i.region i.year if year==1834, vce(robust)
+
+***Column (2) : First-stage***
+eststo fiv1: qui reg ln_TotalFarmHK MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+
+***Column (4) : Reduced form***
+eststo ziv1: qui reg D.Theil_c MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)</code></pre>
+<p><br />
+</p>
+<div id="section-3" class="section level4" number="3.2.1.1">
+<h4><span class="header-section-number">3.2.1.1</span> </h4>
+<p>Columns 1, 2, and 4 of Table 1 represent two Ordinary Least Squares
+(OLS) regressions, a first-stage, and a reduced form, respectively,
+representing distinct stages through OLS regressions. These different
+model specifications are often used in econometric analyses to examine
+causal relationships between variables. These columns offer a
+comprehensive understanding of underlying economic relationships and
+allow for nuanced interpretation of results. The singular variable
+differing across the two OLS regressions is the initial variable,
+corresponding to the dependent variable: the change in the Theil index
+from 1682 to 1834 <code>‘D.Theil_c’</code> and the change in the Theil index of
+1834 aggregated to the size categories of 1682 <code>‘D.AggTheil_c’</code>,
+respectively. In line with our approach of conducting both the
+first-stage and the reduced form analyses, we introduce the instrumental
+variable <code>‘MLmean’</code> in the two last regression equations. The
+replication process of these columns involves several crucial steps in
+estimating econometric models.</p>
+</div>
+<div id="section-4" class="section level4" number="3.2.1.2">
+<h4><span class="header-section-number">3.2.1.2</span> </h4>
+<p>Firstly, the use of the <code>‘eststo clear’</code> command ensures a reset of
+previous estimation results, creating a clean environment before running
+new estimations. Subsequently, the inclusion of <code>‘qui’</code> – for quietly
+– with the <code>‘reg’</code> – for regress – function allows for the temporary
+storage of regression results in a named matrix, such as <code>‘ols1’</code> in the
+first model. Moreover, the model specification, denoted as
+<code>‘D.Theil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast i.region’</code>,
+details the variables included in the regression equation. It is crucial
+to note that this specification is essential for understanding the
+relationships between key variables and the dependent variable – here
+<code>‘D.Theil_c’</code> or <code>‘D.AggTheil_c’</code>. Furthermore, the use of the
+conditional <code>‘if year==1834’</code> filters the data, retaining only
+observations where the <code>‘year’</code> variable is equal to 1834. This
+filtering step enables a focus on a particular year – here 1834 –,
+allowing for a more targeted analysis. Finally, the <code>‘vce(robust)’</code>
+option is specified to estimate robust standard errors, thereby
+addressing potential heteroskedasticity issues. These robust standard
+errors are particularly important to ensure the reliability of
+estimation results, especially when residuals exhibit heterogeneous
+variations.</p>
+</div>
+</div>
+<div id="iv-regressions-by-replicating-columns-35-and-6-of-table-1" class="section level3 hasAnchor" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> IV regressions by replicating columns 3,5 and 6 of Table 1<a href="from-the-article-to-practice-exploring-the-replication-code.html#iv-regressions-by-replicating-columns-35-and-6-of-table-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre id="lst:stata_code" style="stata" caption="Second part of Stata code for Table 1" label="lst:stata_code"><code>***Table 1***
+
+***Column (3) : Second-stage (with diffTheil)***
+eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+
+***Column (5) : Second-stage (with diffAggTheil)***
+eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+
+***Column (6) : Second-stage (with Gini)***
+eststo ginihkdiff: qui ivregress 2sls D.Gini ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] </code></pre>
+<p><br />
+</p>
+<div id="section-5" class="section level4" number="3.2.2.1">
+<h4><span class="header-section-number">3.2.2.1</span> </h4>
+<p>The columns 3, 5, and 6 which represent second-stages, are estimated
+through instrumental variable regressions. Similar to OLS regressions,
+the command <code>‘eststo ivdiff1 : qui’</code> is used to store the estimation
+results in a matrix named <code>‘ivdiff1’</code>, ensuring an organized storage of
+relevant information. Secondly, the function <code>‘ivregress 2sls’</code> is
+applied to conduct a two-stage IV regression, as indicated by <code>‘2sls’</code>.
+Additionally, the explanatory variables
+<code>‘D.Theilc lnarea LnDistCPH Lat Long LnDistCoast i.region’</code> mirror those
+used in the OLS regressions, providing continuity in the model
+specification. The only variable differing across each column
+specification is the initial variable, corresponding to the dependent
+variable : the change in the Theil index from 1682 to 1834 <code>‘D.Theilc’</code>,
+the change in the Theil index of 1834 aggregated to the size categories
+of 1682 <code>‘D.AggTheilc’</code>, and the change in the Gini coefficient instead
+of the Theil index <code>‘D.Gini’</code>, respectively. This nuanced change
+reflects the distinct focus on different dependent variables in each
+instance, while the remaining explanatory variables remain constant,
+allowing for a systematic exploration of the impact of the selected
+variables on the varied dependent variables. The inclusion of
+<code>‘(lnTotalFarmHK = MLmean)’</code> specifies the endogenous variable
+<code>‘lnTotalFarmHK’</code> and its instrument <code>‘MLmean’</code>. This crucial
+specification distinguishes the endogenous variable and its
+corresponding instrument, a fundamental aspect of instrumental variable
+estimation. Furthermore, to address heteroskedasticity and
+autocorrelation, the <code>‘vce(robust)’</code> command employs a robust
+variance-covariance matrix, ensuring the reliability of standard errors
+in the estimation.</p>
+</div>
+<div id="section-6" class="section level4" number="3.2.2.2">
+<h4><span class="header-section-number">3.2.2.2</span> </h4>
+<p>The upcoming lines of code that we are about to describe initially
+seemed somewhat unclear to us. However, despite the initial ambiguity,
+they prove to be valuable and, upon closer examination, are now better
+understood. This is why we will take the time to provide a clear
+explanation of these lines. First, the line <code>‘estat firststage’</code> is
+employed to display statistics from the first-stage of the IV
+regression. This step is typically utilized to assess the validity of
+instruments and ascertain their suitability for the estimation process.
+Secondly, storing the first-stage results in a matrix named ‘fstat’ is
+accomplished through the line <code>‘mat fstat = r(singleresults)’</code>. This
+matrix captures relevant statistics from the first-stage, providing a
+comprehensive view of the instrumental variable performance. Finally,
+the line <code>‘estadd scalar Fstat = fstat[1,4]’</code> introduces a new scalar
+variable, <code>‘Fstat’</code>, into the main regression results. This step allows
+to extract the F-statistic from the first-stage matrix <code>‘fstat’</code> and
+assigns it to <code>‘Fstat’</code>. The F-statistic is a crucial metric in
+instrumental variable regression, serving as a diagnostic tool to assess
+the overall validity of the instruments used. A high F-statistic, that
+is superior to 10, suggests that the instruments collectively have a
+strong explanatory power for the endogenous variable. In summary, these
+lines of code are essential for evaluating the quality and relevance of
+the instrumental variables employed in the two-stage IV regression.</p>
+</div>
+</div>
+<div id="formatting-table-1-an-additional-but-optional-step" class="section level3 hasAnchor" number="3.2.3">
+<h3><span class="header-section-number">3.2.3</span> Formatting Table 1, an additional but optional step<a href="from-the-article-to-practice-exploring-the-replication-code.html#formatting-table-1-an-additional-but-optional-step" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre id="lst:stata_code" style="stata" caption="Third part of Stata code for Table 1" label="lst:stata_code"><code>***Table 1***
+
+***Formation of Table 1***
+esttab ols1 fiv1 ivdiff1 ziv1 ivdiff2 ginihkdiff, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(12) wrap keep(MLmean ln_TotalFarmHK) mtitles(&quot;OLS&quot; &quot;first stage&quot; &quot;second stage (diffTheil)&quot; &quot;reduced form (diff Theil)&quot; &quot;second stage (diffAggTheil)&quot; &quot;second stage (diffGini)&quot; ) stats(N r2 Fstat, labels(&quot;Observations&quot; &quot;R-squared&quot; &quot;KP F-statistic&quot;) fmt(%9.0fc 2 2)) indicate(&quot;Region FE = 2.region&quot; &quot;Geography = LnDistCPH&quot; , labels(Y N)) label</code></pre>
+<p><br />
+</p>
+<div id="section-7" class="section level4" number="3.2.3.1">
+<h4><span class="header-section-number">3.2.3.1</span> </h4>
+<p>The next stage in our analysis involves the creation of a comprehensive
+table summarizing the results of the previously conducted regressions.
+It is essential to note that this step does not stand alone, rather it
+complements the preceding two steps in which variables were defined and
+regressions were estimated. The resulting table serves as a visual
+representation of the relationships captured in the regression models,
+enhancing the interpretability and communicative power of the findings.
+First, the command <code>‘esttab ols1 fiv1 ivdiff1 ziv1 ivdiff2 ginihkdiff’</code>
+specifies which models to include in the table, incorporating the
+Ordinary Least Squares (OLS), first-stage instrumental variable (IV),
+and second-stage IV regression results. To enhance the clarity of the
+table, additional formatting options are applied. The
+<code>‘se star(* 0.10 ** 0.05 *** 0.01)’</code> command displays standard errors
+with significance stars, denoting significance levels with asterisks.
+Thirdly, the <code>‘b(3)’</code> command allows to limit coefficient estimates to
+three decimal places, contributing to a cleaner presentation of results.
+Moreover, the inclusion of <code>‘r2’</code> displays the coefficient of
+determination, the R-squared, in the table, providing insights about the
+explanatory power of the model. The <code>‘var(15)’</code> option limits the
+display of R-squared to 15 decimal places.</p>
+</div>
+<div id="section-8" class="section level4" number="3.2.3.2">
+<h4><span class="header-section-number">3.2.3.2</span> </h4>
+<p>Additionally, with <code>‘model(12)’</code>, we specify the maximum number of
+models to display in the table, accommodating up to 12 different model
+specifications. The <code>‘wrap’</code> command facilitates the wrapping of long
+variable names onto multiple lines, ensuring readability. The
+<code>‘keep(MLmean lnTotalFarmHK)’</code> option selectively includes only the
+variables <code>‘MLmean’</code> and <code>‘lnTotalFarmHK’</code> in the table, which are our
+instrument and endogenous variables. Furthermore, <code>‘mtitles()’</code> assigns
+model titles to each specified model, contributing to a more informative
+and organized presentation. The
+<code>‘stats(N r2 Fstat, labels("Observations" "R-squared" "KP F-statistic") fmt(%9.0fc 2 2))’</code>
+option adds relevant statistics to the table, including the number of
+observations (N), the R-squared, and the F-statistic. The
+<code>‘indicate ("Region FE = 2.region" "Geography = LnDistCPH", labels(Y N))’</code>
+command introduces indicator in a regression model. The first part,
+<code>‘"Region FE = 2.region"’</code>, includes fixed effects for a specific
+region, here denoted as <code>‘2’</code>, representing Jutland. This accounts for
+unobserved variation specific to Jutland. The second part,
+<code>‘"Geography = LnDistCPH"’</code>, introduces an indicator variable related to
+geography. The labels <code>‘Y’</code> and <code>‘N’</code> are assigned to indicate the
+presence or absence of fixed effects or controls in each observation,
+contributing to the model’s interpretability. This step allows for a
+nuanced interpretation of how fixed effects and geographic controls
+influence the results. Finally, the <code>‘label’</code> option is appended to the
+<code>‘esttab’</code> command, indicating that variable labels should be included
+in the table for clarity and precision.</p>
+</div>
+<div id="section-9" class="section level4" number="3.2.3.3">
+<h4><span class="header-section-number">3.2.3.3</span> </h4>
+<p>In the replication code provided by the authors, no specific instruction
+regarding the exportation of tables has been included. Therefore, we
+recommend users to add the command <code>‘using "NameOfYourTable.tex"’</code> right
+after the last variable mentioned in <code>‘esttab’</code>, just before the comma
+in front of <code>‘se star’</code>, if they intend to export the table in LaTeX
+format. Alternatively, users can use the command
+<code>‘using ‘NameOfYourTable.txt"’</code>, at the same location in the code, if
+they prefer the table in a text format. This flexibility allows users to
+choose the desired output format for the tables based on their specific
+needs.<br />
+This last step – which involves the formation of the table – can be
+used in the context of other studies to generate a clear and visually
+appealing table summarizing regression results. However, it is crucial
+to emphasize that this step is not indispensable for obtaining
+replication results. The results can be independently observed directly
+using the same code without the <code>‘qui’</code> option, starting from <code>‘reg’</code> or
+<code>‘ivreg’</code>. This underscores the flexibility of the code, allowing
+researchers to directly access and analyze the regression outcomes
+without relying on the table generation step. While the table
+contributes to a more organized presentation, it is not a prerequisite
+for the replication process. Users can tailor their analysis based on
+their preferences and requirements before proceeding to this step. The
+study relies on an instrumental variable method that can be challenging
+to comprehend. Explaining the replication code of Table 1 is deemed
+essential for us, as it allows a detailed exploration and validation of
+the authors’ instrumental variable approach. This importance is further
+underscored by the fact that Table 1 showcases the primary results of
+the study. Having elucidated the intricacies of the Table 1 replication
+code, we will now transition to describing the replication code for
+Figure 5.</p>
+</div>
+</div>
+</div>
+<div id="understanding-the-replication-process-code-analysis-of-figure-5" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Understanding the replication process: code analysis of Figure 5<a href="from-the-article-to-practice-exploring-the-replication-code.html#understanding-the-replication-process-code-analysis-of-figure-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre id="lst:stata_code" style="stata" caption="Stata code for Figure 5" label="lst:stata_code"><code>***Figure 5***
+
+eststo clear    
+
+foreach x in 1682 1834 1850 1860 1873 1885 1895 {
+    qui ivregress 2sls ln_Theil_`x&#39;c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK`x&#39; = MLmean) if year==`x&#39;, vce(clust ID)
+    estimates store coef`x&#39; 
+}       
+    coefplot coef*, vert yline(0) keep(ln_TotalFarmHK*) graphregion(color(white)) ciopts(recast(rcap) lcol(black)) mcolor(black) ///
+    xtick(1(1)7) xlabel(1 &quot;1682&quot; 2 &quot;1834&quot; 3 &quot;1850&quot; 4 &quot;1860&quot; 5 &quot;1873&quot; 6 &quot;1885&quot; 7 &quot;1895&quot;, ) grid(b) legend(off) 
+graph export &quot;outputfile.png&quot;, replace</code></pre>
+<div id="section-10" class="section level4" number="3.3.0.1">
+<h4><span class="header-section-number">3.3.0.1</span> </h4>
+<p>The provided Stata code segment serves to illustrate the coefficients
+for second-stage estimations conducted over the years 1682 to 1895. The
+dependent variable under consideration is <code>‘ln(Theil)’</code>, and the
+instrumental variable utilized is the share of boulder clay <code>‘MLmean’</code>.
+The use of the natural logarithm for the dependent variable
+<code>‘ln(Theil)’</code> in the second-stage regression is intentional. This choice
+allows for the presentation of estimates for the second-stage
+coefficients in levels, offering insight into the relationships over the
+years 1682 to 1895. The focus on <code>‘ln(Theil)’</code> in different years
+underscores a preference for examining the absolute values of Theil
+index rather than changes in Theil index, providing a comprehensive
+perspective on the dynamics of the variable across the specified
+temporal range.</p>
+</div>
+<div id="section-11" class="section level4" number="3.3.0.2">
+<h4><span class="header-section-number">3.3.0.2</span> </h4>
+<p>Initially, <code>‘eststo clear’</code> ensures a clean slate by clearing any
+previously stored estimation results. Subsequently, the <code>‘foreach’</code> loop
+in the provided Stata code serves as an iterative mechanism, allowing
+the execution of specified commands for each value in the specified
+range or list. In this case, the loop iterates over the years 1682,
+1834, 1850, 1860, 1873, 1885, and 1895. For each iteration, the code
+within the loop conducts a 2-stage least squares regression using the
+<code>‘ivregress 2sls’</code> command, estimating a model for the given year. The
+model includes various independent variables such as
+<code>‘lnTheil’x’c’, ‘lnarea’, ‘LnDistCPH’, ‘Lat’, ‘Long’, ‘LnDistCoast’</code> as
+well as the endogenous variable <code>‘lnTotalFarmHK’</code> instrumented by
+<code>‘MLmean’</code> and there are fixed effects for <code>‘region’</code>. The purpose of
+the loop in this context is to efficiently run the same regression model
+for multiple years, automating the process and avoiding redundant code.
+This is particularly useful when dealing with time-series data or when
+conducting analyses for various time points. The resulting coefficient
+plot provides a concise and visual representation of the dynamics of the
+variable of interest across different years. The line
+<code>‘estimates store coef’x’’</code> facilitates the storage of estimation
+results in matrices named <code>‘coef’x’’</code>, where <code>‘x’</code> represents the
+specific year. Following the loop, the <code>‘coefplot coef*’</code> command
+generates a coefficient plot based on the stored estimation results,
+specifically focusing on coefficients related to the variable
+<code>‘lnTotalFarmHK’</code> across the years.<br />
+In terms of visual representation, the plot includes a vertical line at
+0 for reference with the <code>‘vert yline(0)’</code> command, retains only
+coefficients related to <code>‘lnTotalFarmHK’</code> with the
+<code>‘keep(lnTotalFarmHK*)’</code> command, and employs a white background for
+enhanced clarity thanks to the <code>‘graphregion(color(white))’</code>. Confidence
+intervals are displayed using a horizontal line in black with
+<code>‘ciopts(recast(rcap) lcol(black))’</code>, and the markers – dots –
+representing coefficient estimates are colored black for visibility with
+the <code>‘mcolor(black)’</code> option. Additionally, <code>‘xtick(1(1)7)’</code> and
+<code>‘xlabel(1 "1682" 2 "1834" 3 "1850" 4 "1860" 5 "1873" 6 "1885" 7 "1895")’</code>,
+allow stick marks and corresponding labels on the x-axis to be
+strategically positioned to represent each year from 1682 to 1895.
+Gridlines are incorporated for ease of interpretation <code>‘grid(b)’</code>, and
+the legend is turned off for a clean and uncluttered visual
+representation thanks to the <code>‘legend(off)’</code> command.</p>
+</div>
+<div id="section-12" class="section level4" number="3.3.0.3">
+<h4><span class="header-section-number">3.3.0.3</span> </h4>
+<p>The final line of code, <code>‘graph export "outputfile.png", replace’</code>, is
+added by us to the replication code for the purpose of exporting the
+coefficient plot as a PNG file. This command utilizes Stata’s graph
+export feature, allowing us to save the generated graph to an external
+file named "outputfile.png" in the current working directory. The
+option "replace" ensures that if a file with the same name already
+exists, it will be overwritten. This line of code enhances the
+replicability of the study by facilitating the export of the coefficient
+plot in a widely used PNG format for further analysis or inclusion in
+reports and presentations. This meticulous approach allows for a
+comprehensive exploration of coefficient dynamics over time, offering
+insights into the relationship between the dependent variable,
+<code>‘ln(Theil)’</code>, and the instrumental variable <code>‘MLmean’</code> – share of
+boulder clay – with controls included, across the specified years. With
+the explanation of the coefficient plots for second-stage estimations
+complete, our attention now shifts to describing the replication code
+for Table A.3 found in the Appendix.</p>
+</div>
+</div>
+<div id="understanding-the-replication-process-code-analysis-of-table-a.3" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Understanding the replication process: code analysis of Table A.3<a href="from-the-article-to-practice-exploring-the-replication-code.html#understanding-the-replication-process-code-analysis-of-table-a.3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre id="lst:stata_code" style="stata" caption="Stata code for Table A.3" label="lst:stata_code"><code>***Table A.3***
+
+***Creation of a loop***
+eststo clear
+foreach x in 1682 1834 {
+    eststo ginihk`x&#39;: ivregress 2sls gini`x&#39; ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==`x&#39; &amp; gini1834!=., vce(clust ID)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+}
+
+***Formation of Table A.3***
+esttab ginihk1682 ginihk1834, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) wrap keep(ln_TotalFarmHK) mtitles(&quot;2nd stage: Gini diff&quot; &quot;2nd stage: gini 1682&quot; &quot;2nd stage: gini 1834&quot;) stats(N r2 Fstat, labels(&quot;Observations&quot; &quot;R-squared&quot; &quot;KP F-statistic&quot;) fmt(%9.0fc 2 2)) indicate(&quot;Region FE = 2.region&quot; &quot;Geography = LnDistCPH&quot; , labels(Y N)) label</code></pre>
+<p><br />
+Table A.3 in the Appendix presents robustness check results,
+specifically second-stage instrumental variable estimates using the Gini
+coefficient. This additional analysis aims to verify the robustness of
+the findings by employing an alternative measure. The choice of the Gini
+coefficient not only enhances interpretability but also provides a basis
+for comparing and validating the study’s results against a broader
+scholarly context.</p>
+<div id="creation-of-a-loop" class="section level3 hasAnchor" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> Creation of a loop<a href="from-the-article-to-practice-exploring-the-replication-code.html#creation-of-a-loop" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre id="lst:stata_code" style="stata" caption="First part of Stata code for Table A.3" label="lst:stata_code"><code>***Table A.3***
+
+***Creation of a loop***
+eststo clear
+foreach x in 1682 1834 {
+    eststo ginihk`x&#39;: ivregress 2sls gini`x&#39; ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==`x&#39; &amp; gini1834!=., vce(clust ID)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+}</code></pre>
+<p><br />
+Firstly, the use of the <code>‘eststo clear’</code> command ensures a reset of
+previous estimation results, creating a clean environment before running
+new estimations. The loop designated by <code>‘foreach x in 1682 1834’</code>
+iterates over two specific years, namely 1682 and 1834. This looping
+mechanism, as explained in the preceding section – Section 3.3 –,
+provides a concise and efficient way to conduct repetitive tasks for
+multiple years. The <code>‘eststo ginihk‘x’’</code> command within the loop
+facilitates the storage of results in matrices named <code>‘ginihk‘x’’</code>, with
+<code>‘x’</code> representing the current year in each iteration. For a more
+comprehensive understanding of the loop creation and its purpose,
+referring to the preceding Section 3.3 is recommended. Moreover, the
+<code>‘ivregress 2sls’</code> function is employed to conduct a two-stage
+instrumental variable (IV) regression. The model’s explanatory variables
+include <code>‘D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast i.region’</code>.
+In specifying <code>‘(ln_TotalFarmHK = MLmean)’</code>, the endogenous variable –
+the natural logarithm of the total value of the land measured in barrel
+of hard grain of parish – is denoted as <code>‘ln_TotalFarmHK’</code> and its
+instrument is identified as <code>‘MLmean’</code>.</p>
+<div id="section-13" class="section level4" number="3.4.1.1">
+<h4><span class="header-section-number">3.4.1.1</span> </h4>
+<p>To ensure that the analysis includes only observations for the specified
+year <code>‘x’</code> where the variable <code>‘gini1834’</code> is not missing, the condition
+<code>‘if year==x &amp; gini1834!=.’</code> is incorporated. Furthermore, the command
+<code>‘vce(clust ID)’</code> is used to adjust standard errors in the regression
+model, accounting for within-cluster correlation. The code that we will
+now describe mirrors the structure found in Table 1. Following this,
+<code>‘estat firststage’</code> is employed to display statistics from the
+first-stage of the IV regression. This step is crucial for assessing the
+validity of instruments. The subsequent lines involve the storage of
+first-stage results in a matrix named <code>‘fstat’</code> using the
+<code>‘mat fstat = r(singleresults)’</code> command. This matrix captures relevant
+statistics from the initial stage, providing insights into the
+instrumental variable performance. Finally,
+<code>‘estadd scalar Fstat = fstat[1,4]’</code> introduces a new scalar variable
+<code>‘Fstat’</code> into the main regression results. This step extracts the
+F-statistic from the first-stage matrix <code>‘fstat’</code> and assigns it to
+<code>‘Fstat’</code>. For a more comprehensive understanding of the F-statistics
+and its purpose, referring to the preceding Section 3.3.2 is
+recommended.<br />
+</p>
+</div>
+</div>
+<div id="formatting-table-a.3-an-additional-but-optional-step" class="section level3 hasAnchor" number="3.4.2">
+<h3><span class="header-section-number">3.4.2</span> Formatting table A.3, an additional but optional step<a href="from-the-article-to-practice-exploring-the-replication-code.html#formatting-table-a.3-an-additional-but-optional-step" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre id="lst:stata_code" style="stata" caption="Second part of Stata code for Table A.3" label="lst:stata_code"><code>***Table A.3***
+
+***Formation of Table A.3***
+esttab ginihk1682 ginihk1834, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) wrap keep(ln_TotalFarmHK) mtitles(&quot;2nd stage: Gini diff&quot; &quot;2nd stage: gini 1682&quot; &quot;2nd stage: gini 1834&quot;) stats(N r2 Fstat, labels(&quot;Observations&quot; &quot;R-squared&quot; &quot;KP F-statistic&quot;) fmt(%9.0fc 2 2)) indicate(&quot;Region FE = 2.region&quot; &quot;Geography = LnDistCPH&quot; , labels(Y N)) label</code></pre>
+<p><br />
+Moving forward in our analysis, we proceed to construct a comprehensive
+table that consolidates the outcomes of the earlier regression analyses.
+Importantly, it’s crucial to emphasize that this stage is not conducted
+in isolation, instead it builds upon the groundwork laid in the
+preceding step where variables were defined and regressions within the
+loop were executed. The resultant table serves as a visual
+representation, effectively summarizing the relationships captured in
+the regression models. This approach enhances the interpretability and
+communicative power of the analytical findings. The code employed in the
+creation of the comprehensive table A.3 aligns with the methodology
+elucidated in Section 3.2.3, specifically used for Table 1. Indeed, the
+Stata code provided encompasses the construction of a table using the
+<code>‘esttab’</code> command, incorporating results from the two-stage
+instrumental variable regressions conducted for the years 1682 and 1834.
+Thus, the <code>‘esttab ginihk1682 ginihk1834’</code> line specifies the models
+whose results will be included in the table, representing these two
+specific years.</p>
+<div id="section-14" class="section level4" number="3.4.2.1">
+<h4><span class="header-section-number">3.4.2.1</span> </h4>
+<p>To enhance the clarity and readability of the table, several formatting
+commands are employed. The <code>‘se star(* 0.10 ** 0.05 *** 0.01)’</code> line
+introduces significance stars denoted by asterisks, indicating the
+levels of statistical significance. Additionally, <code>‘b(3)’</code> limits the
+coefficient estimates to three decimal places. The inclusion of the
+coefficient of determination R-squared is facilitated by <code>‘r2’</code> command,
+with <code>‘var(15)’</code> limiting the number of decimals for R-squared to 15
+digits. The <code>‘model(11)’</code> command specifies the maximum number of models
+displayed in the table, accommodating 11 different models. Moreover, the
+<code>‘wrap’</code> command assists in managing long variable names, allowing them
+to span multiple lines for improved readability. The
+<code>‘keep(lnTotalFarmHK)’</code> line specifies the variable <code>‘lnTotalFarmHK’</code> to
+be included in the table. Furthermore, model titles are assigned using
+<code>‘mtitles()’</code>, and additional statistics, such as the number of
+observations (N), R-squared, and the F-statistic, are incorporated with
+<code>‘stats(N r2 Fstat, labels("Observations" "R-squared" "KP F-statistic")fmt(%9.0fc 2 2))’</code>.
+The
+<code>‘indicate("Region FE = 2.region" "Geography = LnDistCPH", labels(Y N))’</code>
+section introduces indicator variables in a regression model. The first
+part, <code>‘"Region FE = 2.region"’</code>, includes fixed effects for a specific
+region, here denoted as <code>‘2’</code>, representing Jutland. This accounts for
+unobserved variation specific to Jutland. The second part,
+<code>‘"Geography = LnDistCPH"’</code> introduces an indicator variable related to
+geography. The <code>‘labels’</code> <code>‘Y’</code> and <code>‘N’</code> are assigned to indicate the
+presence or absence of fixed effects or controls in each observation,
+contributing to the model’s interpretability. Finally, the <code>‘label’</code>
+option appended to the end of the <code>‘esttab’</code> command ensures that
+variable labels are included in the table, enhancing the
+interpretability of the presented results.<br />
+Once again, in the provided replication code by the authors, no specific
+instruction regarding the exportation of tables has been included.
+Therefore, we recommend users to add the command
+<code>‘using "NameOfYourTable.tex"’</code> right after the last variable mentioned
+in <code>‘esttab’</code>, just before the comma in front of <code>‘se star’</code>, if they
+intend to export the table in LaTeX format. Alternatively, users can use
+the command <code>‘using ‘NameOfYourTable.txt"’</code>, at the same location in the
+code, if they prefer the table in a text format. This flexibility allows
+users to choose the desired output format for the tables based on their
+specific needs. This last step to form a table can be employed in the
+context of other studies to generate a clear and visually appealing
+table summarizing regression results. However, it is crucial to
+emphasize that this step is not indispensable for obtaining replication
+results.<br />
+</p>
+</div>
+</div>
+</div>
+<div id="understanding-the-replication-process-code-analysis-of-table-a.4" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Understanding the replication process: code analysis of Table A.4<a href="from-the-article-to-practice-exploring-the-replication-code.html#understanding-the-replication-process-code-analysis-of-table-a.4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre id="lst:stata_code" style="stata" caption="Stata code for Table A.4" label="lst:stata_code"><code>***Table A.4***
+
+eststo clear
+
+***Column (1) : OLS***
+eststo ols1: qui reg D.Theil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+
+eststo ols2: qui reg D.AggTheil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region i.year if year==1834, vce(robust)
+
+***Column (2) : First-stage***
+eststo fiv1: qui reg BygLG MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834 &amp; ln_TotalFarmHK!=., vce(robust)
+
+***Column (3) : Second-stage (diffTheil)***
+eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (BygLG = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+
+***Column (4) : Second-stage (diffAggTheil)***
+eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (BygLG = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+
+***Formation of Table A.4***
+esttab ols1 fiv1 ivdiff1 ivdiff2, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) wrap keep(MLmean BygLG) mtitles(&quot;OLS&quot; &quot;first stage&quot; &quot;second stage (diffTheil)&quot; &quot;second stage (diffAggTheil)&quot; ) stats(N r2 Fstat, labels(&quot;Observations&quot; &quot;R-squared&quot; &quot;KP F-statistic&quot;) fmt(%9.0fc 2 2)) indicate(&quot;Region FE = 2.region&quot; &quot;Geography = LnDistCPH&quot; , labels(Y N)) label</code></pre>
+<p><br />
+</p>
+<div id="section-15" class="section level4" number="3.5.0.1">
+<h4><span class="header-section-number">3.5.0.1</span> </h4>
+<p>Transitioning to another robustness test, presented in Table A.4 in the
+Appendix, we explore an alternative measure of land quality. In this
+test, rather than considering the total value of the parish’s HK, the
+authors focus solely on the amount of barley paid in tax as an indicator
+of land quality. This measure is derived from the digitization of a map
+presented by Frandsen in 1988. The results of this robustness check
+closely resemble the main estimations of table 1, underscoring the
+consistency and reliability of the analytical findings.</p>
+</div>
+<div id="ols-regressions-by-replicating-the-columns-1-and-2-of-table-a.4" class="section level3 hasAnchor" number="3.5.1">
+<h3><span class="header-section-number">3.5.1</span> OLS regressions by replicating the columns 1 and 2 of Table A.4<a href="from-the-article-to-practice-exploring-the-replication-code.html#ols-regressions-by-replicating-the-columns-1-and-2-of-table-a.4" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre id="lst:stata_code" style="stata" caption="First part of Stata code for Table A.4" label="lst:stata_code"><code>***Table A.4***
+
+eststo clear
+
+***Column (1) : OLS***
+eststo ols1: qui reg D.Theil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+
+eststo ols2: qui reg D.AggTheil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region i.year if year==1834, vce(robust)
+
+***Column (2) : First-stage***
+eststo fiv1: qui reg BygLG MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834 &amp; ln_TotalFarmHK!=., vce(robust)</code></pre>
+<p><br />
+</p>
+<div id="section-16" class="section level4" number="3.5.1.1">
+<h4><span class="header-section-number">3.5.1.1</span> </h4>
+<p>In this analysis, we employ familiar Stata commands, akin to those
+utilized in Table 1, with the only variable differing across each column
+specification is the initial variable, corresponding to the dependent
+variable: the change in the Theil index from 1682 to 1834 <code>‘D.Theilc’</code>,
+the change in the Theil index of 1834 aggregated to the size categories
+of 1682 <code>‘D.AggTheilc’</code>, and the amount of barley paid in tax as an
+indicator of land quality <code>‘BygLG’</code>, respectively. In line with our
+approach of conducting the first-stage analysis, we introduce the
+instrumental variable <code>‘MLmean’</code> to the last regression equation. First,
+the command <code>‘eststo ols1’</code> is used to store the estimation results, and
+the results matrix is designated as <code>‘ols1’</code>. The <code>‘qui’</code> function,
+signifying quietly, enables the temporary storage of results in the
+matrix <code>‘ols1’</code> for the initial regression. Importantly, this function
+ensures that the results of the regression are not displayed at this
+point but are preserved under the name <code>‘ols1’</code> for subsequent
+utilization. This approach proves particularly beneficial when authors
+later aim to present a comprehensive table with multiple specifications.</p>
+</div>
+<div id="section-17" class="section level4" number="3.5.1.2">
+<h4><span class="header-section-number">3.5.1.2</span> </h4>
+<p>Moreover, the <code>‘reg’</code> function is utilized for Ordinary Least Squares
+(OLS) estimation, running a regression with specified variables. In this
+instance, the regression equation includes <code>‘Theilc</code> <code>BygLG</code> <code>lnarea</code>
+<code>LnDistCPH Lat Long LnDistCoast i.region’</code>. A conditional statement,
+<code>‘if year==1834 &amp; lnTotalFarmHK!=.’</code>, restricts the analysis to
+observations where the <code>‘year’</code> variable is equal to 1834, and
+<code>‘lnTotalFarmHK’</code> is not missing. This condition ensures a focused
+examination of data relevant to the specified year and variable
+condition. Furthermore, the use of the conditional <code>‘if year==1834’</code>
+filters the data, retaining only observations where the <code>‘year’</code>
+variable is equal to 1834. Lastly, the <code>‘vce(robust)’</code> command is
+incorporated to specify the use of robust standard errors. This
+adjustment is made to account for potential heteroskedasticity and
+correlation of errors, enhancing the reliability of the estimation
+results.</p>
+</div>
+</div>
+<div id="iv-regressions-by-replicating-the-columns-3-and-4-of-the-table-a.4" class="section level3 hasAnchor" number="3.5.2">
+<h3><span class="header-section-number">3.5.2</span> IV regressions by replicating the columns 3 and 4 of the Table A.4<a href="from-the-article-to-practice-exploring-the-replication-code.html#iv-regressions-by-replicating-the-columns-3-and-4-of-the-table-a.4" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre id="lst:stata_code" style="stata" caption="Second part of Stata code for Table A.4" label="lst:stata_code"><code>***Table A.4***
+
+***Column (3) : Second-stage (diffTheil)***
+eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (BygLG = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] 
+
+***Column (4) : Second-stage (diffAggTheil)***
+eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (BygLG = MLmean) if year==1834, vce(robust)
+    estat firststage
+    mat fstat = r(singleresults)
+    estadd scalar Fstat = fstat[1,4] </code></pre>
+<p><br />
+</p>
+<div id="section-18" class="section level4" number="3.5.2.1">
+<h4><span class="header-section-number">3.5.2.1</span> </h4>
+<p>In this specific analysis, we focus on the second-stage of the
+estimations with two dependent variables: <code>‘D.Theilc’</code>, representing the
+change in the Theil index from 1682 to 1834, <code>‘D.AggTheilc’</code>,
+representing the change in the Theil index of 1834 aggregated to the
+size categories of 1682. The endogenous variable, the amount of barley
+paid in tax as an indicator of land quality <code>‘BygLG’</code>, is instrumented
+by the share of boulder clay, utilizing <code>‘MLmean’</code> as the instrumental
+variable. This nuanced approach allows us to enhance the robustness of
+the estimates and address potential biases in the endogenous variable.
+In executing the second-stage of our analysis, employing the
+<code>‘eststo ivdiff1: qui’</code> command allows to store the estimation results
+in a matrix named <code>‘ivdiff1’</code>. This matrix captures the outcomes of the
+two-stage instrumental variable regression facilitated by the
+<code>‘ivregress 2sls’</code> command. The regression equation includes explanatory
+variables <code>‘D.Theilc</code> <code>lnarea</code>
+<code>LnDistCPH Lat Long LnDistCoast i.region’</code>, mirroring the structure of
+OLS regressions.</p>
+</div>
+<div id="section-19" class="section level4" number="3.5.2.2">
+<h4><span class="header-section-number">3.5.2.2</span> </h4>
+<p>Moreover, the specification <code>‘(BygLG = MLmean)’</code> designates <code>‘BygLG’</code> as
+the endogenous variable, with <code>‘MLmean’</code> serving as its instrumental
+variable. An instrumentalization that is crucial to address potential
+endogeneity concerns and fortifying the validity of the estimations. The
+use of the conditional <code>‘if year==1834’</code> filters the data, retaining
+only observations where the <code>‘year’</code> variable is equal to 1834. To
+account for heteroskedasticity and autocorrelation, the <code>‘vce(robust)’</code>
+command employs a robust variance-covariance matrix. Subsequently, we
+encounter the lines of code that initially appeared daunting, but now,
+through regular utilization, their functionality has become
+comprehensible. Indeed, the <code>‘estat firststage’</code> command is utilized to
+display statistics from the first-stage of the IV regression, offering
+insights into the validity of the instrumental variables. Further, the
+<code>‘mat fstat = r(singleresults)’</code> line stores the first-stage results in
+a matrix named <code>‘fstat’</code>, facilitating a comprehensive view of the
+instrumental variable performance. Lastly, the
+<code>‘estadd scalar Fstat = fstat[1,4]’</code> command introduces a new scalar
+variable <code>‘Fstat’</code> into the main regression results. This step extracts
+the F-statistic from the first-stage matrix <code>‘fstat’</code> and assigns it to
+<code>‘Fstat’</code>.</p>
+</div>
+<div id="section-20" class="section level4" number="3.5.2.3">
+<h4><span class="header-section-number">3.5.2.3</span> </h4>
+<p>Once again, for a more comprehensive understanding of the F-statistics
+and its purpose, referring to the preceding Section 3.2.2 is
+recommended. We would like to remind you that the results can be
+independently observed directly using the same code without the <code>‘qui’</code>
+option, starting from <code>‘reg’</code> or <code>‘ivreg’</code>. This underscores the
+flexibility of the code, allowing researchers to directly access and
+analyze the regression outcomes without relying on the table generation
+step.</p>
+</div>
+</div>
+<div id="formatting-table-a.4-an-additional-but-optional-step" class="section level3 hasAnchor" number="3.5.3">
+<h3><span class="header-section-number">3.5.3</span> Formatting Table A.4, an additional but optional step<a href="from-the-article-to-practice-exploring-the-replication-code.html#formatting-table-a.4-an-additional-but-optional-step" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre id="lst:stata_code" style="stata" caption="Third part of Stata code for Table A.4" label="lst:stata_code"><code>***Table A.4***
+
+***Formation of Table A.4***
+esttab ols1 fiv1 ivdiff1 ivdiff2, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) wrap keep(MLmean BygLG) mtitles(&quot;OLS&quot; &quot;first stage&quot; &quot;second stage (diffTheil)&quot; &quot;second stage (diffAggTheil)&quot; ) stats(N r2 Fstat, labels(&quot;Observations&quot; &quot;R-squared&quot; &quot;KP F-statistic&quot;) fmt(%9.0fc 2 2)) indicate(&quot;Region FE = 2.region&quot; &quot;Geography = LnDistCPH&quot; , labels(Y N)) label</code></pre>
+<p><br />
+In the next step of our analysis, we construct a comprehensive table to
+concisely present the findings from our prior regression analyses. It’s
+important to emphasize that this stage isn’t isolated but rather
+complements the groundwork laid in the preceding steps, where variables
+were defined and regressions were conducted. The resultant table serves
+as a visual tool to depict the relationships identified in our
+regression models, thereby enhancing the clarity and communicative
+impact of our analytical insights. In this stage, we use the <code>‘esttab’</code>
+command to generate a comprehensive table summarizing the results from
+various models, including OLS, first-stage IV, and second-stage IV
+regressions. The specified models, denoted as
+<code>‘ols1 fiv1 ivdiff1 ivdiff2’</code>, capture different aspects of the
+regressions. The <code>‘se star(* 0.10 ** 0.05 *** 0.01)’</code> option is employed
+to display standard errors with significance stars, where asterisks
+indicate different levels of significance with * for 0.10, ** for
+0.05, and *** for 0.01. Setting <code>‘b(3)’</code> limits, once again, the
+number of decimal places for coefficient estimates to 3, contributing to
+a cleaner presentation.</p>
+<div id="section-21" class="section level4" number="3.5.3.1">
+<h4><span class="header-section-number">3.5.3.1</span> </h4>
+<p>Including the R-squared <code>‘r2’</code> and limiting the number of decimals for
+the R-squared to 15 digits <code>‘var(15)’</code> provide additional insights into
+the explanatory power of the models. Furthermore, the <code>‘model(11)’</code>
+option ensures that a maximum of 11 different models is displayed in the
+table. To accommodate long variable names, the <code>‘wrap’</code> command is
+utilized, allowing for a more organized presentation. Moreover, the
+<code>‘keep(MLmean BygLG)’</code> option specifies the variables to be included in
+the table, focusing on <code>‘MLmean’</code> and <code>‘BygLG’</code>. Model titles are
+designated using the <code>‘mtitles()’</code> option for clarity and organization.
+Additional statistics, such as the number of observations (N),
+R-squared, and the F-statistic, are included using the
+<code>‘stats(N r2 Fstat, labels("Observations" "R-squared" "KP F-statistic")fmt(%9.0fc 2 2))’</code>
+option, providing a more comprehensive overview. Moreover, indicator
+variables for fixed effects related to a specific region – here <code>‘2’</code>
+representing Jutland – <code>‘2.region’</code> and geography <code>‘LnDistCPH’</code> are
+incorporated using the <code>‘indicate()’</code> option. The <code>‘labels(Y N))’</code>
+allows to specify these fixed effects as <code>‘Y’</code> if the fixed effects are
+included or as <code>‘N’</code> if they are not This offers further control in
+understanding the impact of these factors on the results. Finally, the
+<code>‘label’</code> option ensures that variable labels are included in the table,
+enhancing the interpretability of the presented information.</p>
+</div>
+<div id="section-22" class="section level4" number="3.5.3.2">
+<h4><span class="header-section-number">3.5.3.2</span> </h4>
+<p>Once again, in the provided replication code by the authors, no specific
+instruction regarding the exportation of tables has been included.
+Therefore, we recommend users to add the command
+<code>‘using "NameOfYourTable.tex"’</code> right after the last variable mentioned
+in <code>‘esttab’</code>, just before the comma in front of <code>‘se star’</code>, if they
+intend to export the table in LaTeX format. Alternatively, users can use
+the command <code>‘using ‘NameOfYourTable.txt"’</code>, at the same location in the
+code, if they prefer the table in a text format. This flexibility allows
+users to choose the desired output format for the tables based on their
+specific needs.</p>
+</div>
+<div id="section-23" class="section level4" number="3.5.3.3">
+<h4><span class="header-section-number">3.5.3.3</span> </h4>
+<p>This last step to form a table can be employed in the context of other
+studies to generate a clear and visually appealing table summarizing
+regression results. However, it is crucial to emphasize that this step
+is not indispensable for obtaining replication results. And although we
+conducted a multitude of regressions in Section 3.5.1, it is noteworthy
+that the final Table A.4 does not include the <code>‘ols2’</code> regression.
+Finally, the results can be independently used directly with the same
+code without the <code>‘qui’</code> option, starting from <code>‘reg’</code> or <code>‘ivreg’</code>.
+This highlights the flexibility of the code, allowing researchers to
+directly access and analyze the regression outcomes without relying on
+the table generation step. While the table contributes to a more
+organized presentation, it is not a prerequisite for the replication
+process, providing users with the option to tailor their analysis based
+on specific preferences and requirements.</p>
+</div>
+<div id="section-24" class="section level4" number="3.5.3.4">
+<h4><span class="header-section-number">3.5.3.4</span> </h4>
+<p>Our thorough replication process aimed to transparently convey each step
+of the analysis, ensuring clarity and reproducibility. We hope that our
+detailed descriptions provide a comprehensive understanding of the code
+and methodology employed. Moreover, we hope that this clarity enhances
+the accessibility of the article and facilitates further examination and
+validation by other researchers. We trust that transparency is crucial
+for fostering rigorous and collaborative research practices.</p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="regression-discontinuity-design.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="regression-discontinuity-design-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/SorbonneDevEcon/M2-Econometrics-Book/edit/main/02-CH2.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/SorbonneDevEcon/M2-Econometrics-Book/blob/main/02-CH2.Rmd",
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

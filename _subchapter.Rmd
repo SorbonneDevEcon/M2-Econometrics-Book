@@ -1,0 +1,12 @@
+## sub1
+
+sldfslflskdjfakölsjföa
+
+```{stata, eval=F, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+ssc install missings //Provides tools and commands for working with missing data.
+ssc install rdrobust // Provides tools and commands to execute a regression discontinuity design methodology.
+ssc install ivreg2 // Extends Stata’s built-in instrumental variables (IV) estimation capabilities.
+ssc install estout // Provides additional formatting and exporting options for regression results.
+ssc install outreg2 // Provides additional options formatting regression results for output in tables.
+ssc install ranktest // Provides additional tests for rank-related issues, such as rank correlation coefficients.
+```

@@ -1,8 +1,15 @@
 --- 
 title: "M2 Econometrics Book"
-author: "authors"
+author: "This site is currently under construction."
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
 
+
 # Introduction
+
+```{r, include=FALSE}
+library(Statamarkdown)
+library(knitr)
+```
+
