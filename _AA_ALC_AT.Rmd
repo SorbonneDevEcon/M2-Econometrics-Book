@@ -169,7 +169,7 @@ illustrative tables of regression outputs. This package is able to write
 LaTex-format tables.\
 All the packages can be installed using the following lines of code.
 
-<div align="center"> **Stata code in order to access to the database and to install packages** </div>
+#### **Stata code in order to access to the database and to install packages** 
 ``` {.Stata language="Stata" numbers="none" caption="Stata code in order to access to the database and to install packages"}
 ***Open the database***
 global dirData "C:/Your Directory Here/" 
