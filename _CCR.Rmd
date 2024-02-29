@@ -1,24 +1,26 @@
 ## Political Fragmentation and Government Stability: Evidence from Local Governments in Spain
 
+Carozzi, F., Cipullo, Da. & Repetto, L. (2022). ”Political Fragmentation and Government Stability: Evidence from Local Governments in Spain.” American Economic Journal: Applied Economics, 14 (2): 23-50.
+
 Authors and date of the replication: Carolina Arboleda Lenis, Elif C¸anga, Mariana Navarro Torres, Martina Pugliese - December 2023
 
 ### Highlights {-}
 
-#### **Replication Paper** {-}
+- **Research question:** How does political fragmentation impact government stability?.
 
-Carozzi, F., Cipullo, Da. & Repetto, L. (2022). ”Political Fragmentation and Government Stability: Evidence from Local Governments in Spain.” American Economic Journal: Applied Economics, 14 (2): 23-50.
+- **Methodology employed:** Fuzzy Regression Discontinuity Design (RDD) model.
+
+  - It belongs to the the regression discontinuity design broad methodology, which is a quasi experimental method used to estimate the causal effect of an intervention over a threshold or a cutoff point. It enables the comparison of individuals immediately above and below this specific cutoff point to assess the impact of a treatment on a particular outcome.
+  
+  - In a fuzzy RDD design the assignment rule determining how units are selected into the treatment is probabilistic. The probability of treatment exhibits a discontinuity at the cutoff, though not as a definitive 0 to 1 jump.
+
+- In regards to the original replication package, we present here a simplified version of its main elements for an easy replication with only one dataset and one do-file.
+
+- Through this exercise, on top of standard Stata commands, we present a more in-depth explanation on how to make results’ tables using the “esttab” command, make more complex graphs with the “twoway” command and, specially, discover some commands from the “rdrobust” package, key for RDD analysis in Stata.
 
 - The research paper can be found [here.](https://www.aeaweb.org/articles?id=10.1257/app.20200128)
+
 - The original replication package can be found [here.](https://www.openicpsr.org/openicpsr/project/125341/version/V1/view)
-
-#### **Key Takeaways** {-}
-
-- **Research question:** How does political fragmentation impact government stability?.
-- **Methodology employed:** Fuzzy Regression Discontinuity Design (RDD) model.
-  - It belongs to the the regression discontinuity design broad methodology, which is a quasi experimental method used to estimate the causal effect of an intervention over a threshold or a cutoff point. It enables the comparison of individuals immediately above and below this specific cutoff point to assess the impact of a treatment on a particular outcome.
-  - In a fuzzy RDD design the assignment rule determining how units are selected into the treatment is probabilistic. The probability of treatment exhibits a discontinuity at the cutoff, though not as a definitive 0 to 1 jump.
-- In regards to the original replication package, we present here a simplified version of its main elements for an easy replication with only one dataset and one do-file.
-- Through this exercise, on top of standard Stata commands, we present a more in-depth explanation on how to make results’ tables using the “esttab” command, make more complex graphs with the “twoway” command and, specially, discover some commands from the “rdrobust” package, key for RDD analysis in Stata.
 
 ### Introduction
 The replication of research papers plays a pivotal role for Economics students. It allows them to learn about the implementation of econometrics methods, and to enhance the use of statistical software programs to further develop empirical works. This document provides a replication exercise for a fuzzy regression discontinuity design (RDD) model that estimates the impact of political fragmentation on government stability. It builds on a paper by Carozzi, Cipullo and Repetto (2022).

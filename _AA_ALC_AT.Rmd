@@ -5,13 +5,21 @@ Authors and date of the replication: Auvray Adrien, Carette Anne-Laure, Tarlapan
 ### Highlights {-}
 
 - Research question: What are the distributional effects of land reforms (1682-1895) in Denmark?
+
 - Methodology: Instrumental Variable (IV), used to deal with endogeneity issues stemming from reverse causality between the variable of interest (land productivity) and the dependent variable (land inequalities).
+
 - This methodology is standard by the choice of a geological instrument. It follows the usual steps of the IV procedure, including tests of the instrument’s pertinence (F-statistic of the 1st stage estimation).
+
 - Our added value to the original replication package lies in the detailed explanation of the provided code. Additionally, we demonstrate how to extract various tables and figures directly from the Stata code. While the authors have created a well-realized replication package, our contribution enhances its accessibility and usability.
+
 - Useful Stata tricks:
-Diagnostic Statistics: We leverage the ‘estat firststage’ command to obtain diagnostic statistics pertaining to the first-stage of instrumental variable estimation, which includes extracting and storing the F-statistics for further analysis.
-Looping: The ‘foreach’ loop structure is used, which enables the iteration over multiple years for instrumental variable regressions and allows to avoid repetitive commands in the code.
-Advanced Formatting: Through the utilization of the ‘esttab’ command along with various formatting options, we create well-formatted tables, which results in the production of tables that are not only clear and organized but also visually appealing.
+  - Diagnostic Statistics: We leverage the ‘estat firststage’ command to obtain diagnostic statistics pertaining to the first-stage of instrumental variable estimation, which includes extracting and storing the F-statistics for further analysis.
+  - Looping: The ‘foreach’ loop structure is used, which enables the iteration over multiple years for instrumental variable regressions and allows to avoid repetitive commands in the code.
+  - Advanced Formatting: Through the utilization of the ‘esttab’ command along with various formatting options, we create well-formatted tables, which results in the production of tables that are not only clear and organized but also visually appealing.
+  
+- Link to the paper: https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c
+
+- Link to the replication package: https://doi.org/10.1016/j.jdeveco.2021.102813
 
 ### Introduction
 
