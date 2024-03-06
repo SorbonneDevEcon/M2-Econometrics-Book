@@ -7,7 +7,7 @@ library(downloadthis)
 
 ## Link in Github repo
 download_link(
-  link = "https://github.com/fmmattioni/downloadthis/raw/master/inst/example/file_1.pdf",
+  link = "https://raw.githubusercontent.com/SorbonneDevEcon/M2-Econometrics-Book/main/resources/AA_ALC_AT/DoFile_AA_ALC_AT.do",
   button_label = "Download pdf file",
   button_type = "danger",
   has_icon = TRUE,
