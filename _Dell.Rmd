@@ -1,6 +1,6 @@
-## The persistent effects of Perus mining Mita by Dell (2010)
+## The Persistent Effects of Peru's Mining _Mita_
 
-Authors and date of the replication: Alejandro Arciniegas Herrera, Marcella De Giovanni, Anselm Rabaté, Kenan Topalovic - December 2023
+Dell, M. (2010). The Persistent Effects of Peru's Mining _Mita_. _Econometrica_, 78(6), 1863-1903. Retrieved 2023-11-20, from http://www.jstor.org/stable/40928464
 
 ### Highlights {-}
 
@@ -29,9 +29,6 @@ Authors and date of the replication: Alejandro Arciniegas Herrera, Marcella De G
     the "appendmodels\" program.
 
 -   Link to published article: <https://www.jstor.org/stable/40928464>
-
--   Link to open acces on Dell's webpage:
-    <https://scholar.harvard.edu/files/dell/files/ecta8121_0.pdf>
 
 ### Introduction
 
@@ -118,11 +115,11 @@ each group. Reassuringly, there are no significant differences.
 
 -   We are using for this the data gis_grid.dta.
 
--   Then, with the command "tabstat\" we are going to create a table
+-   Then, with the command `tabstat` we are going to create a table
     with the mean and the number of observations for the elevation by
     group (pothuan_mita, which is 0 if it's outside the *Mita* and 1
-    otherwise) and the same for the slope. This has the option "not\"
-    which is an abbreviation for nototal because we are not interested
+    otherwise) and the same for the slope. This has the option `not`
+    which is an abbreviation for `nototal` because we are not interested
     in the overall statistics.
 
 -   After this we're going to regress the elevation and the slope with
@@ -252,11 +249,13 @@ local Y "100 75 50"
 foreach Y in `Y' {
     // Log Consumption
     use "${dirdata}consumption.dta", clear
-    reg lhhequiv pothuan_mita x y x2 y2 xy x3 y3 x2y xy2 infants children adults elv_sh slope bfe4* if (cusco != 1 & d_bnd < `Y'), robust cluster (ubigeo)
+    reg lhhequiv pothuan_mita x y x2 y2 xy x3 y3 x2y xy2 infants children adults elv_sh ///
+      slope bfe4* if (cusco != 1 & d_bnd < `Y'), robust cluster (ubigeo)
     
     // Stunted Growth
     use "${dirdata}height.dta", clear
-    reg desnu pothuan_mita x y x2 y2 xy x3 y3 x2y xy2 elv_sh slope bfe4* if (cusco != 1 & d_bnd < `Y'), robust cluster (ubigeo)
+    reg desnu pothuan_mita x y x2 y2 xy x3 y3 x2y xy2 elv_sh slope bfe4* ///
+      if (cusco != 1 & d_bnd < `Y'), robust cluster (ubigeo)
 }
 ```
 
@@ -304,38 +303,42 @@ consequently admit the robustness of the main findings.
     and 100 km from the Mita border).
 
 ``` {.Stata language="Stata" numbers="none"}
-
 local Y "100 75 50"
 foreach Y in `Y' {
-    //Log Consumption
+   //Log Consumption
     
-    use "${dirdata}consumption.dta", clear
+   use "${dirdata}consumption.dta", clear
 
-    //Cubic polynomial in distance to Potosi
+   // Cubic polynomial in distance to Potosi
     
-   reg lhhequiv pothuan_mita dpot dpot2 dpot3 infants children adults elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'),robust cluster (ubigeo)
+   reg lhhequiv pothuan_mita dpot dpot2 dpot3 infants children adults elv_sh slope bfe4* ///
+    if (cusco!=1 & d_bnd<`Y'),robust cluster (ubigeo)
    
-   //Cubic polynomial in distance to the mita boundary
+   // Cubic polynomial in distance to the mita boundary
    
-   reg lhhequiv pothuan_mita dbnd_sh dbnd_sh2 dbnd_sh3 infants children adults elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
+   reg lhhequiv pothuan_mita dbnd_sh dbnd_sh2 dbnd_sh3 infants children adults elv_sh ///
+    slope bfe4* if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
    
    // Stunted Growth
    
    use "${dirdata}height.dta", clear
    
-    //Cubic polynomial in distance to Potosi
+   // Cubic polynomial in distance to Potosi
    
-   reg desnu pothuan_mita dpot dpot2 dpot3 elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
+   reg desnu pothuan_mita dpot dpot2 dpot3 elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'), ///
+    robust cluster (ubigeo)
    
-   //Cubic polyonomial in distance to the mita boundary
+   // Cubic polyonomial in distance to the mita boundary
    
-   reg desnu pothuan_mita dbnd_sh dbnd_sh2 dbnd_sh3 elv_sh slope bfe4*   if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
-   
+   reg desnu pothuan_mita dbnd_sh dbnd_sh2 dbnd_sh3 elv_sh slope bfe4*  ///
+    if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
 }
 
-reg desnu pothuan_mita dpot dpot2 dpot3 elv_sh slope bfe4* if (cusco!=1 & border==1), robust cluster (ubigeo)
+reg desnu pothuan_mita dpot dpot2 dpot3 elv_sh slope bfe4* if (cusco!=1 & border==1), ///
+  robust cluster (ubigeo)
    
-reg desnu pothuan_mita dbnd_sh dbnd_sh2 dbnd_sh3 elv_sh slope bfe4*   if (cusco!=1 & border==1), robust cluster (ubigeo)
+reg desnu pothuan_mita dbnd_sh dbnd_sh2 dbnd_sh3 elv_sh slope bfe4* ///
+  if (cusco!=1 & border==1), robust cluster (ubigeo)
 ```
 
 ### Appendix: Automatization of table outputs
@@ -431,26 +434,40 @@ foreach Y of num 100 75 50 25 {
 // Inputting everything on a Matrix
 
 // Submatrix 1: Elevation
-matrix elev = (insi_elev_100, outs_elev_100, con_se_elev_100, insi_elev_75, outs_elev_75, con_se_elev_75, insi_elev_50, outs_elev_50, con_se_elev_50, insi_elev_25, outs_elev_25, con_se_elev_25 \ ., ., se_elev_100, ., ., se_elev_75, ., ., se_elev_50, ., ., se_elev_25)
+matrix elev = (insi_elev_100, outs_elev_100, con_se_elev_100, insi_elev_75, ///
+  outs_elev_75, con_se_elev_75, insi_elev_50, outs_elev_50, con_se_elev_50, ///
+  insi_elev_25, outs_elev_25, con_se_elev_25 \ ., ., se_elev_100, ., ., se_elev_75, ., ///
+  ., se_elev_50, ., ., se_elev_25)
 
 // Submatrix 2: Slope
-matrix slope = (insi_slope_100, outs_slope_100, con_se_slope_100, insi_slope_75, outs_slope_75, con_se_slope_75, insi_slope_50, outs_slope_50, con_se_slope_50, insi_slope_25, outs_slope_25, con_se_slope_25 \ ., ., se_slope_100, ., ., se_slope_75, ., ., se_slope_50, ., ., se_slope_25)
+matrix slope = (insi_slope_100, outs_slope_100, con_se_slope_100, insi_slope_75, ///
+  outs_slope_75, con_se_slope_75, insi_slope_50, outs_slope_50, con_se_slope_50, ///
+  insi_slope_25, outs_slope_25, con_se_slope_25 \ ., ., se_slope_100, ., ., se_slope_75, ///
+  ., ., se_slope_50, ., ., se_slope_25)
 
 // Submatrix 3: Number of observations for elevation and slope
-matrix num_slope = (N_insi_slope_100, N_outs_slope_100, ., N_insi_slope_75, N_outs_slope_75, ., N_insi_slope_50, N_outs_slope_50, ., N_insi_slope_25, N_outs_slope_25, .)
+matrix num_slope = (N_insi_slope_100, N_outs_slope_100, ., N_insi_slope_75, ///
+  N_outs_slope_75, ., N_insi_slope_50, N_outs_slope_50, ., N_insi_slope_25, ///
+  N_outs_slope_25, .)
 
 // Submatrix 4: Indigenous
-matrix indig = (insi_indig_100, outs_indig_100, con_se_indig_100, insi_indig_75, outs_indig_75, con_se_indig_75, insi_indig_50, outs_indig_50, con_se_indig_50, insi_indig_25, outs_indig_25, con_se_indig_25 \ ., ., se_indig_100, ., ., se_indig_75, ., ., se_indig_50, ., ., se_indig_25)
+matrix indig = (insi_indig_100, outs_indig_100, con_se_indig_100, insi_indig_75, ///
+  outs_indig_75, con_se_indig_75, insi_indig_50, outs_indig_50, con_se_indig_50, ///
+  insi_indig_25, outs_indig_25, con_se_indig_25 \ ., ., se_indig_100, ., ., se_indig_75, ///
+  ., ., se_indig_50, ., ., se_indig_25)
 
 // Submatrix 5: Number of observations for Indigenous
-matrix num_indig = (N_insi_indig_100, N_outs_indig_100, ., N_insi_indig_75, N_outs_indig_75, ., N_insi_indig_50, N_outs_indig_50, ., N_insi_indig_25, N_outs_indig_25, .)
+matrix num_indig = (N_insi_indig_100, N_outs_indig_100, ., N_insi_indig_75, ///
+  N_outs_indig_75, ., N_insi_indig_50, N_outs_indig_50, ., N_insi_indig_25, ///
+  N_outs_indig_25, .)
 
 // Final Matrix
 
 matrix Table1 = (elev\slope\num_slope\indig\num_indig)
 
 matrix rownames Table1 = Elevation "." Slope "." Observations %Indigenous "." Observations
-matrix colnames Table1 = Inside Outside "Conley SE/SE" Inside Outside "Conley SE/SE" Inside Outside "Conley SE/SE" Inside Outside "Conley SE/SE" 
+matrix colnames Table1 = Inside Outside "Conley SE/SE" Inside Outside "Conley SE/SE" ///
+  Inside Outside "Conley SE/SE" Inside Outside "Conley SE/SE" 
     
 // Show in command
     
@@ -458,7 +475,7 @@ esttab matrix(Table1, fmt("0 0 2 0 0 2 0 0 " "0 0 2 0 0 2 0 0 " "2 2 2 2 0 2 2")
     refcat(Elevation "GIS Measures" %Indigenous "", nolab) ///
     coef(. " ") ///
     title("Table 1: Summary Statistics") nomti ///
-    addn("The unit of observation is 20 x 20 km grid cells for the geospatial measures and the household for % indigenous. Conley standard errors for the difference in means between mita and non-mita observations are first in each SE columns. Robust standard errors for the difference in means are second. For % indigenous, the robust standard errors are corrected for clustering at the district level. The geospatial measures are calculated using elevation data at 30 arc second (1 km) resolution (SRTM (2000)). The unit of measure for elevation is 1000 meters and for slope is degrees. A household is indigenous if its members primarily speak an indigenous language in the home (ENAHO (2001)). In the first three columns, the sample includes only observations located less than 100 km from the mita boundary, and this threshold is reduced to 75, 50, and finally 25 km in the succeeding columns.") replace
+    addn("The unit of observation is 20 × 20 km grid cells for the geospatial measures and the household for % indigenous. Conley standard errors for the difference in means between mita and non-mita observations are first in each SE columns. Robust standard errors for the difference in means are second. For % indigenous, the robust standard errors are corrected for clustering at the district level. The geospatial measures are calculated using elevation data at 30 arc second (1 km) resolution (SRTM (2000)). The unit of measure for elevation is 1000 meters and for slope is degrees. A household is indigenous if its members primarily speak an indigenous language in the home (ENAHO (2001)). In the first three columns, the sample includes only observations located less than 100 km from the mita boundary, and this threshold is reduced to 75, 50, and finally 25 km in the succeeding columns.") replace
 ```
 
 #### Automatic Output for Table 2
@@ -473,8 +490,9 @@ local j = 1
 foreach Y in `Y' {
     // Log Consumption
     use "${dirdata}consumption.dta", clear
-    quietly reg lhhequiv pothuan_mita x y x2 y2 xy x3 y3 x2y xy2 infants children adults elv_sh slope bfe4* if (cusco != 1 & d_bnd < `Y'), robust cluster (ubigeo)
-    
+    quietly reg lhhequiv pothuan_mita x y x2 y2 xy x3 y3 x2y xy2 infants children adults ///
+      elv_sh slope bfe4* if (cusco != 1 & d_bnd < `Y'), robust cluster (ubigeo)
+
     local i = 1
     
     scalar Nclusters_`j'_`i' =e(N_clust)
@@ -489,7 +507,8 @@ foreach Y in `Y' {
     
     // Stunted Growth
     use "${dirdata}height.dta", clear
-    quietly reg desnu pothuan_mita x y x2 y2 xy x3 y3 x2y xy2 elv_sh slope bfe4* if (cusco != 1 & d_bnd < `Y'), robust cluster (ubigeo)
+    quietly reg desnu pothuan_mita x y x2 y2 xy x3 y3 x2y xy2 elv_sh slope bfe4* ///
+      if (cusco != 1 & d_bnd < `Y'), robust cluster (ubigeo)
     
     scalar Nclusters_`j'_`i' =e(N_clust)
     scalar N_`j'_`i' =e(N)
@@ -502,19 +521,22 @@ foreach Y in `Y' {
     local j = `j' + 1
 }
 
+matrix Main = (b_1_1, b_2_1, b_3_1 \ se_1_1, se_2_1, se_3_1 \ R_1_1, R_2_1, R_3_1 \ ///
+  N_1_1, N_2_1, N_3_1 \ Nclusters_1_1, Nclusters_2_1, Nclusters_3_1 \ b_1_2, b_2_2, ///
+  b_3_2 \ se_1_2, se_2_2, se_3_2 \ R_1_2, R_2_2, R_3_2 \ N_1_2, N_2_2, N_3_2 \ ///
+  Nclusters_1_2, Nclusters_2_2, Nclusters_3_2)
 
-matrix Main = (b_1_1, b_2_1, b_3_1 \ se_1_1, se_2_1, se_3_1 \ R_1_1, R_2_1, R_3_1 \ N_1_1, N_2_1, N_3_1 \ Nclusters_1_1, Nclusters_2_1, Nclusters_3_1 \ b_1_2, b_2_2, b_3_2 \ se_1_2, se_2_2, se_3_2 \ R_1_2, R_2_2, R_3_2 \ N_1_2, N_2_2, N_3_2 \ Nclusters_1_2, Nclusters_2_2, Nclusters_3_2)
-
-matrix rownames Main = Mita1 "." R2 "Number of Observations" "Number of Clusters" Mita2 "." R2 "Number of Observations" "Number of Clusters"
+matrix rownames Main = Mita1 "." R2 "Number of Observations" "Number of Clusters" Mita2 ///
+  "." R2 "Number of Observations" "Number of Clusters"
 matrix colnames Main = "<100 km of Bound." "<75 km of Bound." "<50 km of Bound."
 
 esttab matrix(Main, fmt("3 3 3 0 0 3 3 3 0 0")), ///
     model(17) ///
     varwidth(40) ///
     not ///
-    refcat(Mita1 "Log Equiv. Household Consumption (2001)" Mita2 "Stunted Growth, Children 6-9 (2005)", nolab) ///
-    coef(. " " Mita1 "Mita" Mita2 "Mita") ///
-    nomti ///
+    refcat(Mita1 "Log Equiv. Household Consumption (2001)" ///
+		Mita2 "Stunted Growth, Children 6-9 (2005)", nolab) ///
+    coef(. " " Mita1 "Mita" Mita2 "Mita") nomti ///
     title("Table 2: Main Results for replication")
 ```
 
@@ -532,7 +554,8 @@ foreach Y in `Y' {
     use "${dirdata}consumption.dta", clear
     ren pothuan_mita row1
 //Cubic polynomial in distance to Potosi
-    eststo id`i': quietly reg lhhequiv row1 dpot dpot2 dpot3 infants children adults elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'),robust cluster (ubigeo)
+    eststo id`i': quietly reg lhhequiv row1 dpot dpot2 dpot3 infants children adults ///
+      elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'),robust cluster (ubigeo)
     quietly matrix R_`i' =e(r2)
     quietly scalar Nclusters_`i' = e(N_clust)
     quietly scalar N_`i' = e(N)
@@ -540,9 +563,9 @@ foreach Y in `Y' {
  //Cubic polynomial in distance to the mita boundary
     
     ren row1 row2
- 
     local i = `i'+ 1
-    eststo id`i': quietly reg lhhequiv row2 dbnd_sh dbnd_sh2 dbnd_sh3 infants children adults elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
+    eststo id`i': quietly reg lhhequiv row2 dbnd_sh dbnd_sh2 dbnd_sh3 infants children ///
+      adults elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
     quietly matrix R_`i' =e(r2)
     
 // Stunted Growth
@@ -550,9 +573,9 @@ foreach Y in `Y' {
 //Cubic polynomial in distance to Potosi
 
     ren pothuan_mita row1
-
     local i = `i'+ 1
-    eststo id`i': quietly reg desnu row1 dpot dpot2 dpot3 elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
+    eststo id`i': quietly reg desnu row1 dpot dpot2 dpot3 elv_sh slope bfe4* ///
+      if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
     quietly matrix R_`i' =e(r2)
     quietly scalar Nclusters_`i' = e(N_clust)
     quietly scalar N_`i' = e(N)
@@ -561,20 +584,23 @@ foreach Y in `Y' {
 
     ren row1 row2
     local i = `i'+ 1
-    eststo id`i': quietly reg desnu row2 dbnd_sh dbnd_sh2 dbnd_sh3 elv_sh slope bfe4* if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
+    eststo id`i': quietly reg desnu row2 dbnd_sh dbnd_sh2 dbnd_sh3 elv_sh slope bfe4* ///
+      if (cusco!=1 & d_bnd<`Y'), robust cluster (ubigeo)
     quietly matrix R_`i' =e(r2)
     local i = `i'+ 1    
 }
 use "${dirdata}height.dta", clear
 
 ren pothuan_mita row1
-eststo id13: quietly reg desnu row1 dpot dpot2 dpot3 elv_sh slope bfe4* if (cusco!=1 & border==1), robust cluster (ubigeo)
+eststo id13: quietly reg desnu row1 dpot dpot2 dpot3 elv_sh slope bfe4* ///
+  if (cusco!=1 & border==1), robust cluster (ubigeo)
     quietly matrix R_13 =e(r2)
     quietly scalar Nclusters_13 = e(N_clust)
     quietly scalar N_13 = e(N)
     
 ren row1 row2
-eststo id14: quietly reg desnu row2 dbnd_sh dbnd_sh2 dbnd_sh3 elv_sh slope bfe4* if (cusco!=1 & border==1), robust cluster (ubigeo)
+eststo id14: quietly reg desnu row2 dbnd_sh dbnd_sh2 dbnd_sh3 elv_sh slope bfe4* ///
+  if (cusco!=1 & border==1), robust cluster (ubigeo)
     quietly matrix R_14 =e(r2)
 
     
@@ -605,19 +631,24 @@ foreach i in `i' {
 esttab c1 c2 c3 c4 c5 c6 c7, ///
     keep(row1 row2 R_1 R_2) ///
     coeflabels(row1 "Mita" row2 "Mita" R_1 "R2" R_2 "R2")  ///
-    cells(b(star fmt(3)) se(par fmt(3)) R2_1(fmt(3)) R2_2(fmt(3))) star(* 0.1 ** 0.05 *** 0.01) noobs ///
+    cells(b(star fmt(3)) se(par fmt(3)) R2_1(fmt(3)) R2_2(fmt(3))) ///
+    star(* 0.1 ** 0.05 *** 0.01) noobs ///
     title("TABLE II LIVING STANDARDS") ///
-    ml("<100 km of Bound" "<75 km of Bound" "<50 km of Bound" "<100 km of Bound" "<75 km of Bound" "<50 km of Bound" "Border District") ///
+    ml("<100 km of Bound" "<75 km of Bound" "<50 km of Bound" "<100 km of Bound" ///
+    "<75 km of Bound" "<50 km of Bound" "Border District") ///
     model(17) varwidth(30) ///
     posth("Sample within: " `"{hline @width}"') hlinechar("-") ///
-    mgroups("" "Log Equiv. Household Consumption (2001)" "Stunted Growth, Children 6-9 (2005)", pattern(1 1 0 0 1 0 0) span) ///
-    s(geoc bound clu obs, labels("Geo. controls" "Boundary F.E.s" "Clusters" "Observations")) ///
+    mgroups("" "Log Equiv. Household Consumption (2001)" ///
+	"Stunted Growth, Children 6-9 (2005)", pattern(1 1 0 0 1 0 0) span) ///
+	s(geoc bound clu obs, labels("Geo. controls" ///
+    "Boundary F.E.s" "Clusters" "Observations")) ///
     order(row1 R_1 row2 R_2) ///
-    refcat(row1 "Panel B. Cubic Polynomial in Distance to Potosi" row2 "Panel C. Cubic Polynomial in Distance to Mita Boundary", nolabel) ///
-    nonote addnote(""The unit of observation is the household in columns 1-3 and the individual in columns 4-7. Robust standard errors, adjusted for clustering by district, are in parentheses. The dependent variable is log equivalent household consumption (ENAHO (2001)) in columns 1-3, and a dummy equal to 1 if the child has stunted growth and equal to 0 otherwise in columns 4-7 (Ministro de Educacion (2005a)). Mita is an indicator equal to 1 if the household's district contributed to the mita and equal to 0 otherwise (Saignes (1984), Amat y Juniet (1947, pp. 249, 284)). Panel B includes a cubic polynomial in Euclidean distance from the observation's district capital to Potosi, and panel C includes a cubic polynomial in Euclidean distance to the nearest point on the mita boundary. All regressions include controls for elevation and slope, as well as boundary segment fixed effects (F.E.s). Columns 1-3 include demographic controls for the number of infants, children, and adults in the household. In columns 1 and 4, the sample includes observations whose district capitals are located within 100 km of the mita boundary, and this threshold is reduced to 75 and 50 km in the succeeding columns. Column 7 includes only observations whose districts border the mita boundary. 78% of the observations are in mita districts in column 1, 71% in column 2, 68% in column 3, 78% in column 4, 71% in column 5, 68% in column 6, and 58% in column 7. Coefficients that are significantly different from zero are denoted by the following system: *10%, **5%, and ***1%.") tex replace
+    refcat(row1 "Panel B. Cubic Polynomial in Distance to Potosi" row2 ///
+	"Panel C. Cubic Polynomial in Distance to Mita Boundary", nolabel) nonote ///
+    addnote("The unit of observation is the household in columns 1–3 and the individual in columns 4–7. Robust standard errors, adjusted for clustering by district, are in parentheses. The dependent variable is log equivalent household consumption (ENAHO (2001)) in columns 1–3, and a dummy equal to 1 if the child has stunted growth and equal to 0 otherwise in columns 4–7 (Ministro de Educación (2005a)). Mita is an indicator equal to 1 if the household's district contributed to the mita and equal to 0 otherwise (Saignes (1984), Amat y Juniet (1947, pp. 249, 284)). Panel B includes a cubic polynomial in Euclidean distance from the observation's district capital to Potosí, and panel C includes a cubic polynomial in Euclidean distance to the nearest point on the mita boundary. All regressions include controls for elevation and slope, as well as boundary segment fixed effects (F.E.s). Columns 1–3 include demographic controls for the number of infants, children, and adults in the household. In columns 1 and 4, the sample includes observations whose district capitals are located within 100 km of the mita boundary, and this threshold is reduced to 75 and 50 km in the succeeding columns. Column 7 includes only observations whose districts border the mita boundary. 78% of the observations are in mita districts in column 1, 71% in column 2, 68% in column 3, 78% in column 4, 71% in column 5, 68% in column 6, and 58% in column 7. Coefficients that are significantly different from zero are denoted by the following system: *10%, **5%, and ***1%.") tex replace
 ```
 
-#### Install "x_ols\" and "appendmodels\" programs
+#### Install "x_ols" and "appendmodels" programs
 
 ##### x_ols {-}
 
@@ -763,11 +794,11 @@ while `z'<=`xreg'{;
     gen `se1`z''=cov_dep[`z',`z'];
     gen `se2`z''=sqrt(`se1`z'');
     di "`ind`z''" _col(13)  `beta`z''  _col(29)  `se`z'' _col(42) `se2`z'';
-    scalar con_se`z'=`se2`z''; // ADDED BY THE REPLICATORS: This line is to capture Conley S.E.
+    scalar con_se`z'=`se2`z''; // ADDED BY THE REPLICATORS: This line is to 
+                               // capture Conley S.E.
 local z=`z'+1};
 
-end;
-exit;
+end
 ```
 
 ##### appendmodels {-}
@@ -803,7 +834,7 @@ program appendmodels, eclass
         else {
             mat `V' = ///
             ( `V' , J(rowsof(`V'),colsof(`tmp'),0) ) \ ///
-            ( J(rowsof(`tmp'),colsof(`V'),0) , `tmp' )
+              ( J(rowsof(`tmp'),colsof(`V'),0) , `tmp' )
         }
     }
     local names: colfullnames `b'
@@ -811,7 +842,12 @@ program appendmodels, eclass
     mat rown `V' = `names'
     eret post `b' `V' 
     eret local cmd "whatever"
-end
+end;
+exit;
 ```
 
+---
 
+**Authors of the replication:** Alejandro Arciniegas Herrera, Marcella De Giovanni, Anselm Rabaté, Kenan Topalovic
+
+**Date:** December 2023

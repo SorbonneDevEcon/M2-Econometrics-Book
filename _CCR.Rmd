@@ -1,14 +1,12 @@
 ## Political Fragmentation and Government Stability: Evidence from Local Governments in Spain
 
-Carozzi, F., Cipullo, Da. & Repetto, L. (2022). ”Political Fragmentation and Government Stability: Evidence from Local Governments in Spain.” American Economic Journal: Applied Economics, 14 (2): 23-50.
-
-Authors and date of the replication: Carolina Arboleda Lenis, Elif C¸anga, Mariana Navarro Torres, Martina Pugliese - December 2023
+Carozzi, F., Cipullo, Da. & Repetto, L. (2022). ”Political Fragmentation and Government Stability: Evidence from Local Governments in Spain.” _American Economic Journal: Applied Economics_, 14 (2): 23-50.
 
 ### Highlights {-}
 
-- **Research question:** How does political fragmentation impact government stability?.
+- The paper investigates the impact of political fragmentation on government stability.
 
-- **Methodology employed:** Fuzzy Regression Discontinuity Design (RDD) model.
+- The authors employ a fuzzy Regression Discontinuity Design (RDD) model.
 
   - It belongs to the the regression discontinuity design broad methodology, which is a quasi experimental method used to estimate the causal effect of an intervention over a threshold or a cutoff point. It enables the comparison of individuals immediately above and below this specific cutoff point to assess the impact of a treatment on a particular outcome.
   
@@ -48,34 +46,27 @@ Second, the installation of all packages required to successfully carry out the 
 #### **Folder creation** {-}
 Create the appropriate folders and globals to store your datasets and results. A global is a named storage location that can hold a value or a string of text. We use the command “global” to define it and the prefix “$” to access it.
 
-
-```{stata, eval = F}
+```{stata, eval=F}
 clear all
 set more off
-global dt "C:\Users\Dell\Desktop\test\data" 
+global dt "C:\Users\Dell\Desktop\laurine_stata_files\CCR" 
 ```
+
 #### **Package Installation** {-}
 To carry out the replication of this paper, the following packages must be installed:
 
-```{css, echo=FALSE, class.chunk="scroll-100"}
-.scroll-100 {
-  max-height: 1000px;
-  font-size: 32px;
-  max-width: 1000px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overflow-wrap: break-word;
-  background-color: blue;
-}
-```
-
-```{stata, eval=F, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-ssc install missings //Provides tools and commands for working with missing data.
-ssc install rdrobust // Provides tools and commands to execute a regression discontinuity design methodology.
-ssc install ivreg2 // Extends Stata’s built-in instrumental variables (IV) estimation capabilities.
-ssc install estout // Provides additional formatting and exporting options for regression results.
-ssc install outreg2 // Provides additional options formatting regression results for output in tables.
-ssc install ranktest // Provides additional tests for rank-related issues, such as rank correlation coefficients.
+```{stata, eval=F}
+ssc install missings // Provides tools and commands for working with missing data.
+ssc install rdrobust // Provides tools and commands to execute a regression discontinuity 
+                     // design methodology.
+ssc install ivreg2 // Extends Stata’s built-in instrumental variables (IV) estimation
+                   // capabilities.
+ssc install estout // Provides additional formatting and exporting options for regression
+                   // results.
+ssc install outreg2 // Provides additional options formatting regression results for 
+                    // output in tables.
+ssc install ranktest // Provides additional tests for rank-related issues, such as rank 
+                     // correlation coefficients.
 ```
 
 ### Descriptive Statistics
@@ -100,8 +91,8 @@ keep if Mainresults_sample == 1
 Now, in order to replicate each panel from Table 1. Descriptive Statistics we first open the dataset and, as stated before, keep only the observations needed for the replication of the descriptive statistics:
 
 ```{stata, eval=F}
-use "$dt\Dataset\_CCR.dta", clear
-keep if Descrip\_sample == 1
+use "$dt\Dataset_CCR.dta", clear
+keep if Descrip_sample == 1
 ```
 
 #### **Panel A. General information** {-}
@@ -117,14 +108,20 @@ Now, we compute some summary statistics (mean, standard deviation, minimum, and 
 
 ```{stata, eval=F}
 eststo clear //Clear any previously stored matrix
-eststo panelA: estpost tabstat population\_average surface number_elections, stat(mean sd min max) columns(statistics)
+eststo panelA: estpost tabstat population_average surface number_elections, ///
+  stat(mean sd min max) columns(statistics)
 restore
 ```
 
 Finally, we can replicate the table of Panel A of the Descriptive statistics table using the “esttab” command, which takes stored results from one or more estimation commands and formats them into a table.
 
 ```{stata, eval=F}
-esttab panelA, cells((mean(fmt(%18.2fc)) sd(fmt(2)) min(fmt(1)) max(fmt(0)))) nomtitles nonum collabels("Mean" "Std. dev." "Min" "Max") title("TABLE 1. DESCRIPTIVE STATISTICS") refcat(population_average "A. General information", nolabel) obslast varwidth(35) label addnotes(Notes: "Panel A provides descriptives at the municipal level for all municipalities that appear at least once in our sample.")
+esttab panelA, cells((mean(fmt(%18.2fc)) sd(fmt(2)) min(fmt(1)) max(fmt(0)))) nomtitles ///
+  nonum collabels("Mean" "Std. dev." "Min" "Max") ///
+  title("TABLE 1. DESCRIPTIVE STATISTICS") ///
+  refcat(population_average "A. General information", nolabel) ///
+  obslast varwidth(35) label ///
+  addnotes(Notes: "Panel A provides descriptives at the municipal level for all municipalities that appear at least once in our sample.")
 ```
 
 **Explanation of “esttab” syntaxis and options: cells**: specifies which results to show. **nomtitles**: removes the variable names in the columns’ titles. **nonum**: removes the numbering rows from the columns. **collabels**: adds custom column labels. **title**: adds a title for the table. **refcat**: creates an additional line with descriptions above some certain variables /groups of variables. **obslast**: puts the number of observations last. **varwidth**: specifies the width of the variable names displayed in the table. **label**: shows labels instead of variable names. **addnotes**: adds footnotes to the table.
@@ -134,25 +131,40 @@ The same computation of the summary statistics, storage and tabulation process i
 #### **Panel B. Municipal Elections and Local Government** {-}
 
 ```{stata, eval=F}
-eststo panelB: estpost tabstat nparties nparties\_seats seats_total mocion_5_100 abs_majority PP_mayor PSOE_mayor IU_mayor CIU_mayor , stat(mean sd min max) columns(statistics)
+eststo panelB: estpost tabstat nparties nparties_seats seats_total mocion_5_100 ///
+  abs_majority PP_mayor PSOE_mayor IU_mayor CIU_mayor , stat(mean sd min max) ///
+  columns(statistics)
 
-esttab panelB, cells((mean(fmt(%18.2fc)) sd(fmt(2)) min(fmt(1)) max(fmt(0)) )) nomtitles nonum collabels("Mean" "Std. dev." "Min" "Max") refcat(nparties "B. Municipal Elections and Local Government", nolabel) obslast varwidth(35) label addnotes(Notes: "Panel B provides descriptives on electoral outcomes at the municipality-council level.")
+esttab panelB, cells((mean(fmt(%18.2fc)) sd(fmt(2)) min(fmt(1)) max(fmt(0)) )) nomtitles ///
+  nonum collabels("Mean" "Std. dev." "Min" "Max") ///
+  refcat(nparties "B. Municipal Elections and Local Government", nolabel) ///
+  obslast varwidth(35) label ///
+  addnotes(Notes: "Panel B provides descriptives on electoral outcomes at the municipality-council level.")
 ```
 
 #### **Panel C.1 - Local Government - Stable Mayor** {-}
 
 ```{stata, eval=F}
-eststo panelC1: estpost tabstat abs\majority nparties\seats if mocion\5==0, stat(mean sd min max) columns(statistics)
+eststo panelC1: estpost tabstat abs_majority nparties_seats if mocion_5==0, ///
+  stat(mean sd min max) columns(statistics)
 
-esttab panelC1, cells((mean(fmt(%18.2fc)) sd(fmt(2)) min(fmt(1)) max(fmt(0)) )) nomtitles nonum collabels("Mean" "Std. dev." "Min" "Max") refcat(abs\majority "C1. Local Government - Stable Mayor", nolabel) obslast varwidth(35) label addnotes(Notes: "Panel C splits this sample into councils that approved at least one vote of no confidence during the term (C2), and those that did not(C1)")
+esttab panelC1, cells((mean(fmt(%18.2fc)) sd(fmt(2)) min(fmt(1)) max(fmt(0)) )) ///
+  nomtitles nonum collabels("Mean" "Std. dev." "Min" "Max") refcat(abs_majority ///
+  "C1. Local Government - Stable Mayor", nolabel) obslast varwidth(35) label ///
+  addnotes(Notes: "Panel C splits this sample into councils that approved at least one vote of no confidence during the term (C2), and those that did not(C1)")
 ```
 
 #### **Panel C.2 - Local Government - Vote of No Confidence** {-}
 
 ```{stata, eval=F}
-eststo panelC2: estpost tabstat abs\majority nparties\seats if mocion\5==1, stat(mean sd min max) columns(statistics)
+eststo panelC2: estpost tabstat abs_majority nparties_seats if mocion_5==1, ///
+  stat(mean sd min max) columns(statistics)
 
-esttab panelC2, cells((mean(fmt(%18.2fc)) sd(fmt(2)) min(fmt(1)) max(fmt(0)) )) nomtitles nonum collabels("Mean" "Std. dev." "Min" "Max") refcat(abs\majority "C2. Local Government - Vote of No Confidence", nolabel) obslast varwidth(35) label addnotes(Notes: "Panel C splits this sample into councils that approved at least one vote of no confidence during the term (C2), and those that did not (C1)")
+esttab panelC2, cells((mean(fmt(%18.2fc)) sd(fmt(2)) min(fmt(1)) max(fmt(0)) )) ///
+  nomtitles nonum collabels("Mean" "Std. dev." "Min" "Max") ///
+  refcat(abs_majority "C2. Local Government - Vote of No Confidence", nolabel) ///
+  obslast varwidth(35) label ///
+  addnotes(Notes: "Panel C splits this sample into councils that approved at least one vote of no confidence during the term (C2), and those that did not (C1)")
 ```
 
 ### Empirical Strategy
@@ -190,8 +202,8 @@ Figure 1 shows both the first stage and the reduced form graphs. These figures a
 In order to replicate these graphs, the mains results and the robustness checks, first we are going to keep only the observations needed.
 
 ```{stata, eval=F}
-use "$dt\Dataset\_CCR.dta", clear
-keep if Mainresults\_sample == 1
+use "$dt\Dataset_CCR.dta", clear
+keep if Mainresults_sample == 1
 ```
 
 #### **Figure 1: Top Panel** {-}
@@ -200,30 +212,40 @@ Since this is a fuzzy design, the first panel plots the running variable against
 ```{stata, eval=F}
 preserve
 
-  local increment = 0.0025 // This is done to create the bins of the running variable, which refer to intervals in which the data is grouped or divided.
+  local increment = 0.0025 // This is done to create the bins of the running variable, which
+                           // refer to intervals in which the data is grouped or divided.
 
-  egen rv_bin = cut(rv), at(-0.025(‘increment’)0.025) //Create a new variable rv_bin that categorizes the variable rv into bins based on the specified range and increment
+  egen rv_bin = cut(rv), at(-0.025(`increment')0.025) // Create a new variable rv_bin that
+                                                      // categorizes the variable rv into 7
+                                                      // bins based on the specified range  
+                                                      // and increment
+													  
 
-  egen nparties_mean=mean(nparties_seats) if nparties_seats != ., by(rv_bin) //Generate x-axis points as the average within the bin
+  // Generate x-axis points as the average within the bin:
+  egen nparties_mean=mean(nparties_seats) if nparties_seats != ., by(rv_bin)
 
-  replace rv_bin = rv_bin+‘increment’/2 //Center bins in the midpoint instead of left-end
+  replace rv_bin = rv_bin+`increment'/2 // Center bins in the midpoint instead of left-end
 ```
 
 #### **Plotting the First Stage Graph** {-}
 Now we create a two-way graph with linear fit confidence intervals (lfitci) and scatter points (scatter)
 
 ```{stata, eval=F}
-twoway (lfitci nparties_seats rv if rv<=0 & rv>=-0.025, lwidth(thick) fintensity(inten80) lcolor(gs6) alcolor(none) acolor(gs12\*0.1) fcolor(gs14) alp(dash) ) ///
-  (lfitci nparties_seats rv if rv>0 & rv<=0.025 , lwidth(thick) fintensity(inten80) lcolor(gs6) alcolor(none) acolor(gs12\*0.1) fcolor(gs14) alp(dash)) ///
-  (scatter nparties\_mean rv_bin, msymbol(O) mlcolor(gs11) mfcolor(gs15) msize(medlarge ) xlabel(-.025(.025).025, labsize(large))) ///
-  (scatteri 3 0 4 0, recast(line) ) ///
-  , ylabel(3(.5)4, labsize(large)) ytitle(N. of parties, size(large)) xtitle(Distance to threshold, size(large)) legend(off)
+twoway (lfitci nparties_seats rv if rv<=0 & rv>=-0.025, lwidth(thick) ///
+  fintensity(inten80) lcolor(gs6) alcolor(none) acolor(gs12*0.1) fcolor(gs14) ///
+  alp(dash) ) (lfitci nparties_seats rv if rv>0 & rv<=0.025 , lwidth(thick) ///
+  fintensity(inten80) lcolor(gs6) alcolor(none) acolor(gs12*0.1) fcolor(gs14) ///
+  alp(dash)) (scatter nparties_mean rv_bin, msymbol(O) mlcolor(gs11) ///
+  mfcolor(gs15) msize(medlarge ) xlabel(-.025(.025).025, labsize(large))) ///
+  (scatteri 3 0 4 0, recast(line) ) , ylabel(3(.5)4, labsize(large)) ///
+  ytitle(N. of parties, size(large)) xtitle(Distance to threshold, ///
+  size(large)) legend(off)
 
-graph export "$dt/First\_stage\_025\_linear.png", replace
+graph export "$dt/First_stage_025_linear.png", replace
 restore
 ```
 
-**Explanation of twoway syntaxis and options**: **lwidth(thick)**: specifies the line width as thick. **intensity(inten80)**: sets the intensity of the confidence interval to 80%. **lcolor(gs6)**: sets the line color to grayscale code 6. **alcolor(none)**: specifies no color for the area under the line. **acolor(gs12\*0.1)**: sets the color of the confidence interval area to grayscale code 12 with 10% opacity. **fcolor(gs14)**: sets the color of the fit line to grayscale code 14. **alp(dash)**: specifies a dashed line for the fit. **msymbol(O)**: specifies circular markers for the scatter plot. **mlcolor(gs11)**: sets the line color of the markers to grayscale code 11. **mfcolor(gs15)**: sets the fill color of the markers to grayscale code 15. **msize(medlarge)**: sets the marker size to mediumlarge. **xlabel(-.025(.025).025, labsize(large))**: specifies custom x-axis labels. **scatteri 3 0 4 0** specifies a vertical line segment between the points (0, 3) and (0, 4). **recast(line)**: instructs Stata to recast the scatter plot as a line plot. **graph export**: exports the graph in a specified folder and designated format.
+**Explanation of twoway syntaxis and options**: **lwidth(thick)**: specifies the line width as thick. **intensity(inten80)**: sets the intensity of the confidence interval to 80%. **lcolor(gs6)**: sets the line color to grayscale code 6. **alcolor(none)**: specifies no color for the area under the line. **acolor(gs12*0.1)**: sets the color of the confidence interval area to grayscale code 12 with 10% opacity. **fcolor(gs14)**: sets the color of the fit line to grayscale code 14. **alp(dash)**: specifies a dashed line for the fit. **msymbol(O)**: specifies circular markers for the scatter plot. **mlcolor(gs11)**: sets the line color of the markers to grayscale code 11. **mfcolor(gs15)**: sets the fill color of the markers to grayscale code 15. **msize(medlarge)**: sets the marker size to mediumlarge. **xlabel(-.025(.025).025, labsize(large))**: specifies custom x-axis labels. **scatteri 3 0 4 0** specifies a vertical line segment between the points (0, 3) and (0, 4). **recast(line)**: instructs Stata to recast the scatter plot as a line plot. **graph export**: exports the graph in a specified folder and designated format.
 
 #### **Figure 1: Bottom Panel** {-}
 For the second stage we repeat the same but for the reduced form, plotting directly the Probability of No confidence Votes against the the running variable (Distance to threshold).
@@ -233,20 +255,24 @@ preserve
 
 local increment = 0.0025
 
-egen rv_bin = cut(rv), at(-0.025(increment’)0.025)
+egen rv_bin = cut(rv), at(-0.025(`increment')0.025)
 egen mocion_mean=mean(mocion_5) if mocion_5 != ., by(rv_bin)
 
-replace rv_bin = rv_bin+increment’/2
+replace rv_bin = rv_bin+`increment'/2
 
 // Reduced form graph
 twoway ///
-  (lfitci mocion_5 rv if rv<=0 & rv>=-0.025, lwidth(thick) fintensity(inten80) lcolor(gs6) alcolor(none) acolor(gs12\*0.1) fcolor(gs14) alp(dash) ) ///
-  (lfitci mocion_5 rv if rv>0 & rv<=0.025 , lwidth(thick) fintensity(inten80) lcolor(gs6) alcolor(none) acolor(gs12\*0.1) fcolor(gs14) alp(dash)) ///
-  (scatter mocion\_mean rv\_bin, msymbol(O) mlcolor(gs11) mfcolor(gs15) msize(medlarge ) xlabel(-.025(.025).025, labsize(large))) ///
-  (scatteri 0 0 0.06 0, recast(line) ) ///
-  , ylabel(0(.02).06, labsize(large)) ytitle(P(No-confidence vote), size(large)) xtitle(Distance to threshold, size(large)) legend(off)
+  (lfitci mocion_5 rv if rv<=0 & rv>=-0.025, lwidth(thick) fintensity(inten80) ///
+  lcolor(gs6) alcolor(none) acolor(gs12*0.1) fcolor(gs14) alp(dash) ) ///
+  (lfitci mocion_5 rv if rv>0 & rv<=0.025 , lwidth(thick) fintensity(inten80) ///
+  lcolor(gs6) alcolor(none) acolor(gs12*0.1) fcolor(gs14) alp(dash)) ///
+  (scatter mocion_mean rv_bin, msymbol(O) mlcolor(gs11) mfcolor(gs15) msize(medlarge ) ///
+  xlabel(-.025(.025).025, labsize(large))) (scatteri 0 0 0.06 0, recast(line) ) ///
+  , ylabel(0(.02).06, labsize(large)) ytitle(P(No-confidence vote), size(large)) ///
+  xtitle(Distance to threshold, size(large)) legend(off)
 
-graph export "$dt/RF\_mocion\_025\_linear.png", replace
+graph export "$dt/RF_mocion_025_linear.png", replace
+
 restore
 ```
 
@@ -259,17 +285,17 @@ Now, we address how to perform the 2SLS estimation present the results on tables
 To run only this part, import the dataset again and keep only the observations from the Main Results sample:
 
 ```{stata, eval=F}
-use "$dt\Dataset\_CCR.dta", clear
-keep if Mainresults\_sample == 1
+use "$dt\Dataset_CCR.dta", clear
+keep if Mainresults_sample == 1
 ```
 
 Then, create globals for the regression to be able to easily add as controls the surface and population (in logs) of the municipality, include election year and council seat fixed effects, and include the running variable “rv” and its interaction with the indicator D “rv d”.
 
 ```{stata, eval=F}
-global weights\_on = 1
-global controls "log\_pop log\_surface"
-global fixed\_effects "i.election\_year i.seats\_total"
-global rv "rv rv\_d"
+global weights_on = 1
+global controls "log_pop log_surface"
+global fixed_effects "i.election_year i.seats_total"
+global rv "rv rv_d"
 ```
 
 Additionally, if we want to run the regression with each observation weighted by the inverse of the number of parties running in the election, as the authors of the paper do, we store the global $weights_on = 1. If this is the case, the next command lines sorts the data by town and the election year and generates a new variable which counts the number of observations within each combination of id_town and election_year, and then creates the weights.
@@ -292,16 +318,17 @@ Before running the regressions, it is important to establish a bandwidth, which 
 
 ```{stata, eval=F}
 eststo clear
-rdbwselect mocion_5 rv, c(0) p(1) fuzzy(nparties_seats) vce(clusterid_towns) kernel(uni) $weights_bwmasspoints(off) covs($controls)
-local CCT_bw_l = e(h_mserd) // stores the value of the estimated badnwidth
+rdbwselect mocion_5 rv, c(0) p(1) fuzzy(nparties_seats) vce(cluster id_towns) ///
+  kernel(uni) $weights_bw masspoints(off) covs($controls)
+local CCT_bw_l = e(h_mserd) // stores the value of the estimated bandwidth
 ```
 
 Now, we run each regression of our outcome variable on the running variable, the indicator and their interaction, restricting the analysis to the observations where the absolute value of the running variable is less than the bandwidth that was previously computed and stored in “CCT bw l”.
 
 ```{stata, eval=F}
 //Simple regression.
-eststo: reg mocion_5 $rv d $weights_reg if abs(rv)<CCT_bw_l’, cluster(id_towns)
-estadd scalar band = ‘CCT_bw_l’
+eststo: reg mocion_5 $rv d $weights_reg if abs(rv)<`CCT_bw_l', cluster(id_towns)
+estadd scalar band = `CCT_bw_l'
 ```
 
 Additionally, **“estadd scalar”** is used to add a scalar to the estimation results, and it is assigned the value of the previously calculated and stored bandwidth. Then an scalar is also added with the value of the mean of the variable mocion 5.
@@ -315,20 +342,22 @@ The addition of controls and fixed effects results in the different columns of t
 
 ```{stata, eval=F}
 //For this column, we include controls, but not fixed effects.
-eststo: reg mocion_5 $rv d $controls $weights_reg if abs(rv)<CCT_bw_l’, cluster(id_towns)
-estadd scalar band = ‘CCT_bw_l’
+eststo: reg mocion_5 $rv d $controls $weights_reg if abs(rv)<`CCT_bw_l', cluster(id_towns)
+estadd scalar band = `CCT_bw_l'
 summ mocion_5 if e(sample), mean
 estadd scalar vmean = r(mean)
 
 //For this column, we include fixed effects, but not controls.
-eststo: reg mocion_5 $rv d $fixed_effects $weights_reg if abs(rv)<CCT_bw_l’, cluster(id_towns)
-estadd scalar band = ‘CCT_bw_l’
+eststo: reg mocion_5 $rv d $fixed_effects $weights_reg if abs(rv)<`CCT_bw_l', ///
+  cluster(id_towns)
+estadd scalar band = `CCT_bw_l'
 summ mocion_5 if e(sample), mean
 estadd scalar vmean = r(mean)
 
 //For this column, we include both controls and fixed effects.
-eststo: reg mocion_5 $rv d $controls $fixed_effects $weights_reg if abs(rv)<‘CCT_bw_l’, cluster(id_towns)
-estadd scalar band = ‘CCT_bw_l’
+eststo: reg mocion_5 $rv d $controls $fixed_effects $weights_reg if abs(rv)<`CCT_bw_l', ///
+  cluster(id_towns)
+estadd scalar band = `CCT_bw_l'
 summ mocion_5 if e(sample), mean
 estadd scalar vmean = r(mean)
 ```
@@ -336,7 +365,12 @@ estadd scalar vmean = r(mean)
 We create the first part of the table with the main results using “esttab” (see pag.7)
 
 ```{stata, eval=F}
-Reduced-form results", nolabel) s(vmean band N, label("Mean of dep.var." "Bandwidth" "Obs." ) fmt(3 3 0)) coeflabels(d "Above threshold") varwidth(35) title("Table 2. Reduced-form and 2SLS Estimates - Fragmentation and Stability") mtitles("Mayor uns." "Mayor uns." "Mayors uns." "Mayor uns.")
+esttab, se(3) nolabel b(3) sfmt(0) keep(d)  nostar nonotes ///
+    refcat(d "A. Reduced-form results", nolabel) ///
+    s(vmean band  N, label("Mean of dep.var." "Bandwidth"  "Obs." ) ///
+    fmt(3 3 0)) coeflabels(d "Above threshold") varwidth(35) ///
+    title("Table 2. Reduced-form and 2SLS Estimates - Fragmentation and Stability") ///
+    mtitles("Mayor uns." "Mayor uns." "Mayors uns." "Mayor uns.")
 ```
 
 **Explanation of the esttab syntax**: **se(3)**: displays standard errors instead of t-statistics with 3 decimal points. **nolabel**: to not use labels instead of variables names. **b**: displays point estimates. **sfmt()**: sets format(s) for scalars. **keep**: keep individual coefficients. **nostar**: suppress stars in the table footer. **nonotes**: suppress notes in the table footer. **s**: specifies the statistics or summary measures you want to include in the output.
@@ -350,7 +384,8 @@ Now, we replicate the different columns of Panel B, this time using an instrumen
 
 ```{stata, eval=F}
 eststo clear
-rdbwselect mocion_5 rv, c(0) p(1) fuzzy(nparties_seats) vce(cluster id_towns) kernel(uni) $weights_bw masspoints(off) covs($controls)
+rdbwselect mocion_5 rv, c(0) p(1) fuzzy(nparties_seats) vce(cluster id_towns) ///
+  kernel(uni) $weights_bw masspoints(off) covs($controls)
 local CCT_bw_l = e(h_mserd)
 ```
 
@@ -358,8 +393,9 @@ Then, we estimate the second stage of the main specification with the help of th
 
 ```{stata, eval=F}
 //Simple regression.
-eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $weights_reg if abs(rv)<‘CCT_bw_l’, cluster(id_towns)
-estadd scalar band = ‘CCT_bw_l’
+eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $weights_reg if abs(rv)<`CCT_bw_l', ///
+  cluster(id_towns)
+estadd scalar band = `CCT_bw_l'
 summ mocion_5 if e(sample), mean
 estadd scalar vmean = r(mean)
 ```
@@ -373,24 +409,28 @@ quietly estadd local controls "N"
 
 ```{stata, eval=F}
 //For this column, we include controls, but not fixed effects.
-eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $controls $weights_reg if abs(rv)<‘CCT_bw_l’, cluster(id_towns)
-estadd scalar band = ‘CCT_bw_l’
+eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $controls $weights_reg ///
+  if abs(rv)<`CCT_bw_l', cluster(id_towns)
+estadd scalar band = `CCT_bw_l'
 summ mocion_5 if e(sample), mean
 estadd scalar vmean = r(mean)
 quietly estadd local FE "N"
 quietly estadd local controls "Y"
 
 //For this column, we include fixed effects, but not controls.
-eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $fixed_effects $weights_reg if abs(rv)<‘CCT_bw_l’, cluster(id_towns) partial($fixed_effects)
-estadd scalar band = ‘CCT_bw_l’
+eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $fixed_effects $weights_reg ///
+  if abs(rv)<`CCT_bw_l', cluster(id_towns) partial($fixed_effects)
+estadd scalar band = `CCT_bw_l'
 summ mocion_5 if e(sample), mean
 estadd scalar vmean = r(mean)
 quietly estadd local FE "Y"
 quietly estadd local controls "N"
 
 //For this column, we include both controls and fixed effects.
-eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $controls $fixed_effects</p><p>$weights_reg if abs(rv)<‘CCT_bw_l’, cluster(id_towns) partial($fixed_effects)
-estadd scalar band = ‘CCT_bw_l’
+eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $controls ///
+  $fixed_effects $weights_reg if abs(rv)<`CCT_bw_l', cluster(id_towns) ///
+  partial($fixed_effects)
+estadd scalar band = `CCT_bw_l'
 summ mocion_5 if e(sample), mean
 estadd scalar vmean = r(mean)
 quietly estadd local FE "Y"
@@ -400,7 +440,13 @@ quietly estadd local controls "Y"
 To replicate the Panel B of Table 3 we use a similar code to the one presented previously to recreate Panel A:
 
 ```{stata, eval=F}
-esttab, se(3) nolabel b(3) sfmt(0) keep(nparties_seats) nostar nonotes refcat(nparties_seats "B. 2SLS results", nolabel) s(vmean band N FE controls, label("Mean of dep.var." "Bandwidth" "Obs." "Fixed Effects" "Controls") fmt(3 3 0)) coeflabels(nparties_seats "N. Parties") varwidth(35) title("Table 2. Reduced-form and 2SLS Estimates - Fragmentation and Stability") mtitles("Mayor uns." "Mayor uns." "Mayors uns." "Mayor uns.")addnotes("Notes: Reduced-form and 2SLS estimates of the effect of the number of parties on the probability of unseating the mayor (equation 2). Sample restricted to elections in which the largest party receives less than 40 percent of valid votes. The dependent variable is an indicator taking value 1 if the mayor was unseated by a vote of no confidence during the legislature. Controls and FE are included as indicated in each column. Controls: surface and population (in logs). FE: number of available seats and election year fixed effects. The optimal bandwidth is calculated using the CCT method.Standard errors are clustered at the municipality level.")
+esttab, se(3) nolabel b(3) sfmt(0) keep(nparties_seats) nostar nonotes ///
+  refcat(nparties_seats "B. 2SLS results", nolabel) s(vmean band N FE controls, ///
+  label("Mean of dep.var." "Bandwidth" "Obs." "Fixed Effects" "Controls") fmt(3 3 0)) ///
+  coeflabels(nparties_seats "N. Parties") varwidth(35) ///
+  title("Table 2. Reduced-form and 2SLS Estimates - Fragmentation and Stability") ///
+  mtitles("Mayor uns." "Mayor uns." "Mayors uns." "Mayor uns.") ///
+  addnotes("Notes: Reduced-form and 2SLS estimates of the  effect of the number of parties on the probability of unseating the mayor (equation 2). Sample restricted to elections in which the largest party receives less than 40 percent of valid votes. The dependent variable is an indicator taking value 1 if the mayor was unseated by a vote of no confidence during the legislature. Controls and FE are included as indicated in each column. Controls: surface and population (in logs). FE: number of available seats and election year fixed effects. The optimal bandwidth is calculated using the CCT method.Standard errors are clustered at the municipality level.")
 ```
 
 ### Robustness Checks
@@ -424,19 +470,27 @@ In the first case, we only keep the sample in which the number of Council seats 
 eststo clear
 preserve 
   keep if seats_total>=17
-  rdbwselect mocion_5 rv, c(0) p(1) fuzzy(nparties_seats) vce(cluster id_towns) kernel(uni) $weights_bw covs($controls)
+  rdbwselect mocion_5 rv, c(0) p(1) fuzzy(nparties_seats) vce(cluster id_towns) ///
+    kernel(uni) $weights_bw covs($controls)
   local CCT_bw_l = e(h_mserd)
-  local band1 = round(‘CCT_bw_l’,0.001)
+  local band1 = round(`CCT_bw_l',0.001)
   
-  eststo: reg nparties_seats d $rv $fixed_effects $controls $weights_reg if abs(rv)<‘CCT_bw_l’, cluster(id_towns)
-  estadd local band ‘band1’
+  eststo: reg nparties_seats d $rv $fixed_effects $controls $weights_reg ///
+    if abs(rv)<`CCT_bw_l', cluster(id_towns)
+  estadd local band `band1'
 
-  eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $fixed_effects $controls$weights_reg if abs(rv)<‘CCT_bw_l’, cluster(id_towns)
+  eststo: ivreg2 mocion_5 $rv (nparties_seats = d) $fixed_effects $controls$weights_reg ///
+    if abs(rv)<`CCT_bw_l', cluster(id_towns)
 
 restore
 
-esttab, se(3) nolabel b(3) sfmt(0) keep(d nparties_seats) nostar nonotes model(35) refcat(d "A. Large Councils Only (#seats >= 17)", nolabel) s(band N, label("Bandwidth" "Obs.") fmt(3 0)) coeflabels(nparties_seats "N. Parties" d "Above threshold") varwidth(36) title("Table 5. ROBUSTNESS CHECKS") mtitles("First-Stage" "2SLS Estimate (N. Parties)") addnotes("Notes: Column 1 shows the first-stage estimate of our instrument when estimating equation 3. Column 2 reports the associated 2SLS estimate of the effect of number of parties on stability obtained by estimating equation 2. Each panel corresponds to a different robustness check: A) estimates obtained restricting the sample to municipalities with 17 or more seats in the council. Standard errors clustered at the municipality level. Bandwidths obtained using the CCT method in all panels.")
-
+esttab, se(3) nolabel b(3) sfmt(0) keep(d nparties_seats) nostar nonotes model(35) ///
+  refcat(d "A. Large Councils Only (#seats >= 17)", nolabel) s(band N, ///
+  label("Bandwidth" "Obs.") fmt(3 0)) ///
+  coeflabels(nparties_seats "N. Parties" d "Above threshold") varwidth(36) ///
+  title("Table 5. ROBUSTNESS CHECKS") ///
+  mtitles("First-Stage" "2SLS Estimate (N. Parties)") ///
+  addnotes("Notes: Column 1 shows the first-stage estimate of our instrument when estimating equation 3. Column 2 reports the associated 2SLS estimate of the effect of number of parties on stability obtained by estimating   equation 2. Each panel corresponds to a different robustness check: A) estimates obtained restricting the sample to municipalities with 17 or more seats in the council. Standard errors clustered at the municipality level. Bandwidths obtained using the CCT method in all panels.")
 ```
 
 #### **Table 3. Robustness Checks** {-}
@@ -455,17 +509,28 @@ preserve
   gen rv_2=rv^2
   gen rv_2_d=(rv^2)*d
   global rv_2 "rv rv_d rv_2 rv_2_d" 
-  local band5 = round(‘CCT_bw_l’,0.001)
+  local band5 = round(`CCT_bw_l',0.001)
+ 
+  eststo: reg nparties_seats d $rv_2 $fixed_effects $controls $weights_reg ///
+    if abs(rv)<`CCT_bw_l', cluster(id_towns)
+  estadd local band `band5'
   
-  eststo: reg nparties_seats d $rv_2 $fixed_effects $controls $weights_reg if abs(rv)<‘CCT_bw_l’, cluster(id_towns)
-  estadd local band ‘band5’
-  
-  eststo: ivreg2 mocion_5 $rv_2 (nparties_seats = d) $fixed_effects $controls$weights_reg if abs(rv)<‘CCT_bw_l’, cluster(id_towns)
+  eststo: ivreg2 mocion_5 $rv_2 (nparties_seats = d) $fixed_effects ///
+    $controls$weights_reg if abs(rv)<`CCT_bw_l', cluster(id_towns)
  
 restore
 
-esttab, se(3) nolabel b(3) sfmt(0) keep(d nparties_seats) nostar nonotes model(35) refcat(d "E. Global Quadratic Polynomial", nolabel) s(band N, label("Bandwidth" "Obs.") fmt(3 0)) coeflabels(nparties_seats "N. Parties" d"Above threshold") varwidth(36) title("Table 5. ROBUSTNESS CHECKS") mtitles("First-Stage" "2SLS Estimate (N. Parties)") addnotes("Notes: Column 1 shows the first-stage estimate of our instrument when estimating equation 3. Column 2 reports the associated 2SLS estimate of the effect of number of parties on stability obtained by estimating equation 2. Each panel corresponds to a different robustness check: E) estimates obtained using a large 5% bandwidth and a quadratic polynomial in the running variable. Standard errors clustered at the municipality level. Bandwidths obtained using the CCT method in all panels.")
+esttab, se(3) nolabel b(3) sfmt(0) keep(d nparties_seats) nostar nonotes model(35) ///
+  refcat(d "E. Global Quadratic Polynomial", nolabel) s(band N, ///
+  label("Bandwidth" "Obs.") fmt(3 0)) ///
+  coeflabels(nparties_seats "N. Parties" d"Above threshold") varwidth(36) ///
+  title("Table 5. ROBUSTNESS CHECKS") ///
+  mtitles("First-Stage" "2SLS Estimate (N. Parties)") ///
+  addnotes("Notes: Column 1 shows the first-stage estimate of our instrument when estimating equation 3. Column 2 reports the associated 2SLS estimate of the effect of number of parties on stability obtained by estimating equation 2. Each panel corresponds to a different robustness check: E) estimates obtained using a large 5% bandwidth and a quadratic polynomial in the running variable. Standard errors clustered at the municipality level. Bandwidths obtained using the CCT method in all panels.")
 ```
 
-### References
-Carozzi, F., Cipullo, Da. & Repetto, L. (2022). ”Political Fragmentation and Government Stability: Evidence from Local Governments in Spain.” American Economic Journal: Applied Economics, 14 (2): 23-50.
+---
+
+**Authors of the replication:** Carolina Arboleda Lenis, Elif C¸anga, Mariana Navarro Torres, Martina Pugliese
+
+**Date:** December 2023

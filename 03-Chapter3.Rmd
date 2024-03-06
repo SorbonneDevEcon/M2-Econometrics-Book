@@ -1,4 +1,4 @@
-# Instrument Variables
+# Instrumental Variables
 
 
 ```{r, child='_AA_ALC_AT.Rmd'}

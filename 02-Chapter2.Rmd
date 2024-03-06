@@ -1,15 +1,9 @@
-# Regression Discontinuity Design
+# Randomized Control Trials
 
 [Below are blocks that insert subchapters. Each subchapter has an own file that starts with "_". You could also directly write on this page, but this way we avoid one long Rmd file.]: #
 
-```{r, child='_CCR.Rmd'}
+```{r, child='_CLY.Rmd'}
 ```
-
-
-```{r, child='_Dell.Rmd'}
-```
-
-
 
 
 

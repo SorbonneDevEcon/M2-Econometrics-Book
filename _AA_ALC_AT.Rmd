@@ -1,22 +1,25 @@
 ## Winners and losers from Agrarian Reform: Evidence from Danish land inequality 1682–1895
 
-Authors and date of the replication: Auvray Adrien, Carette Anne-Laure, Tarlapan Alina - December 2023
+Boberg-Fazlić, N., Lampe, M., Lasheras, P. M., & Sharp, P. (2022). Winners and losers from Agrarian Reform: Evidence from Danish land inequality 1682–1895. _Journal of Development Economics_, 155, 102813
 
 ### Highlights {-}
 
-- Research question: What are the distributional effects of land reforms (1682-1895) in Denmark?
+- The paper examines the distributional effects of land reforms between 1682-1895 in Denmark
 
-- Methodology: Instrumental Variable (IV), used to deal with endogeneity issues stemming from reverse causality between the variable of interest (land productivity) and the dependent variable (land inequalities).
+- The authors use an Instrumental Variable (IV) to deal with endogeneity issues stemming from reverse causality between the variable of interest (land productivity) and the dependent variable (land inequalities).
 
 - This methodology is standard by the choice of a geological instrument. It follows the usual steps of the IV procedure, including tests of the instrument’s pertinence (F-statistic of the 1st stage estimation).
 
 - Our added value to the original replication package lies in the detailed explanation of the provided code. Additionally, we demonstrate how to extract various tables and figures directly from the Stata code. While the authors have created a well-realized replication package, our contribution enhances its accessibility and usability.
 
-- Useful Stata tricks:
-  - Diagnostic Statistics: We leverage the ‘estat firststage’ command to obtain diagnostic statistics pertaining to the first-stage of instrumental variable estimation, which includes extracting and storing the F-statistics for further analysis.
-  - Looping: The ‘foreach’ loop structure is used, which enables the iteration over multiple years for instrumental variable regressions and allows to avoid repetitive commands in the code.
-  - Advanced Formatting: Through the utilization of the ‘esttab’ command along with various formatting options, we create well-formatted tables, which results in the production of tables that are not only clear and organized but also visually appealing.
+- We make use of these Stata tricks:
   
+  - Diagnostic Statistics: We leverage the `estat firststage` command to obtain diagnostic statistics pertaining to the first-stage of instrumental variable estimation, which includes extracting and storing the F-statistics for further analysis.
+  
+  - Looping: The `foreach` loop structure is used, which enables the iteration over multiple years for instrumental variable regressions and allows to avoid repetitive commands in the code.
+  
+  - Advanced Formatting: Through the utilization of the `esttab` command along with various formatting options, we create well-formatted tables, which results in the production of tables that are not only clear and organized but also visually appealing.
+
 - Link to the paper: https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c
 
 - Link to the replication package: https://doi.org/10.1016/j.jdeveco.2021.102813
@@ -180,8 +183,8 @@ All the packages can be installed using the following lines of code.
 #### **Stata code in order to access to the database and to install packages** 
 ``` {.Stata language="Stata" numbers="none" caption="Stata code in order to access to the database and to install packages"}
 ***Open the database***
-global dirData "C:/Your Directory Here/" 
-use "${dirData}Dataset_AA_ALC_AT", clear
+global dirData "C:\Your Directory Here" 
+use "${dirData}/Dataset_AA_ALC_AT", clear
 
 ***Install the required packages***
 ssc install estout
@@ -204,36 +207,48 @@ ssc install outreg2
 eststo clear
 
 ***Column (1) : OLS***
-eststo ols1: qui reg D.Theil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+eststo ols1: qui reg D.Theil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region if year==1834, vce(robust)
 
-eststo ols2: qui reg D.AggTheil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast i.region i.year if year==1834, vce(robust)
+eststo ols2: qui reg D.AggTheil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region i.year if year==1834, vce(robust)
 
 ***Column (2) : First-stage***
-eststo fiv1: qui reg ln_TotalFarmHK MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+eststo fiv1: qui reg ln_TotalFarmHK MLmean ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region if year==1834, vce(robust)
 
 ***Column (4) : Reduced form***
-eststo ziv1: qui reg D.Theil_c MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+eststo ziv1: qui reg D.Theil_c MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region ///
+  if year==1834, vce(robust)
 
 ***Column (3) : Second-stage (with diffTheil)***
-eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 
 ***Column (5) : Second-stage (with diffAggTheil)***
-eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
  
  ***Column (6) : Second-stage (with Gini)***
-eststo ginihkdiff: qui ivregress 2sls D.Gini ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+eststo ginihkdiff: qui ivregress 2sls D.Gini ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 
 ***Formation of Table 1***
-esttab ols1 fiv1 ivdiff1 ziv1 ivdiff2 ginihkdiff, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(12) wrap keep(MLmean ln_TotalFarmHK) mtitles("OLS" "first stage" "second stage (diffTheil)" "reduced form (diff Theil)" "second stage (diffAggTheil)" "second stage (diffGini)" ) stats(N r2 Fstat, labels("Observations" "R-squared" "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" "Geography = LnDistCPH" , labels(Y N)) label
+esttab ols1 fiv1 ivdiff1 ziv1 ivdiff2 ginihkdiff, se star(* 0.10 ** 0.05 *** 0.01) b(3) ///
+  r2 var(15) model(12) wrap keep(MLmean ln_TotalFarmHK) mtitles("OLS" "first stage" ///
+  "second stage (diffTheil)" "reduced form (diff Theil)" "second stage (diffAggTheil)" ///
+  "second stage (diffGini)" ) stats(N r2 Fstat, labels("Observations" "R-squared" ///
+  "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" ///
+  "Geography = LnDistCPH" , labels(Y N)) label
 ```
 
 ##### OLS regressions by replicating the columns 1,2 and 4 of Table 1 {-}
@@ -244,18 +259,20 @@ esttab ols1 fiv1 ivdiff1 ziv1 ivdiff2 ginihkdiff, se star(* 0.10 ** 0.05 *** 0.0
 eststo clear
 
 ***Column (1) : OLS***
-eststo ols1: qui reg D.Theil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+eststo ols1: qui reg D.Theil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region if year==1834, vce(robust)
 
-eststo ols2: qui reg D.AggTheil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast i.region i.year if year==1834, vce(robust)
+eststo ols2: qui reg D.AggTheil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region i.year if year==1834, vce(robust)
 
 ***Column (2) : First-stage***
-eststo fiv1: qui reg ln_TotalFarmHK MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+eststo fiv1: qui reg ln_TotalFarmHK MLmean ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region if year==1834, vce(robust)
 
 ***Column (4) : Reduced form***
-eststo ziv1: qui reg D.Theil_c MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+eststo ziv1: qui reg D.Theil_c MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region ///
+  if year==1834, vce(robust)
 ```
-
-\
 
 Columns 1, 2, and 4 of Table 1 represent two Ordinary Least Squares
 (OLS) regressions, a first-stage, and a reduced form, respectively,
@@ -301,25 +318,26 @@ variations.
 ***Table 1***
 
 ***Column (3) : Second-stage (with diffTheil)***
-eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 
 ***Column (5) : Second-stage (with diffAggTheil)***
-eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 
 ***Column (6) : Second-stage (with Gini)***
-eststo ginihkdiff: qui ivregress 2sls D.Gini ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
+eststo ginihkdiff: qui ivregress 2sls D.Gini ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (ln_TotalFarmHK = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 ```
-
-\
 
 The columns 3, 5, and 6 which represent second-stages, are estimated
 through instrumental variable regressions. Similar to OLS regressions,
@@ -378,10 +396,13 @@ the instrumental variables employed in the two-stage IV regression.
 ***Table 1***
 
 ***Formation of Table 1***
-esttab ols1 fiv1 ivdiff1 ziv1 ivdiff2 ginihkdiff, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(12) wrap keep(MLmean ln_TotalFarmHK) mtitles("OLS" "first stage" "second stage (diffTheil)" "reduced form (diff Theil)" "second stage (diffAggTheil)" "second stage (diffGini)" ) stats(N r2 Fstat, labels("Observations" "R-squared" "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" "Geography = LnDistCPH" , labels(Y N)) label
+esttab ols1 fiv1 ivdiff1 ziv1 ivdiff2 ginihkdiff, se star(* 0.10 ** 0.05 *** 0.01) b(3) ///
+  r2 var(15) model(12) wrap keep(MLmean ln_TotalFarmHK) mtitles("OLS" "first stage" ///
+  "second stage (diffTheil)" "reduced form (diff Theil)" "second stage (diffAggTheil)" ///
+  "second stage (diffGini)" ) stats(N r2 Fstat, labels("Observations" "R-squared" ///
+  "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" ///
+  "Geography = LnDistCPH" , labels(Y N)) label
 ```
-
-\
 
 The next stage in our analysis involves the creation of a comprehensive
 table summarizing the results of the previously conducted regressions.
@@ -472,11 +493,14 @@ Figure 5.
 eststo clear    
 
 foreach x in 1682 1834 1850 1860 1873 1885 1895 {
-    qui ivregress 2sls ln_Theil_`x'c ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK`x' = MLmean) if year==`x', vce(clust ID)
+    qui ivregress 2sls ln_Theil_`x'c ln_area LnDistCPH Lat Long LnDistCoast i.region ///
+      (ln_TotalFarmHK`x' = MLmean) if year==`x', vce(clust ID)
     estimates store coef`x' 
 }       
-    coefplot coef*, vert yline(0) keep(ln_TotalFarmHK*) graphregion(color(white)) ciopts(recast(rcap) lcol(black)) mcolor(black) ///
-    xtick(1(1)7) xlabel(1 "1682" 2 "1834" 3 "1850" 4 "1860" 5 "1873" 6 "1885" 7 "1895", ) grid(b) legend(off) 
+    coefplot coef*, vert yline(0) keep(ln_TotalFarmHK*) graphregion(color(white)) ///
+      ciopts(recast(rcap) lcol(black)) mcolor(black) xtick(1(1)7) ///
+      xlabel(1 "1682" 2 "1834" 3 "1850" 4 "1860" 5 "1873" 6 "1885" 7 "1895", ) ///
+      grid(b) legend(off) 
 graph export "outputfile.png", replace
 ```
 
@@ -538,7 +562,7 @@ The final line of code, `graph export "outputfile.png", replace`, is
 added by us to the replication code for the purpose of exporting the
 coefficient plot as a PNG file. This command utilizes Stata's graph
 export feature, allowing us to save the generated graph to an external
-file named \"outputfile.png\" in the current working directory. The
+file named "outputfile.png" in the current working directory. The
 option \"replace\" ensures that if a file with the same name already
 exists, it will be overwritten. This line of code enhances the
 replicability of the study by facilitating the export of the coefficient
@@ -563,17 +587,21 @@ for Table A.3 found in the Appendix.
 ***Creation of a loop***
 eststo clear
 foreach x in 1682 1834 {
-    eststo ginihk`x': ivregress 2sls gini`x' ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==`x' & gini1834!=., vce(clust ID)
+    eststo ginihk`x': ivregress 2sls gini`x' ln_area LnDistCPH Lat Long LnDistCoast ///
+      i.region (ln_TotalFarmHK = MLmean) if year==`x' & gini1834!=., vce(clust ID)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 }
 
 ***Formation of Table A.3***
-esttab ginihk1682 ginihk1834, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) wrap keep(ln_TotalFarmHK) mtitles("2nd stage: Gini diff" "2nd stage: gini 1682" "2nd stage: gini 1834") stats(N r2 Fstat, labels("Observations" "R-squared" "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" "Geography = LnDistCPH" , labels(Y N)) label
+esttab ginihk1682 ginihk1834, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) ///
+  wrap keep(ln_TotalFarmHK) mtitles("2nd stage: Gini diff" "2nd stage: gini 1682" ///
+  "2nd stage: gini 1834") stats(N r2 Fstat, labels("Observations" "R-squared" ///
+  "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" ///
+  "Geography = LnDistCPH" , labels(Y N)) label
 ```
 
-\
 Table A.3 in the Appendix presents robustness check results,
 specifically second-stage instrumental variable estimates using the Gini
 coefficient. This additional analysis aims to verify the robustness of
@@ -590,14 +618,14 @@ scholarly context.
 ***Creation of a loop***
 eststo clear
 foreach x in 1682 1834 {
-    eststo ginihk`x': ivregress 2sls gini`x' ln_area LnDistCPH Lat Long LnDistCoast i.region (ln_TotalFarmHK = MLmean) if year==`x' & gini1834!=., vce(clust ID)
+    eststo ginihk`x': ivregress 2sls gini`x' ln_area LnDistCPH Lat Long LnDistCoast ///
+      i.region (ln_TotalFarmHK = MLmean) if year==`x' & gini1834!=., vce(clust ID)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 }
 ```
 
-\
 Firstly, the use of the `eststo clear` command ensures a reset of
 previous estimation results, creating a clean environment before running
 new estimations. The loop designated by `foreach x in 1682 1834`
@@ -635,7 +663,7 @@ instrumental variable performance. Finally,
 F-statistic from the first-stage matrix `fstat` and assigns it to
 `Fstat`. For a more comprehensive understanding of the F-statistics
 and its purpose, referring to the preceding Section 3.3.2 is
-recommended.\
+recommended.
 
 ##### Formatting table A.3, an additional but optional step {-}
 
@@ -643,10 +671,13 @@ recommended.\
 ***Table A.3***
 
 ***Formation of Table A.3***
-esttab ginihk1682 ginihk1834, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) wrap keep(ln_TotalFarmHK) mtitles("2nd stage: Gini diff" "2nd stage: gini 1682" "2nd stage: gini 1834") stats(N r2 Fstat, labels("Observations" "R-squared" "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" "Geography = LnDistCPH" , labels(Y N)) label
+esttab ginihk1682 ginihk1834, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) ///
+  wrap keep(ln_TotalFarmHK) mtitles("2nd stage: Gini diff" "2nd stage: gini 1682" ///
+  "2nd stage: gini 1834") stats(N r2 Fstat, labels("Observations" "R-squared" ///
+  "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" ///
+  "Geography = LnDistCPH" , labels(Y N)) label
 ```
 
-\
 Moving forward in our analysis, we proceed to construct a comprehensive
 table that consolidates the outcomes of the earlier regression analyses.
 Importantly, it's crucial to emphasize that this stage is not conducted
@@ -720,30 +751,37 @@ results.\
 eststo clear
 
 ***Column (1) : OLS***
-eststo ols1: qui reg D.Theil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+eststo ols1: qui reg D.Theil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region ///
+  if year==1834, vce(robust)
 
-eststo ols2: qui reg D.AggTheil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region i.year if year==1834, vce(robust)
+eststo ols2: qui reg D.AggTheil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region ///
+  i.year if year==1834, vce(robust)
 
 ***Column (2) : First-stage***
-eststo fiv1: qui reg BygLG MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834 & ln_TotalFarmHK!=., vce(robust)
+eststo fiv1: qui reg BygLG MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region ///
+  if year==1834 & ln_TotalFarmHK!=., vce(robust)
 
 ***Column (3) : Second-stage (diffTheil)***
-eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (BygLG = MLmean) if year==1834, vce(robust)
+eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (BygLG = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 
 ***Column (4) : Second-stage (diffAggTheil)***
-eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (BygLG = MLmean) if year==1834, vce(robust)
+eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (BygLG = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 
 ***Formation of Table A.4***
-esttab ols1 fiv1 ivdiff1 ivdiff2, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) wrap keep(MLmean BygLG) mtitles("OLS" "first stage" "second stage (diffTheil)" "second stage (diffAggTheil)" ) stats(N r2 Fstat, labels("Observations" "R-squared" "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" "Geography = LnDistCPH" , labels(Y N)) label
+esttab ols1 fiv1 ivdiff1 ivdiff2, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) ///
+  model(11) wrap keep(MLmean BygLG) mtitles("OLS" "first stage" ///
+  "second stage (diffTheil)" "second stage (diffAggTheil)" ) stats(N r2 Fstat, ///
+  labels("Observations" "R-squared" "KP F-statistic") fmt(%9.0fc 2 2)) ///
+  indicate("Region FE = 2.region" "Geography = LnDistCPH" , labels(Y N)) label
 ```
-
-\
 
 Transitioning to another robustness test, presented in Table A.4 in the
 Appendix, we explore an alternative measure of land quality. In this
@@ -762,15 +800,16 @@ consistency and reliability of the analytical findings.
 eststo clear
 
 ***Column (1) : OLS***
-eststo ols1: qui reg D.Theil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834, vce(robust)
+eststo ols1: qui reg D.Theil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region ///
+  if year==1834, vce(robust)
 
-eststo ols2: qui reg D.AggTheil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region i.year if year==1834, vce(robust)
+eststo ols2: qui reg D.AggTheil_c BygLG ln_area LnDistCPH Lat Long LnDistCoast i.region ///
+  i.year if year==1834, vce(robust)
 
 ***Column (2) : First-stage***
-eststo fiv1: qui reg BygLG MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region if year==1834 & ln_TotalFarmHK!=., vce(robust)
+eststo fiv1: qui reg BygLG MLmean ln_area LnDistCPH Lat Long LnDistCoast i.region ///
+  if year==1834 & ln_TotalFarmHK!=., vce(robust)
 ```
-
-\
 
 In this analysis, we employ familiar Stata commands, akin to those
 utilized in Table 1, with the only variable differing across each column
@@ -812,19 +851,20 @@ results.
 ***Table A.4***
 
 ***Column (3) : Second-stage (diffTheil)***
-eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (BygLG = MLmean) if year==1834, vce(robust)
+
+eststo ivdiff1: qui ivregress 2sls D.Theil_c ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (BygLG = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 
-***Column (4) : Second-stage (diffAggTheil)***
-eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast i.region (BygLG = MLmean) if year==1834, vce(robust)
+***Column (4) : Second-stage (diffAggTheil)*** 
+eststo ivdiff2: qui ivregress 2sls D.AggTheil_c ln_area LnDistCPH Lat Long LnDistCoast ///
+  i.region (BygLG = MLmean) if year==1834, vce(robust)
     estat firststage
     mat fstat = r(singleresults)
     estadd scalar Fstat = fstat[1,4] 
 ```
-
-\
 
 In this specific analysis, we focus on the second-stage of the
 estimations with two dependent variables: `D.Theilc`, representing the
@@ -879,10 +919,13 @@ step.
 ***Table A.4***
 
 ***Formation of Table A.4***
-esttab ols1 fiv1 ivdiff1 ivdiff2, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) model(11) wrap keep(MLmean BygLG) mtitles("OLS" "first stage" "second stage (diffTheil)" "second stage (diffAggTheil)" ) stats(N r2 Fstat, labels("Observations" "R-squared" "KP F-statistic") fmt(%9.0fc 2 2)) indicate("Region FE = 2.region" "Geography = LnDistCPH" , labels(Y N)) label
+esttab ols1 fiv1 ivdiff1 ivdiff2, se star(* 0.10 ** 0.05 *** 0.01) b(3) r2 var(15) ///
+  model(11) wrap keep(MLmean BygLG) mtitles("OLS" "first stage" ///
+  "second stage (diffTheil)" "second stage (diffAggTheil)" ) stats(N r2 Fstat, ///
+  labels("Observations" "R-squared" "KP F-statistic") fmt(%9.0fc 2 2)) ///
+  indicate("Region FE = 2.region" "Geography = LnDistCPH" , labels(Y N)) label
 ```
 
-\
 In the next step of our analysis, we construct a comprehensive table to
 concisely present the findings from our prior regression analyses. It's
 important to emphasize that this stage isn't isolated but rather
@@ -957,3 +1000,9 @@ and methodology employed. Moreover, we hope that this clarity enhances
 the accessibility of the article and facilitates further examination and
 validation by other researchers. We trust that transparency is crucial
 for fostering rigorous and collaborative research practices.
+
+---
+
+**Authors of the replication:** Auvray Adrien, Carette Anne-Laure, Tarlapan Alina
+
+**Date:** December 2023
