@@ -2,6 +2,21 @@
 
 Boberg-Fazlić, N., Lampe, M., Lasheras, P. M., & Sharp, P. (2022). Winners and losers from Agrarian Reform: Evidence from Danish land inequality 1682–1895. _Journal of Development Economics_, 155, 102813
 
+```{r}
+library(downloadthis)
+
+## Link in Github repo
+download_link(
+  link = "https://github.com/fmmattioni/downloadthis/raw/master/inst/example/file_1.pdf",
+  button_label = "Download pdf file",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+
 ### Highlights {-}
 
 - The paper examines the distributional effects of land reforms between 1682-1895 in Denmark
