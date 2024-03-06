@@ -49,7 +49,7 @@ Create the appropriate folders and globals to store your datasets and results. A
 ```{stata, eval=F}
 clear all
 set more off
-global dt "C:\Users\Dell\Desktop\laurine_stata_files\CCR" 
+global dt "C:\Users\Dell\Desktop\laurine_stata_files\CCR"
 ```
 
 #### **Package Installation** {-}

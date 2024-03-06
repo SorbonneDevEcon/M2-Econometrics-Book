@@ -1,9 +1,11 @@
 # Regression Discontinuity Design
 
+```{r, child='_Dell.Rmd'}
+```
+
+
 ```{r, child='_CCR.Rmd'}
 ```
 
 
-```{r, child='_Dell.Rmd'}
-```
 
