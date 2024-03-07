@@ -10,7 +10,7 @@
 **3.1 Getting started: database access and required packages
 
 ***Open the database*** 
-global dirData "C:\Users\Dell\Desktop\laurine_stata_files\AA_ALC_AT"
+global dirData "C:\Your Directory Here"
 use "${dirData}/Dataset_AA_ALC_AT", clear
 
 ***Install the required packages***
