@@ -24,16 +24,16 @@ Boberg-Fazlić, N., Lampe, M., Lasheras, P. M., & Sharp, P. (2022). Winners and 
 
 - Link to the replication package: https://doi.org/10.1016/j.jdeveco.2021.102813
 
-- Link to the Stata do-file: https://raw.githubusercontent.com/SorbonneDevEcon/M2-Econometrics-Book/main/resources/AA_ALC_AT/DoFile_AA_ALC_AT.do
+- Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_AA_ALC_AT.do&filename=DoFile_AA_ALC_AT.do) to download the Stata Do-File to replicate the results
 
 ```{r echo = F, include =T}
 library(downloadthis)
 
 ## Link in Github repo
 download_link(
-  link = "https://raw.githubusercontent.com/SorbonneDevEcon/M2-Econometrics-Book/main/resources/AA_ALC_AT/DoFile_AA_ALC_AT.do",
-  button_label = "Download pdf file",
-  button_type = "danger",
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_AA_ALC_AT.do&filename=DoFile_AA_ALC_AT.do",
+  button_label = "Download Do-File",
+  button_type = "default",
   has_icon = TRUE,
   icon = "fa fa-save",
   self_contained = FALSE
