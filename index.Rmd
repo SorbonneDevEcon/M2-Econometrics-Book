@@ -9,6 +9,8 @@ site: bookdown::bookdown_site
 # Introduction
 
 ```{r, include=FALSE}
+install.packages("Statamarkdown")
+install.packages("knitr")
 library(Statamarkdown)
 library(knitr)
 ```
