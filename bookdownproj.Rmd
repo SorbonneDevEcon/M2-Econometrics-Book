@@ -1,0 +1,67 @@
+--- 
+title: "M2 Econometrics Book"
+author: "This site is currently under construction."
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+
+
+# Introduction
+
+```{r, include=FALSE}
+library(Statamarkdown)
+library(knitr)
+```
+
+
+<!--chapter:end:index.Rmd-->
+
+# Randomized Control Trials
+
+[Below are blocks that insert subchapters. Each subchapter has an own file that starts with "_". You could also directly write on this page, but this way we avoid one long Rmd file.]: #
+
+```{r, child='_CLY.Rmd'}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--chapter:end:02-Chapter2.Rmd-->
+
+# Instrumental Variables
+
+
+```{r, child='_AA_ALC_AT.Rmd'}
+```
+
+
+
+<!--chapter:end:03-Chapter3.Rmd-->
+
+# Regression Discontinuity Design
+
+```{r, child='_Dell.Rmd'}
+```
+
+```{r, child='_CCR.Rmd'}
+```
+
+
+
+
+<!--chapter:end:04-Chapter4.Rmd-->
+

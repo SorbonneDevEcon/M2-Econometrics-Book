@@ -17,7 +17,7 @@ Dell, M. (2010). The Persistent Effects of Peru's Mining _Mita_. _Econometrica_,
     burgeoning literature on the impact of spatially delimited policies.
 
 -   In this document, we provide a detailed explanation on how to
-    implement spatial RDD in Stata.
+    implement spatial RDD in your software Stata.
 
 -   A key element of our contribution consists in capturing Conley
     standard errors using the "x_ols" program (see [Install x_ols line
