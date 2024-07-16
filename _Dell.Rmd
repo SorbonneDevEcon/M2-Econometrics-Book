@@ -1,46 +1,82 @@
 ## The Persistent Effects of Peru's Mining _Mita_
 
-Dell, M. (2010). The Persistent Effects of Peru's Mining _Mita_. _Econometrica_, 78(6), 1863-1903. Retrieved 2023-11-20, from http://www.jstor.org/stable/40928464
+Dell, M. (2010). The Persistent Effects of Peru's Mining _Mita_. _Econometrica_, 78(6), 1863-1903. Retrieved 2023-11-20, from <a href="http://www.jstor.org/stable/40928464" target="_blank">http://www.jstor.org/stable/40928464</a>
+
+```{r echo = F, include =T}
+library(downloadthis)
+
+## Link in Github repo
+download_link(
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FCreateData_Dell.do&filename=CreateData_Dell.do",
+  button_label = "Download Do-File to download/generate/save the dataset for replication",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+## Link in Github repo
+download_link(
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_Dell.do&filename=DoFile_Dell.do",
+  button_label = "Download Do-File corresponding to the explanations below",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+## Link in Github repo
+download_link(
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FCodebook_Dell.pdf&filename=Codebook_Dell.pdf",
+  button_label = "Download Codebook",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+<a href="https://scholar.harvard.edu/dell/publications" target="_blank">[Link to the full original replication package paper on Melissa Dell's webpage]</a>
+
 
 ### Highlights {-}
 
--   Dell (2010) examines the long run impacts of the mita, an extensive
+-   Dell (2010) examines the **long run impacts of the mita**, an extensive
     forced mining labor system in effect in Peru and Bolivia between
     1573 and 1812.
 
--   We will code a spatial regression discontinuity design that is used
+-   We will code a **spatial regression discontinuity design** that is used
     to compare outcomes of households on each side of the mita
     boundaries.
 
--   This paper is a pioneering work in the application of spatial
+-   This paper is a **pioneering work** in the application of spatial
     regression discontinuity designs and lays the foundations for a
     burgeoning literature on the impact of spatially delimited policies.
 
--   In this document, we provide a detailed explanation on how to
-    implement spatial RDD in your software Stata.
+-   In this document, we provide a detailed explanation on **how to
+    implement spatial RDD** in your software Stata.
 
--   A key element of our contribution consists in capturing Conley
-    standard errors using the "x_ols" program (see [Install x_ols line
+-   A key element of our contribution consists in capturing **Conley
+    standard errors** using the "x_ols" program (see [Install x_ols line
     142](#sec:XOLS)).
 
 -   In the appendix you will find the codes that allow the
-    automatization of formatted output tables in a ready to publish
-    style with minimal required manual manipulation using matrices and
+    **automatization of formatted output tables in a ready to publish
+    style** with minimal required manual manipulation using matrices and
     the "appendmodels\" program.
 
--   Link to published article: <https://www.jstor.org/stable/40928464>
 
 ### Introduction
 
 A useful method for analyzing the impact of a policy when it is
-implemented in a geographically delimited area is the Spatial Regression
-Discontinuity Design (Spatial RDD). The paper focuses on the causal
+implemented in a **geographically delimited area** is the **Spatial Regression
+Discontinuity Design (Spatial RDD)**. The paper focuses on the causal
 effect of the mita, an extensive forced mining labor system in effect in
 Peru and Bolivia between 1573 and 1812, on household consumption and
 stunted growth in children.
 
-This identification strategy is based on a cut-off defined by geographic
-borders, specifically the assignment variables are examined by their
+This identification strategy is based on a **cut-off defined by geographic
+borders**, specifically the assignment variables are examined by their
 distance from the mita boundary (the threshold in this research) using a
 discontinuity in longitude-latitude space. This framework is based on
 the assumption that all the characteristics of the treatment and the
@@ -79,6 +115,23 @@ log using "${dirlogs}/Replication_Dell.log", replace
 
 #### Building the three different data frames
 
+Note: to generate the dataset `Dataset_Dell.dta`, you first need to download and run this do-file: 
+```{r echo = F, include =T}
+library(downloadthis)
+
+## Link in Github repo
+download_link(
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FCreateData_Dell.do&filename=CreateData_Dell.do",
+  button_label = "Download Do-File to download/generate/save the dataset for replication",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+
+ 
 ``` {.Stata language="Stata" numbers="none"}
 use "${dirdata}Dataset_Dell.dta", clear
 keep if gis_db==1
@@ -848,6 +901,6 @@ exit;
 
 ---
 
-**Authors of the replication:** Alejandro Arciniegas Herrera, Marcella De Giovanni, Anselm Rabaté, Kenan Topalovic
+**Authors:** Alejandro Arciniegas Herrera, Marcella De Giovanni, Anselm Rabaté, Kenan Topalovic, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a> (2023-2024), Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
 
 **Date:** December 2023

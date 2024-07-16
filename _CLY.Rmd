@@ -2,9 +2,41 @@
 
 Carter, M., Laajaj, R., & Yang, D. (2021). Subsidies and the African Green Revolution: Direct effects and social network spillovers of randomized input subsidies in Mozambique. _American Economic Journal: Applied Economics_, _13_(2), 206‑229.<a href="https://www.aeaweb.org/articles?id=10.1257/app.20190396" target="_blank">https://doi.org/10.1257/app.20190396</a>
 
-<a href="https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=%2Fopenicpsr%2F116761%2Ffcr%3Aversions%2FV2.1%2FRep-file-Moz-Input-Subsidy&type=folder&fbclid=IwAR3bVz5SUf8L2eWPPmh6zxY97BOD8K0LHeIwB8rMiwFi7kfVxomJ3suDmb8" target="_blank">Link to the original replication package</a>
 
-Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FDoFile_CLY.do&filename=DoFile_CLY.do) to get the complete do-file corresponding to the explanations below, <a href="https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=/openicpsr/116761/fcr:versions/V2.1/Rep-file-Moz-Input-Subsidy/data/original/Moz1234panel.dta&type=file" target="_blank">here</a> to download the original dataset (named Moz1234panel.dta) from Open ICPSR, and [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FCodebook_CLY_M.pdf&filename=Codebook_CLY_M.pdf) to get a detailed description of the variables used (codebook).
+```{r echo = F, include =T}
+library(downloadthis)
+
+## Link in Github repo
+download_link(
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FDoFile_CLY.do&filename=DoFile_CLY.do",
+  button_label = "Download Do-File corresponding to the explanations below",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+## Link in Github repo
+download_link(
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FCodebook_CLY_M.pdf&filename=Codebook_CLY_M.pdf",
+  button_label = "Download Codebook",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_link(
+  link = "https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=/openicpsr/116761/fcr:versions/V2.1/Rep-file-Moz-Input-Subsidy/data/original/Moz1234panel.dta&type=file",
+  button_label = "Download Original Data (Moz1234panel.dta from Open ICPSR repository)",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+<a href="https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=%2Fopenicpsr%2F116761%2Ffcr%3Aversions%2FV2.1%2FRep-file-Moz-Input-Subsidy&type=folder&fbclid=IwAR3bVz5SUf8L2eWPPmh6zxY97BOD8K0LHeIwB8rMiwFi7kfVxomJ3suDmb8" target="_blank">[Link to the full original replication package paper from Open ICPSR]</a>
 
 ### Highlights {-}
 
@@ -424,6 +456,6 @@ foreach x in lfertmaizr limprovedseedsr lyieldr ldailyconsr lexp_yield_fertr {
 
 ---
 
-**Authors of the replication:** Elvire Jégu, Ambre Delaunay, Chiara Balducci, Yagmur Helin Aslan, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a> (2023-2024), Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
+**Authors:** Elvire Jégu, Ambre Delaunay, Chiara Balducci, Yagmur Helin Aslan, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a> (2023-2024), Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
 
 **Date:** December 2023

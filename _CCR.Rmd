@@ -1,24 +1,56 @@
 ## Political Fragmentation and Government Stability: Evidence from Local Governments in Spain
 
-Carozzi, F., Cipullo, Da. & Repetto, L. (2022). ”Political Fragmentation and Government Stability: Evidence from Local Governments in Spain.” _American Economic Journal: Applied Economics_, 14 (2): 23-50.
+Carozzi, F., Cipullo, Da. & Repetto, L. (2022). Political Fragmentation and Government Stability: Evidence from Local Governments in Spain. _American Economic Journal: Applied Economics_, 14 (2): 23-50. <a href="https://www.aeaweb.org/articles?id=10.1257/app.20200128" target="_blank">https://www.aeaweb.org/articles?id=10.1257/app.20200128</a>
+
+```{r echo = F, include =T}
+library(downloadthis)
+
+## Link in Github repo
+download_link(
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_CCR.do&filename=DoFile_CCR.do",
+  button_label = "Download Do-File corresponding to the explanations below",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+## Link in Github repo
+download_link(
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FCodebook_CCR.pdf&filename=Codebook_CCR.pdf",
+  button_label = "Download Codebook",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_link(
+  link = "https://www.openicpsr.org/openicpsr/project/125341/version/V1/view?path=/openicpsr/125341/fcr:versions/V1/PFGS_Replication_package_AEJ/Data/Clean&type=folder",
+  button_label = "Download Original Data (from Open ICPSR: click on Data_final.dta and Data_final_allparties.dta)",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+<a href="https://www.openicpsr.org/openicpsr/project/125341/version/V1/view" target="_blank">[Link to the full original replication package paper on OSF]</a>
 
 ### Highlights {-}
 
-- The paper investigates the impact of political fragmentation on government stability.
+- The paper investigates the impact of **political fragmentation** on **government stability**.
 
-- The authors employ a fuzzy Regression Discontinuity Design (RDD) model.
+- The authors employ a **fuzzy Regression Discontinuity Design (RDD)** model.
 
   - It belongs to the the regression discontinuity design broad methodology, which is a quasi experimental method used to estimate the causal effect of an intervention over a threshold or a cutoff point. It enables the comparison of individuals immediately above and below this specific cutoff point to assess the impact of a treatment on a particular outcome.
   
   - In a fuzzy RDD design the assignment rule determining how units are selected into the treatment is probabilistic. The probability of treatment exhibits a discontinuity at the cutoff, though not as a definitive 0 to 1 jump.
 
-- In regards to the original replication package, we present here a simplified version of its main elements for an easy replication with only one dataset and one do-file.
+- In regards to the original replication package, we present here a **simplified version of its main elements** for an easy replication with **only one dataset and one do-file**.
 
-- Through this exercise, on top of standard Stata commands, we present a more in-depth explanation on how to make results’ tables using the “esttab” command, make more complex graphs with the “twoway” command and, specially, discover some commands from the “rdrobust” package, key for RDD analysis in Stata.
+- Through this exercise, on top of standard Stata commands, we present a more in-depth explanation on how to make results’ tables using the `esttab` command, make more complex graphs with the `twoway` command and, specially, discover some commands from the `rdrobust` package, key for RDD analysis in Stata.
 
-- The research paper can be found [here.](https://www.aeaweb.org/articles?id=10.1257/app.20200128)
-
-- The original replication package can be found [here.](https://www.openicpsr.org/openicpsr/project/125341/version/V1/view)
 
 ### Introduction
 The replication of research papers plays a pivotal role for Economics students. It allows them to learn about the implementation of econometrics methods, and to enhance the use of statistical software programs to further develop empirical works. This document provides a replication exercise for a fuzzy regression discontinuity design (RDD) model that estimates the impact of political fragmentation on government stability. It builds on a paper by Carozzi, Cipullo and Repetto (2022).
@@ -39,9 +71,99 @@ The data employed is a panel of Spanish municipalities from 1979 to 2014. The ti
 To obtain causal estimates of the effect of fragmentation – measured as the number of parties in the council – on government stability, they exploit the existence of a 5% vote-share threshold for admission to the local council. This threshold causes parties with vote-shares just below 5% to be excluded from the council, generating exogenous variation in the number of parties with representation. Results show that each additional party with representation in the parliament increases the probability that the incumbent government is unseated by 5 percentage points.
 
 ### Good Practices Before Starting
-In this section, we advise on two procedures before starting an empirical analysis in Stata. First, the creation of folders, which assures an organized storage of the analysis’ inputs and outputs.
+In this section, we advise on two procedures before starting an empirical analysis in Stata. 
 
-Second, the installation of all packages required to successfully carry out the replication.
+First, the creation of the toy dataset from the original replication package, for which we also provide a codebook (see header for downloads). Then, the creation of folders, which assures an organized storage of the analysis’ inputs and outputs. Finally, the installation of all packages required to successfully carry out the replication.
+
+
+#### **Toy dataset** {-}
+```{stata, eval=F}
+clear 
+set more off
+
+*download datasets Data_final.dta and Data_final_allparties.dta from https://www.openicpsr.org/openicpsr/project/125341/version/V1/view?path=/openicpsr/125341/fcr:versions/V1/PFGS_Replication_package_AEJ/Data/Clean&type=folder
+global dt "PUT YOUR OWN WORKING DIRECTORY HERE (where you stored the data)"
+
+*******************************************************************************
+*DATASET FOR DESCRIPTIVE STATISTICS
+*******************************************************************************
+
+use "$dt\Data_final.dta", clear
+
+* Drop problematic obs. 
+keep if tag == 0 | tag == 6  
+
+*Keep some variables
+keep id_towns log_surface surface pop* tag* election_year nominated_date3 total_seats CCAA party1 party2 population_scrutiny votes_blank votes_void province nmayors votes_total_muni turnout nparties_seats nparties allvalidvotes log_pop log_surface party_five_percent* abs_majority party_mayor* seats_total mocion_5
+
+egen population_average=mean(population_legal), by(id_towns)
+replace population_average=population_average/1000
+egen number_elections=sum(1), by(id_towns)
+
+label var population_average "Mean Population 000s (1979-2014)"
+label var surface "Surface (in km2)"
+label var number_elections " # of Elections in sample "
+
+gen PP_mayor=(party_mayor1=="PP"| party_mayor1=="AP/PDP/UL")*100
+gen PSOE_mayor=(party_mayor1=="PSOE")*100
+gen IU_mayor=(party_mayor1=="IU"| party_mayor1=="PCE")*100
+gen CIU_mayor=(party_mayor1=="CIU")*100
+gen mocion_5_100=mocion_5*100
+replace abs_majority=abs_majority*100
+
+label var mocion_5_100 "Vote of No Confidence (%)"
+label var nparties "# of Parties Running"
+label var seats_total "# of Council Seats"
+label var abs_majority "Single-party Majority (%)"
+label var nparties_seats "# of Parties in Council"
+label var PP_mayor "1st Mayor - PP (%)"
+label var PSOE_mayor "1st Mayor - PSOE (%)"
+label var IU_mayor "1st Mayor - IU (%)"
+label var CIU_mayor "1st Mayor - CIU (%)"
+
+gen Descrip_sample = 1
+
+label var Descrip_sample "1 if observation corresponds to sample data to replicate the descriptive statistics"
+
+keep id_towns election_year population_average surface number_elections nparties nparties_seats seats_total  mocion_5_100 abs_majority PP_mayor PSOE_mayor IU_mayor CIU_mayor abs_majority nparties_seats mocion_5 Descrip_sample
+
+save "$dt\Database1.dta", replace
+
+******************************************************************************
+*DATASET FOR FIGURE 3 AND MAIN RESULTS
+******************************************************************************
+use "$dt\Data_final_allparties.dta", clear
+
+* Use as r.v. the vote share distance of each party from 5% *
+replace rv = all_rv 
+replace d = all_d 
+replace rv_d = all_rv_d
+
+*Drop problematic obs. 
+keep if tag == 0 | tag == 6 
+
+*Label
+label var mocion_5 "Mayor uns."
+
+*keeping useful variables
+keep log_pop log_surface election_year seats_total  id_towns nparties nparties_seats rv d rv_d  mocion_5 
+
+gen Mainresults_sample = 1
+
+label var Mainresults_sample "1 if observation corresponds to sample data to replicate the main results and robustness"
+
+save "$dt\Database2.dta", replace
+
+*******************************************************************************
+*FINAL REPLICATION DATASET
+*******************************************************************************
+
+use "$dt\Database1.dta", clear
+append using "$dt\Database2.dta"
+
+save "$dt\Dataset_CCR.dta", replace
+```
+
 
 #### **Folder creation** {-}
 Create the appropriate folders and globals to store your datasets and results. A global is a named storage location that can hold a value or a string of text. We use the command “global” to define it and the prefix “$” to access it.
@@ -51,6 +173,7 @@ clear all
 set more off
 global dt "C:\Users\Dell\Desktop\laurine_stata_files\CCR"
 ```
+
 
 #### **Package Installation** {-}
 To carry out the replication of this paper, the following packages must be installed:
@@ -531,6 +654,6 @@ esttab, se(3) nolabel b(3) sfmt(0) keep(d nparties_seats) nostar nonotes model(3
 
 ---
 
-**Authors of the replication:** Carolina Arboleda Lenis, Elif C¸anga, Mariana Navarro Torres, Martina Pugliese
+**Authors:** Carolina Arboleda Lenis, Elif C¸anga, Mariana Navarro Torres, Martina Pugliese, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a> (2023-2024), Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
 
 **Date:** December 2023

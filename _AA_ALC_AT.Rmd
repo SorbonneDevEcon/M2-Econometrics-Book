@@ -2,9 +2,6 @@
 
 Boberg-Fazlić, N., Lampe, M., Lasheras, P. M., & Sharp, P. (2022). Winners and losers from Agrarian Reform: Evidence from Danish land inequality 1682–1895. _Journal of Development Economics_, 155, 102813. <a href="https://doi.org/10.1016/j.jdeveco.2021.102813" target="_blank">https://doi.org/10.1016/j.jdeveco.2021.102813</a>
 
-<a href="https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c" target="_blank">Link to the original replication package paper on OSF</a>
-
-Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_AA_ALC_AT.do&filename=DoFile_AA_ALC_AT.do) to download the Stata Do-File to replicate the results
 
 ```{r echo = F, include =T}
 library(downloadthis)
@@ -12,19 +9,16 @@ library(downloadthis)
 ## Link in Github repo
 download_link(
   link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_AA_ALC_AT.do&filename=DoFile_AA_ALC_AT.do",
-  button_label = "Download Do-File",
+  button_label = "Download Do-File corresponding to the explanations below",
   button_type = "default",
   has_icon = TRUE,
   icon = "fa fa-save",
   self_contained = FALSE
 )
-```
-```{r echo = F, include =T}
-library(downloadthis)
 
 ## Link in Github repo
 download_link(
-  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FCodebook_AA_ALC_AT.do&filename=Codebook_AA_ALC_AT.do",
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FCodebook_AA_ALC_AT.pdf&filename=Codebook_AA_ALC_AT.pdf",
   button_label = "Download Codebook",
   button_type = "default",
   has_icon = TRUE,
@@ -33,17 +27,16 @@ download_link(
 )
 
 download_link(
-  link = "https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c",
+  link = "https://osf.io/jmn5y/files/osfstorage?view_only=f18f6d51efe44f04abef6e9042c0163c",
   button_label = "Download Original Data (OSF repository: click on WinnersandLosers_finaldata.dta)",
   button_type = "default",
   has_icon = TRUE,
   icon = "fa fa-save",
   self_contained = FALSE
 )
-
-
 ```
 
+<a href="https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c" target="_blank">[Link to the full original replication package paper on OSF]</a>
 
 ### Highlights {-}
 
@@ -190,14 +183,20 @@ indicate the necessary commands to replicate them using Stata.
 In order to open the Stata database and execute the following lines of
 code, several packages need to be downloaded and installed. In this
 section, we guide you through the process of accessing the database and
-briefly refer to these packages.\
-The Stata code to open the database uses a global variable `dirData`
-to store the path to the directory where the `"Dataset_AA_ALC_AT"`
-database is located. Users can change the value of the `dirData`
-variable based on the location of their own data directory. Thus, by
-simply modifying the value of `dirData` to match their personal path,
-the users can open the database without having to modify the rest of the
-code. Subsequently, several Stata packages are necessary to execute the
+briefly refer to these packages. In what follows, you have to download the original dataset from a link, then run these first lines of code to get the shorter version of the dataset, for which we also provide you with a codebook (see header).\
+
+``` {.Stata language="Stata" numbers="none" caption="Stata code in order to access to the database and to install packages"}
+***Open the database*** 
+*download and save WinnersandLosers_finaldata.dta from: https://osf.io/jmn5y/files/osfstorage?view_only=f18f6d51efe44f04abef6e9042c0163c
+*define your working directeory, where you also just stored the dataset
+cd "C:\Users\" /*C:\Users\ = path where you also store the dataset*/
+
+use "WinnersandLosers_finaldata.dta", clear
+keep ID BygLG Lat Long year MLmean Theil_c AggTheil_c gini1682 gini1834 region ln_area LnDistCoast LnDistCPH ln_TotalFarmHK ln_Theil_1682c ln_Theil_1834c ln_Theil_1850c ln_Theil_1860c ln_Theil_1873c ln_Theil_1885c ln_Theil_1895c year_1 Gini ln_TotalFarmHK1682 ln_TotalFarmHK1834 ln_TotalFarmHK1850 ln_TotalFarmHK1860 ln_TotalFarmHK1873 ln_TotalFarmHK1885 ln_TotalFarmHK1895 ln_TotalFarmHK1682_nohouses ln_TotalFarmHK1834_nohouses ln_TotalFarmHK1850_nohouses ln_TotalFarmHK1860_nohouses ln_TotalFarmHK1873_nohouses ln_TotalFarmHK1885_nohouses ln_TotalFarmHK1895_nohouses
+save "Dataset_AA_ALC_AT.dta", replace
+```
+
+Subsequently, several Stata packages are necessary to execute the
 replication code successfully.\
 The first package needed is the **estout** package. This package allows
 to make regression tables using regressions previously stored in the
@@ -212,11 +211,7 @@ illustrative tables of regression outputs. This package is able to write
 LaTex-format tables.\
 All the packages can be installed using the following lines of code.
 
-#### **Stata code in order to access to the database and to install packages** 
 ``` {.Stata language="Stata" numbers="none" caption="Stata code in order to access to the database and to install packages"}
-***Open the database***
-global dirData "C:\Your Directory Here" 
-use "${dirData}/Dataset_AA_ALC_AT", clear
 
 ***Install the required packages***
 ssc install estout
@@ -236,7 +231,7 @@ ssc install outreg2
 ``` {.Stata language="Stata" numbers="none" caption="Stata code for Table 1" label="lst:stata_code"}
 ***Table 1***
 
-eststo clear
+use "Dataset_AA_ALC_AT.dta", clear
 
 ***Column (1) : OLS***
 eststo ols1: qui reg D.Theil_c ln_TotalFarmHK ln_area LnDistCPH Lat Long LnDistCoast ///
@@ -1035,6 +1030,6 @@ for fostering rigorous and collaborative research practices.
 
 ---
 
-**Authors of the replication:** Auvray Adrien, Carette Anne-Laure, Tarlapan Alina, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a> (2023-2024), Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
+**Authors:** Auvray Adrien, Carette Anne-Laure, Tarlapan Alina, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a> (2023-2024), Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
 
 **Date:** December 2023
