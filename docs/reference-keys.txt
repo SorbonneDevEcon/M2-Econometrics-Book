@@ -2,7 +2,7 @@ introduction
 randomized-control-trials
 subsidies-and-the-african-green-revolution-direct-effects-and-social-network-spillovers-of-randomized-input-subsidies-in-mozambique
 background-elements
-replication-of-table-2-main-results---regressions-with-spillover-effects
+replication-of-table-2---regressions-with-spillover-effects
 replication-of-figure-2---direct-and-spillover-impacts-of-subsidies
 replication-of-table-7---separated-estimation-of-spillover-effects-for-the-first-and-second-years-after-the-program
 instrumental-variables

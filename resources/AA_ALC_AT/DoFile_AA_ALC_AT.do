@@ -1,26 +1,31 @@
 *Boberg-Fazli´c, N., Lampe, M., Lasheras, P. M., & Sharp, P. (2022). Winners and losers from Agrarian Reform: Evidence from Danish land inequality 1682–1895. Journal of Development Economics, 155, 102813.
-*Link to the paper: https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c
-*Link to the replication package: https://doi.org/10.1016/j.jdeveco.2021.102813
+*Link to the paper: https://doi.org/10.1016/j.jdeveco.2021.102813
+*Link to the original replication package: https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c 
 
 *Replication file prepared by : Auvray Adrien, Carette Anne-Laure and Tarlapan Alina.
 *Replicating : Table 1, Figure 5, Table A.3 and Table A.4.
-
 
 *3. From the article to practice: exploring the replication code 
 **3.1 Getting started: database access and required packages
 
 ***Open the database*** 
-global dirData "C:\Your Directory Here"
-use "${dirData}/Dataset_AA_ALC_AT", clear
+*download and save WinnersandLosers_finaldata.dta from: https://osf.io/jmn5y/files/osfstorage?view_only=f18f6d51efe44f04abef6e9042c0163c
+*define your working directeory, where you also just stored the dataset
+cd "C:\Users\" /*C:\Users\ = path where you also store the dataset*/
+
+use "WinnersandLosers_finaldata.dta", clear
+keep ID BygLG Lat Long year MLmean Theil_c AggTheil_c gini1682 gini1834 region ln_area LnDistCoast LnDistCPH ln_TotalFarmHK ln_Theil_1682c ln_Theil_1834c ln_Theil_1850c ln_Theil_1860c ln_Theil_1873c ln_Theil_1885c ln_Theil_1895c year_1 Gini ln_TotalFarmHK1682 ln_TotalFarmHK1834 ln_TotalFarmHK1850 ln_TotalFarmHK1860 ln_TotalFarmHK1873 ln_TotalFarmHK1885 ln_TotalFarmHK1895 ln_TotalFarmHK1682_nohouses ln_TotalFarmHK1834_nohouses ln_TotalFarmHK1850_nohouses ln_TotalFarmHK1860_nohouses ln_TotalFarmHK1873_nohouses ln_TotalFarmHK1885_nohouses ln_TotalFarmHK1895_nohouses
+save "Dataset_AA_ALC_AT.dta", replace
+
+
+***Open the database*** 
+use "Dataset_AA_ALC_AT", clear
 
 ***Install the required packages***
-ssc install estout
-
-ssc install ivreg2
- 
-ssc install coefplot
- 
-ssc install outreg2
+ssc install estout, replace
+ssc install ivreg2, replace
+ssc install coefplot, replace
+ssc install outreg2, replace
 
 *The first package needed is the estout package which allows to make regression tables using regressions previously stored in the Stata memory.
 

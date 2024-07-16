@@ -1,6 +1,10 @@
 ## Subsidies and the African Green Revolution: Direct effects and social network spillovers of randomized input subsidies in Mozambique
 
-Carter, M., Laajaj, R., & Yang, D. (2021). Subsidies and the African Green Revolution: Direct effects and social network spillovers of randomized input subsidies in Mozambique. _American Economic Journal: Applied Economics_, _13_(2), 206‑229. <https://doi.org/10.1257/app.20190396>
+Carter, M., Laajaj, R., & Yang, D. (2021). Subsidies and the African Green Revolution: Direct effects and social network spillovers of randomized input subsidies in Mozambique. _American Economic Journal: Applied Economics_, _13_(2), 206‑229.<a href="https://www.aeaweb.org/articles?id=10.1257/app.20190396" target="_blank">https://doi.org/10.1257/app.20190396</a>
+
+<a href="https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=%2Fopenicpsr%2F116761%2Ffcr%3Aversions%2FV2.1%2FRep-file-Moz-Input-Subsidy&type=folder&fbclid=IwAR3bVz5SUf8L2eWPPmh6zxY97BOD8K0LHeIwB8rMiwFi7kfVxomJ3suDmb8" target="_blank">Link to the original replication package</a>
+
+Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FDoFile_CLY.do&filename=DoFile_CLY.do) to get the complete do-file corresponding to the explanations below, <a href="https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=/openicpsr/116761/fcr:versions/V2.1/Rep-file-Moz-Input-Subsidy/data/original/Moz1234panel.dta&type=file" target="_blank">here</a> to download the original dataset (named Moz1234panel.dta) from Open ICPSR, and [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FCodebook_CLY_M.pdf&filename=Codebook_CLY_M.pdf) to get a detailed description of the variables used (codebook).
 
 ### Highlights {-}
 
@@ -10,28 +14,18 @@ Carter, M., Laajaj, R., & Yang, D. (2021). Subsidies and the African Green Revol
 
 - Yet, it departs from the standard by exploring __spillover effects through social networks__, assessing long-term impacts, and addressing informational market failures. The study emphasizes learning processes as part of the intervention’s impact, extending beyond the typical scope of a standard RCT.
 
-- This document provides a detailed explanation of the original replication package. You will learn: 
-    + how to automatically generate a __new label__ by keeping / removing certain parts of an existing label with the __`subinstr` command__,
-    + how to use a __`local` macro together with `replace` and `append` commands__ in order to loop over a list of variables and store all their corresponding results into a fresh table every time the code is run, 
-    + how to create a __beautiful plot with estimates stored in a matrix__, 
-    + creating tables with __outreg2__, while adding a few __values for statistical tests__ in the bottom part. 
+- This document provides a detailed explanation of the original replication package. But you will also learn: 
+    + how to create a beautiful coefficient plot tailored to your needs, with estimates stored in a matrix (this is how the authors display the main results of their paper) using `mkmat` together with `coefplot`, 
+    + how to create a result table with `outreg2`, while adding a few statistical tests tailored to your needs in the bottom part with `test` and `scalar`, 
+    + how to automatically generate a new label by keeping / removing certain parts of an existing label with `subinstr`,
+    + how to use a `local` macro together with `replace` and `append` commands in order to loop over a list of variables and store all their corresponding results into a fresh table every time the code is run. 
 
-
-- __Link to the article__: <a href="https://www.aeaweb.org/articles?id=10.1257/app.20190396" target="_blank">https://www.aeaweb.org/articles?id=10.1257/app.20190396</a> 
-
-- __Link to the original replication package__: <a href="https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=%2Fopenicpsr%2F116761%2Ffcr%3Aversions%2FV2.1%2FRep-file-Moz-Input-Subsidy&type=folder&fbclid=IwAR3bVz5SUf8L2eWPPmh6zxY97BOD8K0LHeIwB8rMiwFi7kfVxomJ3suDmb8" target="_blank">Data and Code for Subsidies and the African Green Revolution: Direct Effects and Social Network Spillovers of Randomized Input Subsidies in Mozambique (openicpsr.org)</a>
-
-- Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FDoFile_CLY.do&filename=DoFile_CLY.do) to download the Stata Do-File to replicate the results
-
-- Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FCodebook_CLY_M.pdf&filename=Codebook_CLY_M.pdf) to download the Stata Do-File to replicate the results
-
-- Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_AA_ALC_AT.do&filename=DoFile_AA_ALC_AT.do) to download the Stata Do-File to replicate the results
 
 ### Background elements
 
 This study examines the impact of a one-off input subsidy program implemented in Mozambique in 2010 within the context of the Green Revolution and the Alliance for a Green Revolution in Africa. While the Green Revolution transformed Asian and Latin American agriculture, Sub-Saharan Africa lagged behind. In response, the Maputo Declaration (2003) committed African nations to invest 10% of their budgets in agriculture. Launched in 2006, the Alliance aimed to catalyze the Green Revolution in Africa through input subsidy programs (ISPs), providing technologies at discounted rates to randomly selected farmers. Focusing on Mozambique's 2010 _Programa de Suporte aos Produtores_, this paper not only assesses subsidy impacts on 704 farmers but also explores post-subsidy persistence and spillover effects through social networks. Findings reveal increased technology adoption, sustained maize yield growth post-program, and notable impacts on farmers’ networks. The program also fostered enhanced beliefs about technology returns, mitigating information-related market failures.
 
-### Replication of Table 2 (main results) - Regressions with spillover effects
+### Replication of Table 2 - Regressions with spillover effects
 
 This table (Table 2 in the paper) is the output you will get from the code we explain below. 
 
@@ -43,25 +37,43 @@ __How to read this table.__ The first two lines of this table present the progra
 
 The next lines present the impact of the ISP on social network spillovers, which is estimated on members of treated farmers' social networks during (round 2) and after (rounds 3 and 4) the treatment period, respectively. The general pattern observed is that the coefficients for social network variables are positive and significant in the post-intervention period but not in the intervention period. The magnitude of the coefficients increases as the number of social network contacts in the treatment group increases from one to two, and then stabilizes. This pattern suggests that the effect of social networks on technology adoption and yield increases sharply at two or more social network contacts in the treatment group. For example, after the program, having one contact in the treatment group increases maize yield by 0.18 kilogram per hectare, while having two contacts increases maize yield by 0.53 kilogram per hectare. This substantial increase in yield with two or more social network contacts justifies the authors' estimation of spillover effects on individuals having above-median (two or more) social network members in the treatment group in Figure 2.
 
-#### Replication code for Table 2 (main results of the paper) {-}
+#### Replication code for Table 2 {-}
 
 ##### Data importation {-}
 
-To start the replication of the authors’ code, one should always start by deleting any potential data in memory using clear all. Then, open the dataset of interest using global base, which indicates the path leading to the file you want to store this project in, and the command use “...”, clear to indicate the dataset you want to import in Stata.
+After having downloaded the original dataset and saved this dataset under your working directory defined with command "cd" (for current directory), you can generate a shorter version of the dataset, named here __Dataset_CLY.dta__, for which we provide a [detailed codebook](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FCodebook_CLY_M.pdf&filename=Codebook_CLY_M.pdf). 
+
+``` {.Stata language="Stata" numbers="none"}
+
+*A/ Download and save data "Moz1234panel.dta" from: https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=/openicpsr/116761/fcr:versions/V2.1/Rep-file-Moz-Input-Subsidy/data/original/Moz1234panel.dta&type=file
+
+*B/ Set your working directory where Moz1234panel.dta already is:
+cd "XXX" /*XXX=the directory where you just saved the 'Moz1234panel.dta' dataset*/
+
+*C/ Create a shorter dataset:
+use "Moz1234panel.dta", clear
+
+* selecting the necessary avriables for replicating the Table 2, Figure 2, and Table A7
+keep sn5up_sub_dur sn2up_sub_aft nw_talkedagmoder lfertmaizr sn2_sub_dur sn2up_sub_dur sn1_sub_aft lyieldr sn3_sub_aft lexp_yield_fertr vouch_aft_r3 sn2up_sub_aft_r3 limprovedseedsr vouch_aft sn1_sub_dur vlgid_round respid sn2up_sub_aft_r4 vouch_aft_r4 vouch_dur ldailyconsr sn3_sub_dur sn4_sub_aft sn5up_sub_aft sn4_sub_dur sn2_sub_aft fertmaizr vouch round
+
+* exponentiation of the winsorized variables back to their original forms
+foreach x in improvedseedsr yieldr dailyconsr exp_yield_fertr{ 
+	// it is necessary in order to add the means of the control to the table 2. This way it uses the value that is not Winsorized. 
+		gen `x' = exp(l`x')
+}
+
+save "Dataset_CLY.dta", replace
+```
+
+To start the replication, one should always start by deleting any potential data in memory using clear all. Then, open the dataset of interest, and the command use “...”, clear to indicate the dataset you want to import in Stata.
 
 Because this project uses panel data, you need to inform Stata of the structure of the data. Use the command xtset to indicate that you are working with panel data, followed by the name of the variable you want to set as the panel variable. Here, _vlgid_round_ is an identifier for every possible combination of locality and round.
 
 ``` {.Stata language="Stata" numbers="none"}
 clear all
-
-global base "PUT YOUR OWN WORKING DIRECTORY HERE (and store the data under this folder)"
-
 use "Dataset_CLY.dta", clear
-
 xtset vlgid_round
-
-global sn_treatments sn1_sub_dur sn2_sub_dur sn3_sub_dur sn4_sub_dur sn5up_sub_dur /// 
-sn1_sub_aft sn2_sub_aft  sn3_sub_aft  sn4_sub_aft sn5up_sub_aft 
+global sn_treatments sn1_sub_dur sn2_sub_dur sn3_sub_dur  sn4_sub_dur sn5up_sub_dur sn1_sub_aft sn2_sub_aft  sn3_sub_aft  sn4_sub_aft sn5up_sub_aft 
 ```
 
 Now, you want to modify the labels for a set of variables that were in log format in the original dataset, to indicate that they are in their original scale.
@@ -412,6 +424,6 @@ foreach x in lfertmaizr limprovedseedsr lyieldr ldailyconsr lexp_yield_fertr {
 
 ---
 
-**Authors of the replication:** Elvire Jégu, Ambre Delaunay, Chiara Balducci, Yagmur Helin Aslan, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a>, Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
+**Authors of the replication:** Elvire Jégu, Ambre Delaunay, Chiara Balducci, Yagmur Helin Aslan, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a> (2023-2024), Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
 
 **Date:** December 2023

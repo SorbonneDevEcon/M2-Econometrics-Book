@@ -1,30 +1,10 @@
 ## Winners and losers from Agrarian Reform: Evidence from Danish land inequality 1682–1895
 
-Boberg-Fazlić, N., Lampe, M., Lasheras, P. M., & Sharp, P. (2022). Winners and losers from Agrarian Reform: Evidence from Danish land inequality 1682–1895. _Journal of Development Economics_, 155, 102813
+Boberg-Fazlić, N., Lampe, M., Lasheras, P. M., & Sharp, P. (2022). Winners and losers from Agrarian Reform: Evidence from Danish land inequality 1682–1895. _Journal of Development Economics_, 155, 102813. <a href="https://doi.org/10.1016/j.jdeveco.2021.102813" target="_blank">https://doi.org/10.1016/j.jdeveco.2021.102813</a>
 
-### Highlights {-}
+<a href="https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c" target="_blank">Link to the original replication package paper on OSF</a>
 
-- The paper examines the distributional effects of land reforms between 1682-1895 in Denmark
-
-- The authors use an Instrumental Variable (IV) to deal with endogeneity issues stemming from reverse causality between the variable of interest (land productivity) and the dependent variable (land inequalities).
-
-- This methodology is standard by the choice of a geological instrument. It follows the usual steps of the IV procedure, including tests of the instrument’s pertinence (F-statistic of the 1st stage estimation).
-
-- Our added value to the original replication package lies in the detailed explanation of the provided code. Additionally, we demonstrate how to extract various tables and figures directly from the Stata code. While the authors have created a well-realized replication package, our contribution enhances its accessibility and usability.
-
-- We make use of these Stata tricks:
-  
-  - Diagnostic Statistics: We leverage the `estat firststage` command to obtain diagnostic statistics pertaining to the first-stage of instrumental variable estimation, which includes extracting and storing the F-statistics for further analysis.
-  
-  - Looping: The `foreach` loop structure is used, which enables the iteration over multiple years for instrumental variable regressions and allows to avoid repetitive commands in the code.
-  
-  - Advanced Formatting: Through the utilization of the `esttab` command along with various formatting options, we create well-formatted tables, which results in the production of tables that are not only clear and organized but also visually appealing.
-
-- Link to the paper: https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c
-
-- Link to the replication package: https://doi.org/10.1016/j.jdeveco.2021.102813
-
-- Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_AA_ALC_AT.do&filename=DoFile_AA_ALC_AT.do) to download the Stata Do-File to replicate the results
+Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_AA_ALC_AT.do&filename=DoFile_AA_ALC_AT.do) to download the Stata Do-File to replicate the results
 
 ```{r echo = F, include =T}
 library(downloadthis)
@@ -39,68 +19,104 @@ download_link(
   self_contained = FALSE
 )
 ```
+```{r echo = F, include =T}
+library(downloadthis)
+
+## Link in Github repo
+download_link(
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FCodebook_AA_ALC_AT.do&filename=Codebook_AA_ALC_AT.do",
+  button_label = "Download Codebook",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_link(
+  link = "https://osf.io/jmn5y/?view_only=f18f6d51efe44f04abef6e9042c0163c",
+  button_label = "Download Original Data (OSF repository: click on WinnersandLosers_finaldata.dta)",
+  button_type = "default",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+
+```
+
+
+### Highlights {-}
+
+- The paper examines the distributional effects of land reforms between 1682-1895 in Denmark.
+
+- The authors use an Instrumental Variable (IV) to deal with endogeneity issues stemming from reverse causality between the variable of interest (land productivity) and the dependent variable (land inequalities).
+
+- This methodology is standard by the choice of a geological instrument. It follows the usual steps of the IV procedure, including tests of the instrument’s pertinence (F-statistic of the 1st stage estimation).
+
+- Our added value to the original replication package lies mainly in the detailed explanation of the provided code. Additionally, we show how to extract various tables and figures directly from the Stata code. 
+
+- We explain these Stata tricks:
+  
+  - Diagnostic Statistics: We leverage the `estat firststage` command to obtain diagnostic statistics pertaining to the first-stage of instrumental variable estimation, which includes extracting and storing the F-statistics for further analysis.
+  
+  - Looping: The `foreach` loop structure is used, which enables the iteration over multiple years for instrumental variable regressions and allows to avoid repetitive commands in the code.
+  
+  - Advanced Formatting: Through the utilization of the `esttab` command along with various formatting options, we create well-formatted tables, which results in the production of tables that are not only clear and organized but also visually appealing.
+
+
 
 ### Introduction
 
-As a rule, agrarian reforms are viewed as fundamental for economic
-development, allowing, on one hand, to fuel agricultural productivity
+As a rule, **agrarian reforms are viewed as fundamental for economic
+development**, allowing, on one hand, to fuel agricultural productivity
 and on the other, to reallocate the necessary productive resources to
 industrialization. Their design has to fulfill two competing objectives:
 **stimulating farms' productivity** and **ensuring an equitable access
 to land**. As numerous reforms have been criticized for failing the
-latter, this paper provides the first quantitative long-term assessment
+latter, this paper provides the **first quantitative long-term assessment
 of the Danish agrarian reforms' effects on both economic efficiency and
-land inequalities. Rather efficiency-oriented, these reforms were
-designed to support the owners of medium-sized farmers and were
-therefore detrimental to smallholders and landless agricultural
-laborers. As land inequalities became more stringent in the most fertile
-areas, the objective of the paper is to find the underlying mechanisms
-of these patterns and more specifically, the role of agrarian reforms in
-this context.
+land inequalities**. 
 
-To do so, the authors combine several sources of historical data on
-farms at the parish level with population and agricultural censuses to
-cover the 1682- 1895 period and enhance the robustness and depth of
-their analysis. The utilization of a singular, extensive dataset allows
-for a thorough examination of long-term land inequality trends and
-patterns, including nuances and variations that might be overlooked in
-studies with more limited or less comprehensive datasets. The authors'
-access to a unique dataset positions their study as a valuable
-contribution to the literature on historical agrarian economies,
-providing nuanced perspectives that contribute to a broader
-understanding of the subject matter. The authors opted for the use of
+To do so, the authors combine several sources of **historical data** on
+**farms at the parish level** with population and agricultural censuses to
+cover the **1682-1895 period**. 
+
+- First, they document that the **agrarian reform happened between 1784 and 1810**, with a unification of property rights, favoring middle-sized farms. 
+
+- Then, they get the **number and sizes of farms per parish** for the years 1682, 1834, 1850, 1860, 1873, 1885 and 1895 from Danish land registers, as well as their **productive capacity measured in units of barrel of hard grain (HK)**, which was the unified measure used for tax collection. 
+
+- Thanks to this data, they can calculate a measure for **inequality within parishes** for the several data points (their explained variable). 
+They opt for the use of
 the Theil index to measure land inequality due to its analytically
-desirable properties. One key advantage is that the Theil index adheres
+desirable properties. *One key advantage is that the Theil index adheres
 to the principle of transfers, ensuring that a redistribution from one
 individual to a less affluent one results in a proportional decline in
 the Theil index, which is particularly convenient for focusing on
 changes in inequalities over time. Moreover, the Theil index provides
 unambiguous rankings of distributions, ensuring that two regions with
-identical Theil indices exhibit identical income distributions. This is
-not guaranteed by other common measures such as the Gini index. The
-preference for the Theil index would allow for a higher precision and
-interpretability of their findings.
+identical Theil indices exhibit identical income distributions (not guaranteed by other common measures such as the Gini index).
+If a parish have all farms of equal productive size, then its Theil index is 0 ; if only one farm holds all land, its Theil index is the logarithm of the number of households living in the parish.* 
 
-From an econometric point of view, the most obvious approach would be to
+- Finally, they consider the natural logarithm of the **total value of the land (measured in HK) of parish p** as their main explanatory variable.  
+
+Recall that **their objective is to estimate the effect of productive capacity on inequality**. From an econometric point of view, the most obvious approach would be to
 regress changes in parish-level land inequalities on a measure of soil
-productivity -- Total HK, translated as "barrels of hard grain" -- and
-some geographical characteristics of the parish, as well as regional
-fixed effects. Nonetheless, such a specification would be exposed to
+productivity. Nonetheless, such a specification would be exposed to
 endogeneity issues, due to the reverse causality between the explained
 variable (evolution in land inequalities) and the variable of interest
 (land productivity): as higher agricultural productivity leads to
 Malthusian dynamics, in parishes with more fertile soils, there would be
 more smallholders and landless individuals, whose socio-economic status
-would be deteriorated by the reforms. Consequently, areas with a higher
+would then be deteriorated by the reforms. Consequently, areas with a higher
 agricultural productivity were more exposed to rises in land
 inequalities. At the same time, population growth has beneficial effects
-on innovation and thus, agricultural productivity. To tackle this, the
+on innovation and thus, agricultural productivity. **To tackle this, the
 authors adopt an IV strategy and choose as an instrument for land
-productivity the distribution of "Boulder Clay", the sediment type most
+productivity the distribution of "Boulder Clay"**, the sediment type most
 adapted to barley, resulting from the Weichselian glaciation. Geological
 variables are generally viewed as reliable instruments, since they
 capture long-term determinants of development that are independent from
-human factors.
+human factors. So their IV is the share of parish area classified as boulder clay (invariant in time). 
 
 ### Identification strategy
 
@@ -1019,6 +1035,6 @@ for fostering rigorous and collaborative research practices.
 
 ---
 
-**Authors of the replication:** Auvray Adrien, Carette Anne-Laure, Tarlapan Alina
+**Authors of the replication:** Auvray Adrien, Carette Anne-Laure, Tarlapan Alina, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a> (2023-2024), Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
 
 **Date:** December 2023
