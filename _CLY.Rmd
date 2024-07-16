@@ -4,35 +4,46 @@ Carter, M., Laajaj, R., & Yang, D. (2021). Subsidies and the African Green Revol
 
 ### Highlights {-}
 
-- The paper investigates the short-term and long-term effects, including diffusion through farmers' networks, of a one-off input subsidy program on agricultural yields over time?
+- The paper investigates the short-term and long-term effects (i.e. diffusion through farmers' networks) of an __input subsidy program__ on __agricultural yields__. 
 
-- The authors conduct a standard Randomized Controlled Trial (RCT) in which individuals are randomly assigned to the treatment and control groups, eliminating potential selection bias.
+- The authors rely on a standard __Randomized Controlled Trial__ in which farmers are randomly assigned to the treatment and control groups, eliminating potential selection bias.
 
-- Yet, it departs from the standard by exploring spillover effects through social networks, assessing long-term impacts, and addressing informational market failures. The study emphasizes learning processes as part of the intervention’s impact, extending beyond the typical scope of a standard RCT.
+- Yet, it departs from the standard by exploring __spillover effects through social networks__, assessing long-term impacts, and addressing informational market failures. The study emphasizes learning processes as part of the intervention’s impact, extending beyond the typical scope of a standard RCT.
 
-- This document provides a detailed explanation of the original replication package.
+- This document provides a detailed explanation of the original replication package. You will learn: 
+    + how to automatically generate a __new label__ by keeping / removing certain parts of an existing label with the __`subinstr` command__,
+    + how to use a __`local` macro together with `replace` and `append` commands__ in order to loop over a list of variables and store all their corresponding results into a fresh table every time the code is run, 
+    + how to create a __beautiful plot with estimates stored in a matrix__, 
+    + creating tables with __outreg2__, while adding a few __values for statistical tests__ in the bottom part. 
 
-- In addition to the replication of the original outputs, this work will introduce you to two practical techniques which you may find useful for your future Stata projects. You will learn (1) how to automatically generate a new label by keeping / removing certain parts of an existing label with the `subinstr` command and (2) how to use a `local` macro together with `replace` and `append` commands in order to loop over a list of variables and store all their corresponding results into a fresh table every time the code is run.
 
-- More background on the study: This study examines the impact of a one-off input subsidy program implemented in Mozambique in 2010 within the context of the Green Revolution and the Alliance for a Green Revolution in Africa. While the Green Revolution transformed Asian and Latin American agriculture, Sub-Saharan Africa lagged behind. In response, the Maputo Declaration (2003) committed African nations to invest 10% of their budgets in agriculture. Launched in 2006, the Alliance aimed to catalyze the Green Revolution in Africa through input subsidy programs (ISPs), providing technologies at discounted rates to randomly selected farmers. Focusing on Mozambique's 2010 _Programa de Suporte aos Produtores_, this paper not only assesses subsidy impacts on 704 farmers but also explores post-subsidy persistence and spillover effects through social networks. Findings reveal increased technology adoption, sustained maize yield growth post-program, and notable impacts on farmers’ networks. The program also fostered enhanced beliefs about technology returns, mitigating information-related market failures.
+- __Link to the article__: <a href="https://www.aeaweb.org/articles?id=10.1257/app.20190396" target="_blank">https://www.aeaweb.org/articles?id=10.1257/app.20190396</a> 
 
-- Link to the article: https://www.aeaweb.org/articles?id=10.1257/app.20190396
+- __Link to the original replication package__: <a href="https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=%2Fopenicpsr%2F116761%2Ffcr%3Aversions%2FV2.1%2FRep-file-Moz-Input-Subsidy&type=folder&fbclid=IwAR3bVz5SUf8L2eWPPmh6zxY97BOD8K0LHeIwB8rMiwFi7kfVxomJ3suDmb8" target="_blank">Data and Code for Subsidies and the African Green Revolution: Direct Effects and Social Network Spillovers of Randomized Input Subsidies in Mozambique (openicpsr.org)</a>
 
-- Link to the original replication package: [Data and Code for Subsidies and the African Green Revolution: Direct Effects and Social Network Spillovers of Randomized Input Subsidies in Mozambique (openicpsr.org)](https://www.openicpsr.org/openicpsr/project/116761/version/V2/view?path=%2Fopenicpsr%2F116761%2Ffcr%3Aversions%2FV2.1%2FRep-file-Moz-Input-Subsidy&type=folder&fbclid=IwAR3bVz5SUf8L2eWPPmh6zxY97BOD8K0LHeIwB8rMiwFi7kfVxomJ3suDmb8)
+- Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FDoFile_CLY.do&filename=DoFile_CLY.do) to download the Stata Do-File to replicate the results
 
-### TABLE 2 - Regressions with spillover effects
+- Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FCLY%2FCodebook_CLY_M.pdf&filename=Codebook_CLY_M.pdf) to download the Stata Do-File to replicate the results
 
-#### Final output for Table 2
+- Click [here](https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FAA_ALC_AT%2FDoFile_AA_ALC_AT.do&filename=DoFile_AA_ALC_AT.do) to download the Stata Do-File to replicate the results
+
+### Background elements
+
+This study examines the impact of a one-off input subsidy program implemented in Mozambique in 2010 within the context of the Green Revolution and the Alliance for a Green Revolution in Africa. While the Green Revolution transformed Asian and Latin American agriculture, Sub-Saharan Africa lagged behind. In response, the Maputo Declaration (2003) committed African nations to invest 10% of their budgets in agriculture. Launched in 2006, the Alliance aimed to catalyze the Green Revolution in Africa through input subsidy programs (ISPs), providing technologies at discounted rates to randomly selected farmers. Focusing on Mozambique's 2010 _Programa de Suporte aos Produtores_, this paper not only assesses subsidy impacts on 704 farmers but also explores post-subsidy persistence and spillover effects through social networks. Findings reveal increased technology adoption, sustained maize yield growth post-program, and notable impacts on farmers’ networks. The program also fostered enhanced beliefs about technology returns, mitigating information-related market failures.
+
+### Replication of Table 2 (main results) - Regressions with spillover effects
+
+This table (Table 2 in the paper) is the output you will get from the code we explain below. 
 
 ![](resources/CLY/table1.png)
 
-Table 2 examines the impact of the government-implemented input subsidy program (ISP) on various agricultural outcomes, including fertilizer use on maize, adoption of improved maize seeds, maize yield, daily consumption per capita, and expected yield with the technology package. The objective of this analysis is to determine whether the ISP has a positive and statistically significant impact on the use of fertilizer on maize and on maize yields, measured as average maize yield per hectare.
+Table 2 examines the impact of the government-implemented input subsidy program (ISP) on various agricultural outcomes: fertilizer use on maize, adoption of improved maize seeds, maize yield, daily consumption per capita, and expected yield with the technology package. The objective of this analysis is to determine whether the ISP has a positive and statistically significant impact on the use of fertilizer on maize and on maize yields, measured as average maize yield per hectare.
 
-The first two lines of this table present the program’s results estimated on treated farmers (those who received the subsidy). The effects of the program are assessed both during and after the ISP implementation. This table reveals that the program has a positive impact on all farmers' outcomes, both during and after the program. The effects are more pronounced during the treatment period for fertilizer use, improved maize seeds, and maize yields.
+__How to read this table.__ The first two lines of this table present the program’s results estimated on treated farmers (those who received the subsidy). The effects of the program are assessed both during and after the ISP implementation. This table reveals that the program has a positive impact on all farmers' outcomes, both during and after the program. The effects are more pronounced during the treatment period for fertilizer use, improved maize seeds, and maize yields.
 
 The next lines present the impact of the ISP on social network spillovers, which is estimated on members of treated farmers' social networks during (round 2) and after (rounds 3 and 4) the treatment period, respectively. The general pattern observed is that the coefficients for social network variables are positive and significant in the post-intervention period but not in the intervention period. The magnitude of the coefficients increases as the number of social network contacts in the treatment group increases from one to two, and then stabilizes. This pattern suggests that the effect of social networks on technology adoption and yield increases sharply at two or more social network contacts in the treatment group. For example, after the program, having one contact in the treatment group increases maize yield by 0.18 kilogram per hectare, while having two contacts increases maize yield by 0.53 kilogram per hectare. This substantial increase in yield with two or more social network contacts justifies the authors' estimation of spillover effects on individuals having above-median (two or more) social network members in the treatment group in Figure 2.
 
-#### Replication code for Table 2
+#### Replication code for Table 2 (main results of the paper) {-}
 
 ##### Data importation {-}
 
@@ -67,7 +78,7 @@ foreach v in fertmaizr improvedseedsr yieldr dailyconsr exp_yield_fertr {
 }
 ```
 
-##### Regression and table creation{#cly-table}
+##### Regressions, and table creation {-}
 
 You are now set to running the regressions and creating a table presenting results.
 
@@ -108,21 +119,21 @@ foreach x in fertmaizr improvedseedsr yieldr dailyconsr exp_yield_fertr {
 }
 ```
 
-### FIGURE 2 - Direct and Spillover Impacts of Subsidies
+### Replication of Figure 2 - Direct and Spillover Impacts of Subsidies
 
-#### Final output for Figure 2
+This figure (Figure 2 in the paper) is the output you will get from the code we explain below.
 
 ![](resources/CLY/graph1.png)
 
-This figure highlights the Intent-to-Treat estimates through the direct and indirect effects on five outcomes of the subsidy program on the farmers and on their social networks. The outcomes of interest include the adoption of fertilizer and adoption of improved maize seeds, the maize yields, the consumption of the household (an indirect measure of agricultural profit), and the expected yields to the technology package. In this figure, indirect effects are estimated on individuals having at least two contacts in the treatment group, because they are the ones for whom effects are the largest, as demonstrated in Table 2.
+ This figure highlights the Intention-to-Treat estimates through the direct and indirect effects on five outcomes of the subsidy program on the farmers and on their social networks. The outcomes of interest include the adoption of fertilizer and adoption of improved maize seeds, the maize yields, the consumption of the household (an indirect measure of agricultural profit), and the expected yields to the technology package. In this figure, indirect effects are estimated on individuals having at least two contacts in the treatment group, because they are the ones for whom effects are the largest, as demonstrated in Table 2.
 
-The coefficient of the regressions of interest are represented with dots, while the lines represent 95 percent confidence intervals.
+__How to read this figure.__ The coefficient of the regressions of interest are represented with dots, while the lines represent 95 percent confidence intervals.
 
 Direct impacts of the subsidies on the voucher recipient group are estimated for all five outcomes for both the “during” (subsidized) and the “after” (post-subsidy) periods. The Figure shows that the program had a large and significant impact during the subsidy period on the adoption of fertilizers and improved seeds, also allowing for higher maize yields. The effects on consumption were only significant after the subsidy period. Yield expectations were stable across periods for treated farmers. While the effect on fertilizer use decreases in magnitude after the subsidy period, it remains substantial and statistically significant. The impact on agricultural yields also persists over time.
 
 Regarding spillover effects, impacts of the program are positive and significant on the adoption of fertilizers, on improved seeds, maize yields, and expected returns to the technology package.
 
-#### Replication code for Figure 2
+#### Replication code for Figure 2 {-}
 
 ##### Data preparation and confidence intervals calculation {-}
 
@@ -336,21 +347,19 @@ gr export figure2.png, replace
 gr export figure2.pdf, replace
 ```
 
-### TABLE 7 - Separated Estimation of Spillover Effects for the First and Second Years After the Program
-
-#### Final output for Table 7
+### Replication of Table 7 - Separated Estimation of Spillover Effects for the First and Second Years After the Program
 
 In both Table 2 and Figure 2 presented above, researchers estimate a single “after” treatment effect, pooling the two years after the intervention period. In Table 7, the researchers distinguish between spillover effects one year after, and two years after the program, separately. The objective of this table is to push the analysis of spillovers further, and is similar to conduct a robustness check in the context of this study.
 
 To dissect spillover effects over time, researchers introduce two different “after” indicators for each of the post-subsidy years. As expected, due to reduced power, fewer coefficients reach statistical significance. There is no clear systematic pattern to the coefficients across the two years, and the hypothesis that the direct and spillover effects are consistent between the first and second "after" years cannot be rejected.
 
-#### Replication code for Table 7
-
 ![](resources/CLY/table2.png)
+
+#### Replication code for Table 7 {-}
 
 ##### Data preparation {-}
 
-Start with initializing a local macro using local, named rep_app and set its value to replace. For more information, see section \@ref(cly-table).
+Start with initializing a local macro using local, named rep_app and set its value to replace. For more information, see section explaining Table 2 above.
 
 ``` {.Stata language="Stata" numbers="none"}
 use "Dataset_CLY.dta", clear
@@ -369,9 +378,9 @@ label var sn2up_sub_aft_r3 "Spillover impacts 1 year after"
 label var sn2up_sub_aft_r3 "Spillover impacts 2 year after"
 ```
 
-##### Regression and table creation {-}
+##### Regressions, and table creation {-}
 
-The code for creating Table 7 is very similar to that for creating Table 2. Please refer to section 1 for more detail on the commands used here.
+The code for creating Table 7 is very similar to that for creating Table 2 (see above). The interesting novelties are the following: 
 
 Using a loop, run a regression with `areg`, adding the prefix `xi-` to indicate that the regression includes indicator values (equal to either 0 or 1), and including fixed effects which will be absorbed for the variable _vlgid_round_ with the option `absorb`. Standard errors are clustered at the individual level (_respid_ variable). The command `qui`, for “quietly”, means that the results will not be displayed.
 
@@ -379,7 +388,7 @@ Then test the equality of coefficients between _vouch_aft_r3_ and _vouch_aft_r4_
 
 Next, store the p-value results using `scalar`.
 
-The last step is to export the results you have just obtained into our results folder using `outreg2`. To create a nice table easily, refer to section \@ref(cly-table) .
+The last step is to export the results you have just obtained into our results folder using `outreg2`. To create a nice table easily, refer to explanations from Table 2.
 
 ``` {.Stata language="Stata" numbers="none"}
 foreach x in lfertmaizr limprovedseedsr lyieldr ldailyconsr lexp_yield_fertr {
@@ -403,6 +412,6 @@ foreach x in lfertmaizr limprovedseedsr lyieldr ldailyconsr lexp_yield_fertr {
 
 ---
 
-**Authors of the replication:** Elvire Jégu, Ambre Delaunay, Chiara Balducc, Yagmur Helin Aslan
+**Authors of the replication:** Elvire Jégu, Ambre Delaunay, Chiara Balducci, Yagmur Helin Aslan, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a>, Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
 
 **Date:** December 2023
