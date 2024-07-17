@@ -21,8 +21,7 @@ We hope you find this textbook informative and engaging as you delve into the wo
 
 *We are financed by the Service des Usages Numériques at Université Paris 1. More information about their projects and initiatives can be found <a href="https://pedagogie-numerique.pantheonsorbonne.fr/projets/appels-projets" target="_blank">here</a>. We thank the University Paris 1 Panthéon-Sorbonne and the Sorbonne School of Economics for their continuous support in this project.*
 
-
-
+<img src="resources/logotypes_EES-CMJN.jpg" alt="resources/logotypes_EES-CMJN.jpg" width="300"/>
 
 
 ```{r, include=FALSE}
