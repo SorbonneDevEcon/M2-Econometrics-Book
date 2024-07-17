@@ -55,5 +55,3 @@ main-results---replication-of-table-3
 robustness-check---replication-of-figure-a2
 test-for-manipulation-around-the-eligibility-cutoff-using-the-rddensity-package
 replication-of-the-chart-for-the-14-major-cities-then-for-urban-and-rural-using-twoway
-r-markdown
-including-plots
