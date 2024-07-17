@@ -8,7 +8,7 @@ library(downloadthis)
 
 ## Link in Github repo
 download_link(
-  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FLMS%2FDoFile_LMS.do&filename=DoFile_LMS.do",
+  link = "https://git-link.vercel.app/api/download?url=https%3A%2F%2Fgithub.com%2FSorbonneDevEcon%2FM2-Econometrics-Book%2Fblob%2Fmain%2Fresources%2FLMS%2FDo-File_LMS.do&filename=Do-File_LMS.do",
   button_label = "Download Do-File corresponding to the explanations below",
   button_type = "default",
   has_icon = TRUE,
