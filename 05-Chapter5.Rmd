@@ -1,0 +1,4 @@
+# Differences in Discontinuity Design
+
+```{r, child='_LMS.Rmd'}
+```

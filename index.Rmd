@@ -1,22 +1,23 @@
 --- 
-title: "Replication Textbook"
-author: "This site is currently under construction."
-date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
+# Welcome to our replication textbook! {-}
 
+This textbook is designed by students for students interested in **applied econometrics**, under the guidance of their econometrics professors. Our goal is to present, explain, and share with you **substantial Stata code chunks** based on real-life examples from **well-published articles**.
 
-# Introduction {-}
+In this textbook, you'll find **questions**, **strategies**, and **results** **integrated with the code** to enhance clarity and spark curiosity. Our content caters to a **wide audience**, ranging from **beginners** in Econometrics 101 to **advanced learners**. We cover various methodologies, with examples tailored to different skill levels.
 
-Welcome to our **online replication textbook**! This project is designed by students for students interested in **applied econometrics**, under the guidance of their econometrics professors. Our goal is to present, explain, and share with you substantial Stata code chunks based on real-life examples from well-published articles.
+Our starting point is the existing Stata code available on open data platforms like <a href="https://dataverse.harvard.edu/" target="_blank">Dataverse</a>,  <a href="https://www.openicpsr.org/openicpsr/" target="_blank">OpenICPSR</a>, or from the researchers themselves. From these extensive codes, we extract **a few examples** and refine them to **give the code chunks a more pedagogical flavor**. 
 
-In this textbook, you'll find questions, strategies, and results integrated with the code to enhance clarity and spark curiosity. Our content caters to a wide audience, ranging from beginners in Econometrics 101 to advanced learners. We cover various methodologies, with examples tailored to different skill levels.
+**Each section replicates a paper** with a main result, a figure (when available), and a robustness test (when relevant). Each replication has its own identity, style, and tone, but **all include a 'Highlights' section** explaining the replication and Stata tricks, along with buttons to download the **original datasets**, a **student-created do-file**, and a **student-created codebook**.
 
-Our starting point is the existing Stata code available on open data platforms like <a href="https://dataverse.harvard.edu/" target="_blank">Dataverse</a>,  <a href="https://www.openicpsr.org/openicpsr/" target="_blank">OpenICPSR</a>, or from the authors themselves. From these extensive codes, we extract **a few examples** and refine them to **give the code chunks a more pedagogical flavor**. We are deeply indebted to the authors of the cited articles for their original replication packages. All errors, however, remain ours. Please also note that our replication exercises are not intended to verify or validate findings.
+**We are deeply indebted to the authors of the cited articles for their original replication packages**. All errors, however, remain ours. Please also note that our replication exercises are not intended to verify or validate findings.
 
-This ongoing project started in the 2023/2024 academic year and continues this upcoming year, with new examples to come! The authors are students in their second year of master's in Development Economics and Sustainable Development at the Université Paris 1 Panthéon-Sorbonne. You can learn more about the program <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">here</a>.
+We hope you find this textbook informative and engaging as you delve into the world of econometrics. **Happy learning!**
 
-We hope you find this textbook informative and engaging as you delve into the world of econometrics. Happy learning!
+*********
+
+*This ongoing project started in the 2023/2024 academic year and continues this upcoming year, with new examples to come! The authors are students in their second year of master's in <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Development Economics and Sustainable Development</a> at the Université Paris 1 Panthéon-Sorbonne.*
 
 *We are financed by the Service des Usages Numériques at Université Paris 1. More information about their projects and initiatives can be found <a href="https://pedagogie-numerique.pantheonsorbonne.fr/projets/appels-projets" target="_blank">here</a>. We thank the University Paris 1 Panthéon-Sorbonne and the Sorbonne School of Economics for their continuous support in this project.*
 
