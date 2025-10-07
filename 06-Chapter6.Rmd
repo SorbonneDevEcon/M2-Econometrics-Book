@@ -1,0 +1,10 @@
+# Differences-in-Differences
+
+```{r, child='_2024_LA_SC_PE.Rmd'}
+```
+
+```{r, child='_2024_BCW.Rmd'}
+```
+
+```{r, child='_2024_AG_LP_JTC.Rmd'}
+```

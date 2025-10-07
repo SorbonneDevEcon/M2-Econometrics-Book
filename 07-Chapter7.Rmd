@@ -1,0 +1,10 @@
+# Synthetic Control Method
+
+```{r, child='_2024_BBPM.Rmd'}
+```
+
+```{r, child='_2024_NO_LB_AB.Rmd'}
+```
+
+```{r, child='_2024_IB_NO_MA.Rmd'}
+```

@@ -1,0 +1,594 @@
+## Does the Election of a Female Leader Clear the Way for More Women in Politics?"
+
+Thushyanthan Baskaran and Zohal Hessami. 2018. "Does the Election of a Female Leader Clear the Way for More Women in Politics?" *American Economic Journal: Economic Policy*, 10 (3): 95–121. <a href="https://www.aeaweb.org/articles?id=10.1257/pol.20170045" target="_blank">https://www.aeaweb.org/articles?id=10.1257/pol.20170045</a>  
+
+<a href="Resources/Dofile_DLS.do" target="_blank">[Download Do-File corresponding to the explanations below]</a> | <a href="Resources/Dell/Codebook_Dell.pdf" target="_blank">[Download Codebook corresponding to the explanations below]</a>
+
+<a href="https://www.openicpsr.org/openicpsr/project/114710/version/V1/view" target="_blank">[Link to the full original replication package paper from OPEN ICPSR]</a>  
+
+### Highlights {-} 
+  
+- Baskaran and Hessami (2018) examine whether **female council candidates receive more preferential votes** when a female mayor has been recently elected into office in Germany.
+
+- The authors implement a **Regression Discontinuity Design (RDD)** based on **close mixed-gender mayoral elections**, leveraging the natural randomness of election outcomes near the margin to identify causal effects.
+
+- The methodology follows standard sharp RDD practices in **economic policy research**, using local linear and quadratic regressions with optimal bandwidths, as recommended by Gelman and Imbens (2016).
+
+- We provide a simplified approach to using the replication package, adressing the deprecated optimal bandwidth methods (CCT and IK) by implementing manual adjustments.
+
+- The different **Stata tricks** you will learn:
+    - Creating custom Stata commands with ado-files
+    - Plotting RDD graphs
+    - Understanding and applying the **`partial()`** option in the **`ivreg2`** command for robust estimation
+
+
+
+### Introduction
+
+In modern politics women remain underrepresented, even in contexts where progress towards gender equality has been made. In 2016, less than 23% of national parliamentarians worldwide were women. This underrepresentation is not only unfair, but it also has consequences. Evidence shows that women prioritize policies that align with women’s preferences, invest in children, and reduce corruption.
+
+This paper focuses on the **German political landscape** to examine whether female candidates gain voter share after a female mayor has been voted to power in local council elections. Using data from 109,017 candidates in four elections (2001-2016) across the German state of Hesse, the analysis focuses on **close mixed-gender mayoral elections** to investigate causal impact of having a female mayor on local council voter behavior.
+
+**Key insights include:**
+
+-	**Rank improvement effect:** Germany`s open-list electoral system allows voters to influence the ranking of candidates on party lists. Candidates can advance from their initial party-assigned rank based on voter support. The paper shows, that in municipalities with a female mayor, female candidates experience larger rank advancements than those in municipalities led by male mayors.
+
+-	**Reduction in voter bias:** Female leadership leads to a reduction in anti-female biases and reduction of stereotypes. The effect persists across party lines.
+
+-	**Spillover to neighboring municipalities:** Positive effects of female leadership on subsequent elections extend beyond the municipality the leader is elected.
+ 
+
+### Identification Strategy
+
+#### Sharp RDD
+
+The authors use a **Sharp Regression Discontinuity Design (RDD)** based on **close mixed-gender mayoral elections**. This approach compares municipalities where a female candidate narrowly won against a male candidate to those where a male candidate narrowly won against a female candidate.
+
+**Key Features:**
+  
+  - **Assumption of Local Randomization**: Close elections ensure that municipalities near the threshold differ only in the gender of the elected mayor, isolating the causal effect of mayoral gender on subsequent female council candidate outcomes.
+
+- **Running Variable**: The margin of victory for the female mayoral candidate.
+
+- **Outcome Variable**: Normalized rank improvement of female council candidates. The share of elected women in councils is sometime used as a secondary outcome variable.
+
+#### Use of a Two-Stage Estimation
+
+The authors use the **Two-Stage Least Squares** Stata package (**`ivreg2`**) without an instrumental variable to run their regression because it allows to use the **`partial()`** option, which requires two stages.
+
+In the **first stage**, the effects of the running variable (margin of victory) and its interaction with the independent variable (margin of victory × female mayor) are **"partialed out"** by regressing the independent variable and the dependent variable on these controls. This step isolates the variation in both variables that is orthogonal to the controls.
+
+The main regression (**second stage**) is then performed on these residuals, ensuring that the estimated relationship between dependent and independent variable is not confounded by the effects of the control variables. The option does not perform instrumental variable (IV) regression but partials out the effects of the specified controls.
+
+The goal is to estimate the causal effect of the independent variable more cleanly, without computing coefficients for the control variables.
+
+### Good Practices
+
+This section highlights some advisable procedures before starting an empirical analysis in Stata.
+
+
+
+#### Folder Creation and Directories
+
+Clean your Stata (globals with **`eret clear`**, data in memory with **`clear *`**, close any opened logfile with **`capture log close`**).
+
+Create the appropriate folders and globals to store your datasets and results. A **global** is a named storage location that can hold a value or a string of text. It can be use to group variables or, here, to create pathways in your computer. We use the command **`global`** to define it and the prefix **`$`** to access it.
+
+``` {.Stata language="Stata" numbers="none"}
+capture log close
+clear *
+  clear matrix
+eret clear
+
+global dir "Your directory here"
+global dirdata "$dir/datasets"
+global dirlogs "$dir/logs"
+global diroutputs "$dir/outputs"
+
+log using "${dirlogs}/Replication.log", replace
+
+use "$dirdata\Dataset_DLS.dta", clear
+
+```
+
+To use our Dofile, you should:
+  
+  1. Put your directory in the **`global dir`**.
+2. Create the following folders in this directory: **datasets** (where you should put the downloaded dataset *"Dataset_DLS"*), **logs** (for the logfile) and **outputs**.
+
+#### Package Installation
+
+To carry out the replication of this paper, the following packages must be installed:
+  
+  ``` {.Stata language="Stata" numbers="none"}
+ssc install unique // Command to calculate the unique values taken by a variable
+
+ssc install rdrobust // Provides tools and commands to execute a regression discontinuity design methodology.
+
+ssc install ivreg2 // Extends Stata's built-in instrumental variables (IV) estimation capabilities.
+
+ssc install estout // Provides additional formatting and exporting options for regression results.
+
+ssc install outreg2 // Provides additional options formatting regression results for output in tables. 
+
+ssc install ranktest // Provides tools for rank-based tests.
+```
+
+#### The Dataset
+
+Use the **clean dataset *"Dataset_DLS"*** provided here: 
+
+<a href="Resources/Dataset_DLS.dta" target="_blank">[Download Clean Dataset]</a> 
+
+
+Since we replicate the summary statistics, the main graph and the placebo robustness check, we created a dataset appending the two datasets needed from the Replication Package.
+
+- *"main_dataset.dta"*: for the main graph and the summary statistics
+- *"dataset_with_lagged_rank_improvements.dta"*: for the placebo
+
+The cleaning, labeling, and renaming processes are detailed in the associated do-file, available here:
+
+<a href="Resources/Cleaning_Dofile_DLS.do" target="_blank">[Download Dofile for Clean Dataset]</a> 
+
+In the new original replication package, the main variables (from *"main_dataset.dta"*) have the same name as the variables used for the placebo test (from *"dataset_with_lagged_rank_improvements.dta"*). We renamed the variables used in the placebo with the suffix **`variable_RC`** (RC for Robustness Check).
+
+#### Check the Structure of the Dataset
+
+The commands **`describe`** and **`summarize`** are always useful to get an understanding of your data.
+    
+``` {.Stata language="Stata" numbers="none"}
+describe
+
+summarize
+```
+
+
+###  Summary Statistics
+#### Table 1 - Summary Statistics for Candidate Characteristics
+This table provides **summary statistics** for candidates to council election's characteristics, for **all candidates** in panel A and only for **female candidates** in panel B. It allows to compare the observable characteristics of the candidates for council elections between the whole population (both genders) and the sample for the RDD (female).
+
+The following statistics are given: number of observations, mean, standard error, minimum and maximimum.
+
+![](Resources/Table01.jpg)
+
+
+#### Code for Summary Statistics 
+
+##### Table 1A : All Candidates 
+
+In this panel, the statistics are computed for the whole council candidates sample (main dataset variables). 
+
+This is done with the command **`summarize`** or **`sum`** for all the characteristics listed (normalized rank improvement, initial list rank... see *Codebook_DLS.pdf*).
+
+The **`estpost`** command allows to store the statistics in a matrix, it is part of the **`estout`** package we installed previously. 
+
+Here, the **`esttab`** command, from the same package, is used in a simple way. It allows to put the stored results in a table. In the *6. Robustness Check* section we will explain more complex options of the command.
+
+In this section we will explain the **basic options** used:
+  
+  - **`using "$diroutputs/Table1_PanelA.tex"`**: gives the directory and the name of the table. **`.txt`** will give us a classic text file and **`.tex`** will give us the Latex code for the table.
+- **`replace`**: ensures that the file will be overwritten, if it already exists.
+- **`fmt(%6.0f)`**: describes the format of the numbers included in the table, which will be numbers with no decimal.
+
+
+
+``` {.Stata language="Stata" numbers="none"}
+estpost sum gewinn_norm listenplatz_norm age non_university_phd university phd ///
+  architect businessmanwoman engineer lawyer civil_administration teacher ///
+  employed selfemployed student retired housewifehusband
+
+
+// Table 1 panel A:
+  
+  esttab using "$diroutputs/Table1_PanelA.tex", replace style(tab) ///
+  cells("count(fmt(%6.0f)) mean(fmt(%6.3f)) sd(fmt(%6.3f)) min(fmt(%6.3f)) max(fmt(%6.3f))") ///
+  collabels(none) label
+```
+
+
+
+
+##### Table 1B : Female Candidates
+In this panel, the statistics are computed only for the women council candidates. Hence, we have to restrain our dataset to this sample.
+
+We use the **`preserve`** command to create a copy of the dataset in the Stata memory, so that any changes or modifications will only affect this temporary copy. We then restore the dataset to its initial state with the command **`restore`**.
+
+We proceed similarly to panel A, computing the summary statistics for the same characteristic variables.
+
+
+``` {.Stata language="Stata" numbers="none"}
+preserve 
+
+keep if female == 1 
+
+estpost sum gewinn_norm listenplatz_norm age non_university_phd university phd ///
+  architect businessmanwoman engineer lawyer civil_administration teacher ///
+  employed selfemployed student retired housewifehusband
+
+
+// Table 1 panel B:
+  
+  esttab using "$diroutputs/Table1_PanelB.tex", replace style(tab) ///
+  cells("count(fmt(%6.0f)) mean(fmt(%6.3f)) sd(fmt(%6.3f)) min(fmt(%6.3f)) max(fmt(%6.3f))") ///
+  collabels(none) label
+
+restore
+```
+
+
+
+### Main Results
+#### Figure 2: Rank Improvement of Female Candidates - RDD Plot
+
+This **Figure 2** represents a **RDD plot**. It is a very commun representation of the regression of the dependent variable (here the normalized rank improvement for women candidates in council election) on the running variable (here the margin of victory of the mayor) in a RDD setting. 
+
+The **x-axis** represents the margin of victory for female candidates (closely lost the election when negative, below the cutoff and closely won the election when positive, abode the cutoff), while the **y-axis** shows the normalized rank improvement of female council candidates.
+
+The **jump at the cutoff** (margin of victory = 0) in the rank improvement of female candidates indicates that municipalities with female mayors witness significantly higher rank improvements for female council candidates, supporting the hypothesis that **electing female leaders reduces voter bias against women**.
+
+
+![](Resources/figure2.png)
+
+
+**This RDD plot consists of four key elements:**
+  
+  1. **Bins**: Represent averaged data points to visualize the raw relationship between the dependent variable and the running variable
+2. **Regression Line** (red line): Represents the fitted relationship between the dependent variable and the running variable
+3. **Confidence Interval** (gray shading): Shows the uncertainty range around the regression line
+4. **Upper and Lower Limits** (thin black lines): Indicate the boundaries of the fitted data for the plot (extremum of the confidence intervals)
+
+In the following section, we will break down the steps required to **replicate this graph "manually"**. In the original replication package, the authors included a very long and complicated ado-file that automates the graph creation. We preferred to simplify the process since the graph is only done once in the paper.
+
+#### Code for RDD Plot - Main Results
+
+
+##### Start the Code
+
+To start this part of code, we **define the sample** we are going to work on. To do so, we use the command **`preserve`** to allow us to return to our original dataset if needed. The dataset is then restricted to observations involving female council candidates (**`female == 1`**) where a female mayor was either narrowly elected or narrowly defeated, within a margin of 30 percentage points (**`abs(margin_1)<30`**).
+
+The command **`tempvar`** allows us to define the variables we are going to generate in this code as temporary variables. They will be deleted once the RDD plot code is run. The variables have to be used between apostrophes to be recognized.
+
+
+``` {.Stata language="Stata" numbers="none"}
+preserve
+
+keep if female==1
+
+keep if abs(margin_1)<30
+
+tempvar bin mean x0 s0 se0 x1 s1 se1 ul0 ll0 ul1 ll1
+```
+
+
+##### Bins
+
+In a RDD plot, **bins** represent grouped averages of the dependent variable (normalized rank improvement) within discrete intervals of the running variable (margin of victory). They allow to have a clear view of the relationship of the two variables around the threshold.
+
+- The command **`mod()`** rounds down the running variable **`margin_1`** to the nearest multiple of 3, so it creates one bin every three units of the variable (hence 10 bins per side of the cutoff).
+
+- The command **`egen [...], by(bin)`** computes the average of the normalized rank improvement in each bin.
+
+``` {.Stata language="Stata" numbers="none"}
+gen `bin' = margin_1- mod(margin_1,3)+3/2
+
+egen `mean' = mean(gewinn_norm), by(`bin')
+```
+
+
+##### Regression Line and Standard Errors
+
+The command **`lpoly`** is used for **local polynomial smoothing**. It estimates the relationship between the dependent variable and the running variable, by performing regressions locally by grid point (see below). It smooths the relationship locally using weighted regressions.
+
+**Separate regressions** are performed for both sides of the RDD plot: negative margin of victory (the female mayor candidate lost) and positive margin of victory (the female mayor candidate won).
+
+We will break down the options included in the command to understand what it is used for:
+
+- **`bw(20.10)`**: specifies the **bandwidth** used for smoothing, how far observations are included around each grid point. In the original code, the bandwidth was chosen using the CCT method. Since it is not available in Stata anymore we set manually the bandwidth on **Table 2** in the paper.
+
+- **`deg(1)`**: fits a local lineal polynomial (degree 1).
+
+- **`n(100)`**: evaluates the local regression at 100 gris points.
+
+- **`gen()`**: stores regression results in specified variables: 
+  - **`x0/x1`**: the 100 grid points where the regression is evaluated for each side of the threshold
+  - **`s0/s1`**: the smoothed predicted values at each grid point
+
+- **`ci`**: computes the confidence intervals for the smoothed values.
+
+- **`se(se0/se1)`**: stores the standard errors of the smoothed values (**`s0/s1`**) into the **`se0/se1`** variables.
+
+- **`kernel(triangle)`**: specifies a triangle kernel to assign higher weights to observations closer to the grid point.
+
+The variables for the control group (below the threshold) are designed by the suffix 0 and the variables for the treatment group (above the threshold) are designed by the suffix 1.
+
+``` {.Stata language="Stata" numbers="none"}
+lpoly gewinn_norm margin_1 if margin_1<0  , bw(20.10) deg(1)  n(100) gen(`x0' `s0') ci se(`se0') kernel(triangle)
+
+lpoly gewinn_norm margin_1 if margin_1>=0 , bw(20.10)  deg(1)  n(100) gen(`x1' `s1') ci se(`se1') kernel(triangle)
+```
+
+
+##### Confidence Intervals and Upper/Lower Limits
+
+To compute the **95% confidence intervals** for both groups we use a loop allowing to treat first the control group (**`v=0`**) and then the treatment group (**`v=1`**). Inside the loop the following steps are taken:
+
+1. Computation of the **Upper Confidence Limits** (**`ul0`** and **`ul1`**): Calculated as the smoothed predicted values (**`s0`** and **`s1`** respectively) plus 1.96 times their standard error (**`se0`** and **`se1`**).
+
+2. Computation of the **Lower Confidence Limits** (**`ll0`** and **`ll1`**): Calculated as the smoothed predicted values (**`s0`** and **`s1`**) minus 1.96 times their standard error (**`se0`** and **`se1`**).
+
+The intervals between the final variables (**`ul0`** and **`ll0`**, **`ul1`** and **`ll1`**) represent the confidence intervals for each group.
+
+``` {.Stata language="Stata" numbers="none"}
+forvalues v=0/1 {
+		gen `ul`v'' = `s`v'' + 1.96*`se`v''
+		gen `ll`v'' = `s`v'' - 1.96*`se`v'' }
+```
+
+
+
+##### Generate the RDD Plot
+
+The **`twoway`** command in Stata creates two-dimensional (X-Y) plots, it allows to combine multiple plot types (scatter, line, area...) in a single graph. We use this to combine all the elements together:
+
+- **`rarea`**: two grey shade areas as **confidence intervals** between the upper and lower confidence limits: one for the control and one for the treatment group (**`ul0/ul1`**, **`ll0/ll1`**), precising **`x0/x1`** as grid points where predictions and their confidence intervals are evaluated
+
+- **`scatter`**: plots the **bins** at their x-axis values and the corresponding means of the dependent variable on the y-axis.
+
+- **`line`**: six lines: three per side of the threshold
+  - One connects the **smoothed predicted values** (**`s0/s1`**) for each grid point (**`x0/x1`**) in red.
+  - Two connect the **upper and lower limit values** (**`ul0/ul1`** and **`ll0/ll1`**) for each grid point (**`x0/x1`**) in black.
+
+**Options for the graph presentation:**
+
+- **`legend(off)`**: no legend is required
+- **`ytitle()`/`xtitle()`**: title of the y-axis and x-axis
+- **`ylabel()`/`xlabel()`**: labeling of the y-axis and x-axis
+- **`xline(0)`**: draws a line at the cutoff where the margin of victory is equal to 0.
+
+The code for the Figure ends with the export of the graph in the output directory and the command **`restore`** to return to the original dataset.
+
+``` {.Stata language="Stata" numbers="none"}
+twoway ///
+    (rarea `ul0' `ll0' `x0', bcolor(gs14)) ///
+    (rarea `ul1' `ll1' `x1', bcolor(gs14)) ///
+    (scatter `mean' `bin', msymbol(circle) msize(large) mcolor(black)) ///
+    (line `s0' `x0', lwidth(thick) lcolor(red)) ///
+    (line `ul0' `x0', lwidth(thin) lcolor(gray)) ///
+    (line `ll0' `x0', lwidth(thin) lcolor(gray)) ///
+    (line `s1' `x1', lwidth(thick) lcolor(red)) ///
+    (line `ul1' `x1', lwidth(thin) lcolor(gray)) ///
+    (line `ll1' `x1', lwidth(thin) lcolor(gray)), ///
+    legend(off) ///
+    ytitle("Rank improvement of women") ///
+    xtitle("Female mayoral candidate margin of victory (%)") ///
+    ylabel(-5(2.5)5) ///
+    xlabel(-30(10)30) ///
+    xline(0)
+
+graph export "$dirtables/figure2.png", replace
+
+restore
+```
+
+
+
+### Robustness Check
+
+#### Table A8: Rank Improvement of Female Candidates in Previous Council Elections
+
+The authors include a **placebo test** as one of their robustness checks to help confirm the validity of their results. It consists in intentionally applying the treatment variable (female mayor) to **an unrelated scenario or variable** where no causal impact is expected. The purpose is to verify whether the results remain significant in these contexts, which would suggest issues with the identification strategy.
+
+In this case, the authors applied the treatment variable (female mayor), **to the lagged dependent variable**: the normalized rank improvement in previous council elections.
+
+Since these elections occurred before the mayor's term in question, the presence of a female mayor should logically have no effect.
+                                     
+                                     
+                                     ![](Resources/tableA8.png)
+                                     
+                                     We included this placebo test in our replication because it is a **widely recognized robustness test** and it allows us to explain how the authors used **ado-files** to compute weights and how we adapted these computations to account for the changes in the updated version of Stata, which deprecated certain options used in the original replication package. Additionally, it provides us with the opportnity to explain the authors' strategy for the regressions.
+
+
+#### Ado-file
+
+An **ado-file** is a script that can be written in another dofile but called in the main one. It contains **commands or procedures** defined by the user and allows to extend Stata's functionality by executing **custom-written programs** as if they were built-in commands. It is written in a kind of loop that is done over each time the command is called for when it has been run before.
+                                     
+                                     In the original package, the authors wrote three ado-files:
+                                       
+                                       - *bandwidth_and_weights.ado*
+                                       - *post_ttest.ado*
+                                       - *rdd_plot.ado*
+                                       
+                                       We do not focus on the *post_ttest.ado* ado-file, and we have already simplified the *rdd_plot.ado* ado-file above
+                                     
+                                     In the ado-file ***bandwidth_and_weights.ado***, the authors create the **`bandwidth_and_weight`** command which computes the optimal bandwidth using the **`rdrobust`** command. It allows specifying options like the bandwidth selection method (CCT or IK), kernel weight type, and polynomial degree. It then generates three bandwidth values: the optimal bandwidth (**`bw_opt`**), its half and its double for when variants of the CCT method are specified (CCT/2 or CCT*2) (cf. Baskaran and Hessami, 2018). For each bandwidth, the program calculates weights using a formula based on the scaled running variable, ensuring weights are applied only within the bandwidth.
+                                     
+                                     The issue with this ado-file is that, it **relied on older bandwidth selection methods, CCT (Calonico, Cattaneo, and Titiunik) and IK (Imbens and Kalyanaraman)**. CCT provided bias-corrected estimates with robust confidence intervals, while IK minimized the mean squared error but lacks bias correction. These methods were widely used but are now deprecated in newer versions of Stata due to the development of more advanced and efficient alternatives, like MSERD (Mean Squared Error Regression Discontinuity), which provide more reliable results. We have tried to call the command specifying for the new method MSERD in **`rdrobust`** but the results differed significantly from the original estimation.
+                                     
+                                     For future research using regression discontinuity designs, the **`rdrobust`** command with the MSERD method is a reliable choice. However, for exact replication of this study, the older methods (CCT and IK) or their manual adjustments are necessary to ensure comparability.
+                                     
+                                     To address this, we modified the process by including the **ado-file weight computations** directly into our main do-file and we **manually inserted the optimal bandwidth values**, obtained in Table A8, into the specification code to maintain consistency with the original study, deleting the optimized bandwidth computation.
+                                     
+                                     The computed weights are kernel weights designed to give more importance to observations closer to the threshold. These weights are influenced by the selected bandwidth, which determines the range within which observations are given non-zero weight.
+                                     
+                                     **Below is the ado-file for computing these weights, followed by a breakdown of its components:**
+                                       
+                                       ``` {.Stata language="Stata" numbers="none"}
+                                     capture program drop weights
+                                     
+                                     program weights 
+                                     syntax [if] [in], var(varlist) bw(real) 
+                                     
+                                     capture: drop temp1 ind temp2 weight 
+                                     
+                                     gen temp1 = `var'/ `bw' 
+    gen ind = abs(temp1) <= 1 
+    gen temp2 = 1 - (abs(temp1))
+    gen weight = temp2 * ind 
+    
+end
+```
+
+
+
+
+##### How to Start an Ado-File:
+
+The first step in defining a user-written command is to **drop the program** if it has been run before. Then the ado-file starts with the command **`program`**.
+
+- **`program`**: creates a program. Here, its name will be **`weights`**.
+- **`syntax`**: defines the syntax of the new **`weight`** program:
+  - **`[if]`**: to filter observations based on conditions (e.g., if female == 1).
+  - **`[in]`**: to restrict the analysis to specific rows (e.g., in 1/100).
+  - **`var(varlist)`**: to specify the running variables (here the margin of victory) on which we want to compute weights to test different bandwidth.
+  - **`bw(real)`**: to input of the bandwidth we specified manually in the code.
+
+- **`capture: drop`**: drops the temporary variables **`temp1`**, **`ind`**, **`temp2`**, and **`weight`** without interrupting the script if they have not been generated in a previous use of the command.
+
+
+
+``` {.Stata language="Stata" numbers="none"}
+capture program drop weights
+
+program weights 
+    syntax [if] [in], var(varlist) bw(real) 
+
+capture: drop temp1 ind temp2 weight 
+```
+
+##### Weights Computation within the Program 
+
+The **weight computation** involves four steps:
+
+1. **`temp1`**: Normalizes the running variable based on the bandwidth called in the syntax of the program.
+2. **`ind`**: Generates a dummy for the observations within the kernel's range (between -1 and 1).
+                                     3. **`temp2`**: Computes weights for each observation based on its distance from the cutoff.
+                                     4. **`weight`**: Computes non-zero weights for observations within the kernel's range (when **`ind`**=1). It is our **final variable**.
+
+``` {.Stata language="Stata" numbers="none"}
+    gen temp1 = `var'/ `bw' 
+    gen ind = abs(temp1) <= 1 
+    gen temp2 = 1 - (abs(temp1))
+    gen weight = temp2 * ind 
+```
+
+##### Finishing an Ado-File:
+
+The **`end`** command stops the programs (and the ado-file).
+
+``` {.Stata language="Stata" numbers="none"}
+end
+```
+
+
+
+#### Code for Placebo Test - Robustness Check
+
+In this part of the code, the variables used are those with the suffix **`_RC`** (for Robustness Check) because they are the variables from the second dataset we appended with the main dataset. In this subset database, the dependent variable is the **lagged normalized rank improvement for female council elections candidates**.
+
+Here, we will break down the **first specification code** and the **table code** because the other four specifications are very similar except for the size of the bandwidth manually included.
+
+##### First Specification
+
+###### Set the Manual Bandwidth and Compute the Weights
+
+1. Define manually the bandwidth in a global **`$manual_bw_CCT`**. In each specification we named the global based on what the method used in the original replication package was (here, CCT).
+2. Use the command **`weights`** to create weights based on the value of the variable **`margin_1_RC`** and the bandwidth that we specified in the global.
+
+``` {.Stata language="Stata" numbers="none"}
+preserve 
+
+global manual_bw_CCT = 15.71
+
+weights, var(margin_1_RC) bw($manual_bw_CCT)
+```
+
+
+
+
+
+
+###### Perform the Regression with the Manual Bandwidth and the Weights
+
+As outlined in the *Identification Strategy* part, the authors use the command **`ivreg2`** without an instrument because this command allows the **`partial()`** option, which requires two stages.
+
+Here is a breakdown of the option outlined in the **`ivreg2`** command:
+
+- **`if abs(margin_1_RC) < $manual_bw_CCT`**: restricts the regression to the sample within the bandwidth manually defined.
+- **`[pw = weight]`**: applies the weights computed in the command **`weights`** (structures the analysis around the cutoff by giving more weights to the observations around the cutoff (near 0)).
+- **`r`**: specifies heteroskedasticity-robust standard errors.
+- **`cluster(gkz_RC)`**: clusters the standard errors at the municipality level.
+- **`partial(margin_1_RC inter_1_RC)`**: removes the influence of the specified control variables (**`margin_1_RC`** and **`inter_1_RC`**) from both the dependent variable (**`gewinn_norm_RC`**) and the independent variable of interest (**`female_mayor_RC`**). 
+  1. Regress each variable on the controls in a first stage, isolating the variation in the dependent and independent variables that is orthogonal to the controls. 
+  2. Main regression on these residuals, ensuring that the estimated relationship between **`female_mayor_RC`** and **`gewinn_norm_RC`** is not confounded by the effects of the control variables.
+
+The command **`est store m1`** store the results of the regression in Stata memory under the name m1 (first specification.)
+
+``` {.Stata language="Stata" numbers="none"}
+ivreg2 gewinn_norm_RC female_mayor_RC margin_1_RC inter_1_RC   if abs(margin_1_RC)<$manual_bw_CCT  [pw = weight], r cluster(gkz_RC) partial(margin_1_RC inter_1_RC)
+est store m1
+```
+
+
+
+###### Options and Macros for the Final Table
+
+For the final table to be **homogeneous between the five specifications**, the same **macros** are generated under each specification containing different information based on the specification. The information will be stored in Stata memory within the specification m1.
+
+The command **`estadd`** is used to store information about the estimation under the form of local macros:
+
+- **`bw`**: the method used to calculate the optimal bandwidth (in this case, we specify that we have implemented a manual bandwidth that corresponds to the CCT method in the paper).
+- **`degree`**: the degree used in the regression.
+- **`bw_length`**: the bandwidth used for this specification.
+- **`num_of_election`**: the number of unique elections (using the unique identifier **`gkz_jahr_RC`**) included in the sample for this specification.
+- **`mean_depvar`**: the mean of the dependent variable (**`gewinn_norm_RC`**) for the sample used in the specification.
+- **`sd_depvar`**: the standard deviation of the dependent variable for the sample.
+
+
+
+``` {.Stata language="Stata" numbers="none"}
+estadd local bw "Manual CCT"
+estadd local degree "Linear"
+estadd local bw_length  $manual_bw_CCT
+unique gkz_jahr_RC if e(sample)
+estadd local num_of_elections  `"`r(sum)'"'
+sum gewinn_norm_RC if e(sample)
+estadd scalar  mean_depvar =r(mean)
+estadd scalar sd_depvar =r(sd)
+```
+
+##### Final Table - Integration of all specifications 
+
+The command **`esttab`** displays the results of the five estimations stored previously along with the descriptive statistics and the added information stored in the different macros. We have previously brokem down some of the basic options of this command, so we will go over the new ones here.
+
+**Options of the `esttab` command:** 
+
+- **`cells()`**: defines what to display for each regression:
+  - Regression coefficients **`b`** with stars for statistically significance (**`star`**) formatted to 3 decimal places (**`fmt(%8.3f)`**)
+  - Standard error **`se`** between brackets (**`par`**) formatted to 3 decimal places (**`fmt(%6.3f)`**)
+- **`collables(none)`** and **`mlabel(,none)`**: deletes the labels and the model names for the columns.
+- **`keep()`**: restricts the table to only include the coefficient of the **`female_mayor_RC`** variable.
+- **`varlabels()`**: labelizes the variable.
+- **`stats()`**: adds statistics which had been stored in local macros in the code above, except for the number of observations **`N`** and the number of clusters **`N_clust`** that are automatically computed during the regression.
+- **`layout()`**: controls how the statistics are displayed. The **`@`** allows to place each statistic in one row except for the **`"@ (@)"`** that places the standard deviation of the dependent variable in brackets next to its mean.
+- **`fmt()`**: specifies the format of each statistic. When it begins with a ~ it is a text, when it begins with a number, it is a numeric value and the number it ends with is the number of decimals required.
+- **`labels()`**: assigns custom labels to each statistic for the table.
+
+``` {.Stata language="Stata" numbers="none"}
+esttab  m1 m2 m3 m4 m5 using "$dirtables\tableA8.tex", replace style(tab) order( ) mlabel(,none) ///
+cells(b(label(coef.) star fmt(%8.3f) ) se(label((z)) par fmt(%6.3f))) ///
+collabels(none) ///
+keep (female_mayor_RC) varlabels(female_mayor_RC "Female Mayor") ///
+stats(bw bw_length degree N num_of_elections  N_clust mean_depvar sd_depvar , layout( @ @ @ @ @ @ `""@ (@)""' )  fmt( %~#s %9.2f %~# %9.0g %9.0g %9.0f %9.2f %9.2f  ) ///
+labels("Bandwidth type" "Bandwidth size" "Polynomial"   "N" "Elections" "Municipalities" "Mean (SD)"  )) ///
+starlevels(* 0.10 ** 0.05 *** 0.01)
+
+restore
+```
+
+---
+
+**Authors:** Quitterie Dumez, Juliana Ludemann, and Lennart Schreiber, students in the <a href="https://economie-master-developmenteconomics.pantheonsorbonne.fr/" target="_blank">Master program in Development Economics and Sustainable Development</a> (2023-2024), Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne. 
+
+**Date:** December 2023
+
+

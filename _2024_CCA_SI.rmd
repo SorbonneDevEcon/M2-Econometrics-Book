@@ -1,0 +1,1064 @@
+## Firm Donations and Political Rhetoric: Evidence from a National Ban
+
+Cagé, Julia, Caroline Le Pennec, and Elisa Mougin. 2024. "Firm Donations and Political Rhetoric: Evidence from a National Ban." *American Economic Journal: Economic Policy*, 16 (3): 217-56. DOI:10.1257/pol.20220218.  <https://www.aeaweb.org/articles?id=10.1257/pol.20220218" target="_blank">https://www.aeaweb.org/articles?id=10.1257/pol.20220218</a> 
+
+```{r setup, include=FALSE}
+# Set CRAN mirror first
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
+# Install required packages if not already installed
+if (!require("kableExtra")) install.packages("kableExtra", dependencies = TRUE)
+if (!require("knitr")) install.packages("knitr", dependencies = TRUE)
+
+# Load the packages
+library(knitr)
+library(kableExtra)
+
+options(knitr.table.format = "html")
+suppressWarnings(library(kableExtra))
+
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+```
+
+
+```{css, echo=FALSE}
+.download-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.download-button:hover {
+  background-color: #45a049;
+}
+```
+
+
+## Resources
+<div style="margin: 20px 0;">
+<a href="https://github.com/csconrradoal/R-MARKDOWN/raw/refs/heads/main/main.do" class="download-button">Download Do-File</a>
+<a href="https://github.com/csconrradoal/R-MARKDOWN/raw/main/Codebook_CCA_SI.pdf" class="download-button">Download Codebook</a>
+<a href="https://github.com/csconrradoal/R-MARKDOWN/raw/main/data_cand_8897.dta.zip" class="download-button">Download Original Data</a>
+<a href="https://www.openicpsr.org/openicpsr/project/184946/version/V1/view"  class="download-button">Download Original Paper Replication Package</a>
+</div>
+
+## Highlights
+```{css, echo=FALSE}
+ul {
+  margin-top: 0px;
+  margin-bottom: 0px; /* Adjust the space between main bullets */
+}
+
+ul ul {
+  margin-top: 0px;
+  margin-bottom: 8px; /* Adjust the space between sub-points */
+}
+
+ul ul ul {
+  margin-top: 0px;
+  margin-bottom: 0px; /* Adjust the space between sub-points */
+}
+```
+
+**Highlights**
+
+* The paper examines the effects of banning firm donations on candidates' political discourse in France, focusing on the 1995 campaign finance reform.
+
+* The paper uses a **Difference-in-Differences (DiD)** strategy to compare candidates' rhetorical behavior before and after the 1995 reform that banned firm donations.
+
+  * The key outcome variables include the share of local references (department and commune) and share of national references in debates and written questions.
+
+  * Fixed effects are applied at multiple levels to account for unobserved heterogeneity:
+     * **Candidate fixed effects** to control for individual-specific characteristics.
+     * **Year-party fixed effects** to capture time trends and party-level variations.
+  * Examines effects on both campaign rhetoric and post-election behavior
+  * The regression approach is implemented using `reghdfe`, a Stata package that handles high-dimensional fixed effects.
+
+* The paper is innovative to the literature through two main elements:
+   * Novel Data Combination of campaign finance records with detailed text analysis of political manifestos. While we do not cover the text analysis implementation in this replication project, we strongly recommend readers to explore this aspect in the original paper's replication package. The authors develop an impressive text analysis framework that includes:
+      * Measure local vs national references in manifestos
+      * Project manifestos onto left-right ideological scale
+      * Analyze policy topic prevalence using multinomial inverse regression
+      * Calculate manifesto originality through latent semantic indexing
+   
+   These sophisticated text analysis techniques represent a methodological contribution in their own right and could prove invaluable for any text-based research in political economy.
+   * Measuring the causal effects of firm donations on political communication.
+
+* Besides providing a detailed explanation of implementation of the authors' econometric strategy, our replication proposes an alternative estimation using `didregress` to validate the results and highlight any differences in implementation.
+
+* The analysis demonstrates the following key Stata tricks:
+  * Panel Data: Difference-in-differences estimation with multiple fixed effects
+  * Efficient data cleaning and merging for panel analysis
+  * Generating interaction terms and standardized variables
+  * Advanced Controls: Handling candidate and party-specific time trends
+  * Rigorous robustness checks through alternative specifications
+
+
+
+## Introduction
+The 1995 reform in French campaign finance, which outlawed corporate donations to political campaigns, offers a valuable experimental setting for analyzing how alterations in funding channels affect political discourse. In the paper, the authors look to answer this question by analyzing whether candidates have shifted their attention from **national policies**, which tend to appeal to corporate interest, to more **local issues**, after the new legislation. They use a causal framework to investigate the relationship between financial contributions and candidates’ rhetorical behavior, addressing a relevant policy question in political economy.
+
+To identify this effect, a **Difference-in-Differences (DiD)** design is adopted using candidate-level data from before and after the reform. The analysis merges campaign finance records and text analysis of political speeches and written parliamentary questions in order to measure rhetorical focus. The key dependent variables capture the share of references to **local (department and commune) topics** and **national policies**. The regression framework thus includes **high-dimensional fixed effects** to control for unobserved candidate-specific, district-level, and year-party characteristics to have a robust comparison across time and space. This methodological combination of econometrics and text analysis proves to be an important innovation to the study.
+
+The objective of this replication is to reproduce the authors' main findings and check their robustness. We expect to assess the causal effects of reform on political rhetoric using the same Difference-in-Differences strategy implemented with `reghdfe`. We also present an alternative estimation tool : `didregress`. Unlike `reghdfe`, which requires careful manual handling of fixed effects and interaction terms, `didregress` automates the estimation of treatment effects in a clean and standardized way. This tool simplifies implementation, improves transparency, and ensures consistency in the treatment and control group comparisons. We will replicate the findings, test their robustness, and provide detailed explanations of the code and steps. 
+
+
+
+# 1.Preliminaries: Required Packages
+For this replication analysis, we need to install several Stata packages (ados):
+
+1. **Data Presentation and Analysis:**
+   - `estout`, `esttab`, `eststo`, `estadd`: These packages are essential for creating and exporting regression tables and storing estimation results
+   - `coefplot`: Useful for visualizing regression coefficients and creating coefficient plots
+
+2. **Advanced Regression Analysis:**
+   - `ftools`: Provides tools for fixed effects estimation and other computational tasks
+   - `reghdfe`: Implements high-dimensional fixed effects regression models, crucial for DiD analysis with multiple fixed effects
+
+3. **Data Management:**
+   - `reclink`: Facilitates record linkage and matching observations across datasets
+   - `cibar`: Creates confidence interval bar plots
+
+The installation code is structured as follows:
+```{stata, eval=FALSE}
+* Install ados / packages:
+********************************************************************************
+cap ssc install estout
+cap ssc install esttab
+cap ssc install eststo
+cap ssc install estadd
+cap ssc install estpost
+cap ssc install cibar
+cap ssc install ftools
+cap ssc install reghdfe
+cap ssc install reclink
+cap ssc install coefplot
+```
+
+
+# 2. Data Overview
+This replication project uses a cleaned dataset prepared by the original authors, referred to as `data_cand_8897`. The data spans the **1993** and **1997 French legislative elections**, offering a rich panel structure for the analysis. The codebook provides a full list of variables, including their definitions, units, and construction. The key variables include:
+
+- **Candidate Characteristics**: Gender, incumbency, party affiliation, etc.
+- **Campaign Finance Information**: Revenues, expenditures, and detailed shares of funding sources (e.g., firms, individuals, parties).
+- **Textual Analysis Variables**: Measures of local and national references derived from speeches and written parliamentary questions.
+- **Electoral Outcomes**: Variables capturing the number of votes, vote shares, and whether the candidate was elected or re-elected.
+
+
+# 3.Descriptive Statistics
+## 3.1.Descriptive Statistics
+This section describes the construction of Table 1, which presents descriptive statistics for campaign financing across the 1993 and 1997 election years.
+
+```{r, echo = FALSE}
+library(kableExtra)
+
+table_data <- data.frame(
+  Metric = c(
+    "Total spending per candidate", "1993", "1997",
+    "Total revenues", "1993", "1997",
+    "Share firm donations", "1993", "1997",
+    "Share individual donations", "1993", "1997",
+    "Share personal contributions", "1993", "1997",
+    "Share party contributions", "1993", "1997"
+  ),
+  Mean = c(
+    "", "20,397", "14,607",
+    "", "22,923", "14,972",
+    "", "12.87", "0.00",
+    "", "9.50", "13.77",
+    "", "35.60", "59.96",
+    "", "37.62", "23.70"
+  ),
+  Median = c(
+    "", "10,503", "2,257",
+    "", "10,583", "2,441",
+    "", "0.00", "0.00",
+    "", "2.19", "0.02",
+    "", "15.63", "72.62",
+    "", "20.34", "1.72"
+  ),
+  SD = c(
+    "", "25,369", "18,646",
+    "", "33,326", "19,129",
+    "", "24.09", "0.00",
+    "", "16.43", "25.43",
+    "", "39.47", "39.23",
+    "", "40.05", "33.90"
+  ),
+  Min = c(
+    "", "0", "0",
+    "", "0", "0",
+    "", "0", "0",
+    "", "0", "0",
+    "", "0", "0",
+    "", "0", "0"
+  ),
+  Max = c(
+    "", "160,756", "72,122",
+    "", "784,482", "99,873",
+    "", "100", "0",
+    "", "100", "100",
+    "", "100", "100",
+    "", "100", "100"
+  ),
+  N = c(
+    "", "5,115", "5,977",
+    "", "5,134", "5,977",
+    "", "4,949", "5,094",
+    "", "4,951", "5,094",
+    "", "4,951", "5,094",
+    "", "4,951", "5,094"
+  )
+)
+
+kable(table_data, 
+      caption = "Table 1—Summary Statistics: Campaign Spending and Revenue",
+      col.names = c("", "Mean", "Median", "SD", "Min", "Max", "N"),
+      align = c("l", rep("c", 6))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = TRUE) %>%
+  pack_rows("Total spending per candidate", 1, 3) %>%
+  pack_rows("Total revenues", 4, 6) %>%
+  pack_rows("Share firm donations", 7, 9) %>%
+  pack_rows("Share individual donations", 10, 12) %>%
+  pack_rows("Share personal contributions", 13, 15) %>%
+  pack_rows("Share party contributions", 16, 18) %>%
+  add_header_above(c(" " = 1, "Spending (cst €)" = 6))
+
+```
+
+Table 1 summarizes key campaign financing statistics across the 1993 and 1997 legislative elections in France. This includes the total expenditures, total revenues, and the shares of donations from firms, individuals, personal contributions, and party contributions. The main observations from the table are: 
+
+- A marked decline in firm donations from 1993 to 1997 due to the 1995 reform.
+- An increase in personal contributions post-reform.
+- Revenues and expenditures per candidate also reduced significantly between the two elections.
+
+### 3.1.1.Initial Data Selection
+The analysis begins with data preparation by focusing on the specific electoral years of interest, 1993 and 1997. The dataset retains essential financial variables that capture various aspects of campaign financing. These include both individual and firm donations, total expenditures and revenues, party and personal contributions, as well as the relative shares of different funding sources. This selective approach ensures that the analysis focuses on the most relevant financial metrics for understanding campaign financing patterns.
+
+```{stata, eval=FALSE}
+use "$output/data_cand_8897", clear
+keep if year==1993 | year==1997
+keep year codegeo candidat id_cand private_donation_indiv_cst private_donation_firms_cst total_expenditures_cst total_revenues_cst party_contribution_cst kind_contribution_cst other_cst personal_contribution_cst other_kind_cst sh_dons_firms sh_dons_indiv sh_party_contrib sh_personal_contrib nb_elec
+```
+
+### 3.1.2.Data Restructuring
+The next step involves transforming the data structure to facilitate comparative analysis between the two election years. Through the reshape command, the data is converted from a long format to a wide format. This transformation creates separate columns for each year (1993 and 1997) for all financial variables, enabling direct year-to-year comparisons of campaign financing metrics. The wide format is particularly useful for analyzing how different aspects of campaign finance evolved between the two election cycles.
+
+```{stata, eval=FALSE}
+gen x=_n
+reshape wide private_donation_indiv_cst private_donation_firms_cst total_expenditures_cst total_revenues_cst party_contribution_cst kind_contribution_cst other_cst personal_contribution_cst other_kind_cst sh_dons_firms sh_dons_indiv sh_party_contrib sh_personal_contrib, i(x) j(year)
+
+quietly : do "$dofiles/_labels.do"
+```
+
+### 3.1.3.Statistical Analysis
+The statistical analysis focuses on calculating comprehensive descriptive statistics for key financial metrics across both election years. The analysis examines total campaign expenditures and revenues, providing insight into the overall scale of campaign financing. Additionally, it investigates the composition of campaign funding by analyzing the shares of donations from different sources: firms, individuals, personal contributions, and party contributions. This approach allows for a nuanced understanding of how campaign financing sources varied both within and between election years.
+
+```{stata, eval=FALSE}
+global stat_revenues total_expenditures_cst1993 total_expenditures_cst1997 ///
+total_revenues_cst1993 total_revenues_cst1997 ///
+sh_dons_firms1993 sh_dons_firms1997 ///
+sh_dons_indiv1993 sh_dons_indiv1997 ///
+sh_personal_contrib1993 sh_personal_contrib1997 ///
+sh_party_contrib1993 sh_party_contrib1997 
+
+estpost sum $stat_revenues, d
+```
+
+### 3.1.4.Table Generation
+The final step involves creating a detailed table that presents the statistical findings in a clear and organized manner. The table is structured to display multiple statistical measures for each variable, including means, medians, standard deviations, and the range of values (minimum and maximum). These statistics are calculated separately for each election year, allowing for direct temporal comparisons. The table organizes variables into meaningful categories, starting with aggregate measures like total spending and revenues, then breaking down into specific funding source shares. This organization helps readers understand both the overall scale of campaign financing and its compositional details.
+
+```{stata, eval=FALSE}
+eststo : esttab using "$main/Table1.tex", label replace ///
+cells("mean(fmt(%15.0fc %15.0fc %15.0fc %15.0fc %15.2fc %15.2fc %15.2fc %15.2fc) label(Mean)) p50(fmt(%15.0fc  %15.0fc %15.0fc %15.0fc %15.2fc %15.2fc %15.2fc %15.2fc) label(Median)) sd(fmt(%15.0fc %15.0fc %15.0fc %15.0fc %15.2fc %15.2fc %15.2fc %15.2fc) label(sd)) min(fmt(%15.0fc) label(Min)) max(fmt(%15.0fc) label(Max)) count(fmt(%15.0fc) label(N))") ///
+style(tex) nonum noobs ///
+mlabels("Spending (cst \euro)", pattern(1 0 0 0) prefix(\multicolumn{@span}{c}{) suffix(}) span erepeat(\cmidrule(lr){@span})) ///
+refcat(total_expenditures_cst1993 "\textbf{Total spending per candidate}" total_revenues_cst1993 "\textbf{Total revenues}" sh_dons_firms1993 "\textbf{Share firm donations}"sh_dons_indiv1993 "\textbf{Share individual donations}" sh_personal_contrib1993 "\textbf{Share personal contributions}" sh_party_contrib1993 "\textbf{Share party contributions}", nolabel)
+```
+
+The resulting Table 1 serves as a comprehensive reference point for understanding campaign financing patterns and their evolution between the 1993 and 1997 election years.
+
+## 3.2.Campaign Revenues by Party and Year
+
+Figure 1 illustrates the composition of campaign revenues for different political parties in the 1993 and 1997 elections, before and after the 1995 ban on firm donations. The total revenues (black bars) and firm donations (white bars) are broken down by party.
+
+```{r, echo = FALSE, fig.cap = "Figure  1 - Total Campaign Revenue and Firm Donations across Parties", fig.align='center', out.width="80%"}
+knitr::include_graphics("/Users/constanzaconrrado/Downloads/ECO DU DEV/S3/STATA ECONOMETRICS  FRIDAY/REPLICAYSH/sent/Graph.png")
+```
+
+These are its main observations:
+
+- 1993 Election: Mainstream parties, such as the Right and Socialist parties, show significant reliance on firm donations. The Right party has the largest total revenues and the highest share of firm donations.
+- 1997 Election: After the reform, firm donations are eliminated across all parties, leading to a visible decline in total revenues, particularly for the Right and Socialist parties. Smaller parties, such as the Greens and the Far-right, exhibit less reliance on firm donations and show minimal changes in total revenues.
+
+### 3.2.1.Filtering and Standardizing Party Labels
+We filtered the dataset to focus exclusively on the 1993 and 1997 elections. Party labels are standardized for clarity in the visualization (e.g., "FN" is replaced with "Far-right"). This ensures the data is clean and categories are consistently labeled across years.
+
+```{stata, eval=FALSE}
+*** Figure 1: Campaign Revenue Structure by Political Party
+use "$output/data_cand_8897", clear
+keep if year==1993 | year==1997
+
+replace bigparty="Far-right" if bigparty=="FN"
+replace bigparty="Right" if bigparty=="UMP"
+replace bigparty="Socialist" if bigparty=="PS"
+replace bigparty="Communist" if bigparty=="PC"
+replace bigparty="Green" if bigparty=="Verts"
+```
+
+### 3.2.2.Generation of the Stacked Bar Graph
+The `graph bar` command is used to create a stacked bar chart. The bars represent the total revenues (black) and firm donations (white) for each party across the two elections. The data is grouped by year and party to facilitate easy comparison.
+The y-axis represents revenues in euros, while the x-axis categorizes parties.
+
+```{stata, eval=FALSE}
+graph bar total_revenues_cst private_donation_firms_cst , ///
+stack over(year) over(bigparty, sort(order)) ///
+bar(1, fcolor(black) lcolor(black)) bar(2, fcolor(white) lcolor(black)) ///
+ytitle("Revenues in €") ///
+legend(label(1 "Other revenues") label(2 "Firm donations"))
+```
+
+
+
+
+# 4.Main Results
+
+## 4.1.The Determinants of Firm Donations
+
+Before proceeding to the main DiD analysis, we need to address the endogenous allocation of firm donations across candidates. To do this, we first estimate the predicted amount of firm donations based on observable characteristics:
+
+$$
+\text{Firm_Donations}_i = W'_i\lambda + Z'_d\gamma + \eta_p + u_i
+$$
+
+where:
+- $\text{Firm_Donations}_i$ is either the number or amount (in euros per voter) of firm donations received by candidate $i$ in 1993
+
+- $W'_i$ is a vector of candidate-level characteristics including:
+
+  - Gender
+  - Incumbent status
+  - Mayoral position
+  - Other electoral mandates
+  - Previous election experience
+- $Z'_d$ represents district-level controls
+- $\eta_p$ captures party fixed effects
+- $u_i$ is the error term, clustered at district level
+
+The predicted values from this regression ($\widehat{\text{FD}}_{i93}$) are then interacted with the post-treatment indicator in our main difference-in-difference specification to control for different trends across candidates who were expected to receive different amounts of firm donations. This approach helps address the concern that firm donations were not randomly allocated across candidates and that candidates who received more donations might have exhibited different trends in their policy focus even in the absence of the ban.
+
+The implementation of this analysis is shown in the preliminary steps of Section 4.2: 
+
+- Data Preparation and Control Variables, 
+- Fixed Effects Generation, and 
+- Predicted Firm Donations, 
+
+where we handle missing values, estimate the model using `reghdfe` with party-year fixed effects and clustering at the district level, and create candidate-level measures with the interaction terms needed for the main difference-in-difference analysis.
+
+
+## 4.2.Impact on Policy Topics: Difference-in-Differences Approach 
+
+This section presents the main results of the paper and analyzes how the ban on corporate donations affected candidates' policy focus across different topics. The baseline specification follows:
+
+$$Y_{it} = \alpha_i + \eta_{pt} + \beta \text{Firm_Donations}_{it} + \gamma \widehat{\text{FD}}_{i93} \times \text{Post}_t + W'_{it}\lambda + \varepsilon_{it}$$
+
+where:
+
+- $Y_{it}$ is the probability that candidate $i$ in year $t$ focuses primarily on one of four policy topics:
+  - Economic policy (`economy2_prob1`)
+  - Social policy (`social2_prob1`)
+  - Homeland/administrative policy (`homeland2_prob1`)
+  - Foreign policy (`foreign2_prob1`)
+
+- $\alpha_i$ are candidate fixed effects controlling for time-invariant characteristics
+
+- $\eta_{pt}$ are party-year fixed effects capturing time-varying party characteristics
+
+- $\text{Firm_Donations}_{it}$ measures standardized firm donations per voter
+
+- $\widehat{\text{FD}}_{i93}$ is predicted 1993 donations based on observables
+
+- $\text{Post}_t$ indicates post-ban period (1997)
+
+- $W'_{it}$ includes time-varying controls:
+  - Female candidate indicator
+  - Running again indicator
+  - Incumbent status
+  - Mayor status
+  - Other mandate indicators
+
+- $\varepsilon_{it}$ is the error term, clustered at district level
+
+The coefficient of interest $\beta$ captures how losing firm donations affects the probability of focusing on each policy topic. To interpret $\beta$ as the effect of losing donations, we multiply $\text{Firm_Donations}_{it}$ by -1. 
+
+The identification strategy relies on comparing changes in policy focus between candidates who received different amounts of firm donations before the ban. The estimated effects of losing firm donations on candidates' emphasis of different policy topics in their campaign manifestos are presented in Table 6 of the original paper, which is replicated below.
+
+
+```{r table6, echo=FALSE}
+
+library(kableExtra)
+table_data <- data.frame(
+  Variable = c(
+    "Firm donations (loss)", "", 
+    "Observations", 
+    "Mean outcome before ban",
+    "R2-Within"
+  ),
+  Economic = c(
+    "-1.213**", "(0.563)",
+    "2602",
+    "23.507",
+    "0.013"
+  ),
+  Social = c(
+    "1.324**", "(0.584)",
+    "2602",
+    "36.203",
+    "0.010"
+  ),
+  Homeland = c(
+    "-0.982*", "(0.563)",
+    "2602",
+    "19.243",
+    "0.006"
+  ),
+  Foreign = c(
+    "0.274**", "(0.137)",
+    "2602",
+    "4.244",
+    "0.009"
+  )
+)
+
+kable(table_data, 
+      caption = "Table 2—Impact of Ban on Policy Topics",
+      col.names = c("", "Economic\npolicy", "Social\npolicy", "Homeland and\nadministration", "Foreign\npolicy"),
+      align = c("l", rep("c", 4))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = TRUE) %>%
+  footnote(
+    general = "Standard errors clustered by district in parentheses.",
+    symbol = c("* p<0.10", "** p<0.05", "*** p<0.01")
+  ) %>%
+  add_header_above(c(" " = 1, "Policy Topics" = 4))
+
+
+```
+
+The results reveal significant shifts in policy focus following the ban on corporate donations, with candidates adjusting their rhetorical emphasis across different policy domains. Specifically, losing firm donations led to a significant decrease in emphasis on economic policy (coefficient -1.213, significant at 5% level) and homeland/administrative issues (coefficient -0.982, significant at 10% level). This suggests that candidates who previously relied on firm donations were more likely to discuss economic and administrative matters in their campaigns.
+
+Conversely, the ban led to increased emphasis on social policy (coefficient 1.324, significant at 5% level) and foreign policy (coefficient 0.274, significant at 5% level). 
+
+These effects are not only statistically significant but also economically meaningful. For instance, a one standard deviation decrease in firm donations reduces the probability of focusing on economic issues by about 5.2% relative to the pre-ban mean (23.507), while increasing the emphasis on social issues by approximately 3.7% relative to its pre-ban mean (36.203).
+
+The findings suggest that the loss of firm donations pushed candidates to shift their campaign rhetoric away from local economic issues that might have been of particular interest to their corporate donors, and toward broader social and foreign policy issues. This shift in policy emphasis aligns with the paper's broader finding that banning firm donations affected not just campaign financing but also the substance of political discourse.
+
+The analysis is implemented through several key steps:
+
+1. **Data Preparation and Control Variables**
+
+```stata
+* Define control variable sets
+global census90="pasdedip1990 sup1990 agri1990 ouvr1990 pop_65_plus1990 pop_15_241990"  // Census controls
+global urbancontrol="cheflieudep nb_villes"                                               // Urban characteristics
+global cc="CC_charges_fonctio CC_produits_fonctio"                                       // Financial controls
+global dads = "DADS_nbestab DADS_sumwage DADS_share_top1 DADS_nbworker"                 // Labor market controls
+global cand_cont = "female rerun Dincumbent mayor other_mandate"                         // Candidate characteristics
+```
+
+2. **Fixed Effects Generation**
+
+```stata
+* Create identifiers for different fixed effects levels
+egen id_circo=group(codegeo)                // District FE
+egen id_indiv=group(codegeo party id_cand)  // Individual candidate FE
+egen id_yearparty=group(party year)         // Party-year FE
+```
+
+3. **Predicted Firm Donations**
+
+```stata
+* Generate and clean temporary variables for prediction
+foreach x of varlist *_i_93 *_c_93 change_limit_cst elec_margin_c_88 secround_circo_c_88 {
+    gen temp_`x'=`x'
+    gen disp_`x'=`x'==.
+    replace temp_`x'=-1 if `x'==.
+}
+
+* Predict firm donations using 1993 data
+reghdfe dons_firms temp_* disp_* if year==1993, absorb(id_yearparty) cluster(id_circo)
+predict pred93 if year==1993
+
+* Generate candidate and party-district level predicted donations
+byso id_cand: egen pred_dons_firms=min(pred93)                           // Within candidate
+gen inter_pred_dons_firms=pred_dons_firms*id_year                        // Interaction with year
+```
+
+4. **Main Analysis of Policy Topics**
+
+```stata
+foreach out in economy2_prob1 social2_prob1 homeland2_prob1 foreign2_prob1 {
+    * Prepare sample
+    use "$temp/analysis", clear
+    keep if `out'!=. & sample_rest==1 & sample_did==1
+    
+    * Handle missing values in controls
+    foreach x in $cand_cont {
+        gen disp_`x'=`x'==.
+        replace `x'=-1 if `x'==.
+    }
+    
+    * Keep candidates running in both years
+    byso id_indiv: gen temp=_N
+    keep if temp>1
+    drop temp
+    
+    * Prepare party-year groups
+    byso id_yearparty: gen temp=_N
+    replace id_yearparty=10000+year if temp<2 
+    drop temp
+    
+    * Transform donations variable for interpretation
+    replace std_dons_firms=-std_dons_firms
+    label var std_dons_firms "Firm donations (loss)"
+    
+    * Main regression
+    reghdfe `out' disp_* $cand_cont inter_pred_dons_firms std_dons_firms, ///
+        absorb(id_indiv id_yearparty) cluster(id_circo)
+    
+    * Store summary statistics
+    sum `out' if year==1993
+    estadd scalar ymean=r(mean)
+}
+```
+
+The main regression for each policy topic:
+- Uses candidate and party-year fixed effects
+- Controls for candidate characteristics
+- Includes predicted donations interacted with year
+- Clusters standard errors at district level
+- Stores pre-ban means for interpretation
+
+The negative transformation of `std_dons_firms` allows interpreting coefficients as the effect of losing donations rather than receiving them.
+
+The coefficient $\beta$ is estimated through `reghdfe` which:
+
+1. Absorbs candidate fixed effects to control for time-invariant characteristics
+
+2. Absorbs party-year fixed effects to control for time-varying party patterns
+
+3. Controls for candidate characteristics and predicted donations
+
+4. Uses within-candidate variation in donations before vs after the ban
+
+5. Accounts for district-level correlation in standard errors
+
+This approach allows us to estimate how losing firm donations causally affects candidates' emphasis on different policy topics, controlling for both observable and unobservable confounding factors.
+
+
+# 5.Robustness Checks
+
+## 5.1.Sample Selection
+A key concern in difference-in-differences analysis presented in the paper is potential sample selection bias. The inclusion of candidate fixed effects in the main specification (equation 1) mechanically restricts our sample to candidates who ran in both 1993 and 1997 elections. While this helps control for the endogenous allocation of firm donations among candidates with different unobserved attributes, it creates potential selection issues.
+
+The subsample of rerunners differs significantly from the overall candidate pool:
+
+- More likely to be male
+- More likely to have previous electoral experience
+- More likely to have won previous elections
+- More likely to hold other electoral mandates
+- Tend to have higher campaign revenue, including firm donations
+
+More importantly, the authors find that receiving larger firm donations in 1993 is associated with a higher probability of running again in 1997 (significant at 5% level). These systematic differences may affect our estimates through two channels:
+
+1. If losing donations deters candidates with specific communication skills from running again
+2. If the ban pushes discourse away from local campaigning by discouraging entry of politicians who would emphasize local presence, not just by causing rerunners to adjust their rhetoric
+
+To address these concerns, the authors implement an alternative specification that:
+
+- Replaces candidate fixed effects with party × district fixed effects
+- Includes all candidates whose party appears in the same district in both years
+- Allows for different candidates from the same party to run in different years
+
+This less restrictive approach has two important caveats:
+
+1. Excludes candidates from short-lived parties and independents
+2. Cannot control for firms targeting specific types of candidates within parties who may not run in both elections
+
+Table 4 presents the results of our sample selection analysis, examining how firm donations affect different measures of selection into our sample.
+
+
+```{r table_robustness, echo=FALSE}
+library(kableExtra)
+
+robustness_data <- data.frame(
+ Variable = c(
+   "Firm donations", "", 
+   "Observations", 
+   "Mean outcome before ban",
+   "R2-Within"
+ ),
+ CandidateNext = c(
+   "0.026**", "(0.011)",
+   "5082",
+   "0.337",
+   "0.028"
+ ),
+ ManifestoAvail = c(
+   "-0.003", "(0.008)", 
+   "1713",
+   "0.256", 
+   "0.011"
+ ),
+ PartyNext = c(
+   "0.004", "(0.003)",
+   "2508",
+   "0.959",
+   "0.005"
+ )
+)
+
+kable(robustness_data,
+     caption = "Table 3 - Sample Selection Analysis",
+     col.names = c("", "Candidate in\nnext election", "Manifesto\navailable", "Party in\nnext election"),
+     align = c("l", rep("c", 3))) %>%
+ kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+               full_width = TRUE) %>%
+ add_header_above(c(" " = 1, 
+                   "(1)" = 1,
+                   "(2)" = 1,
+                   "(3)" = 1)) %>%
+ footnote(
+   general = "Standard errors clustered by district in parentheses.",
+   symbol = c("* p<0.10", "** p<0.05", "*** p<0.01")
+ )
+```
+
+
+Column 1 shows that receiving more firm donations in 1993 significantly increases a candidate's probability of running in 1997. However, columns 2 and 3 reveal that firm donations do not significantly affect the availability of manifestos or party presence in subsequent elections. 
+
+The main specification with candidate fixed effects addresses these selection concerns by holding candidate type constant. The robustness of the results across these specifications suggests that sample selection is not driving our findings about how firm donations affect policy topics.
+
+
+This robustness analysis can be implemented using:
+
+```stata
+* Step 1: Prepare the sample and generate selection indicators
+use "$temp/analysis", clear
+keep if sample_rest==1 & sample_did==1
+
+* Step 2: Generate manifesto availability indicator
+gen temp=text_size_sr1!=.
+byso id_indiv: egen temp2=total(temp)
+gen nomissing_manif=temp2==2
+drop temp*
+
+* Step 3: Generate donations data availability indicator
+gen temp=montant_total!=.
+byso id_indiv: egen temp2=total(temp)
+gen nomissing_dons=temp2==2
+drop temp*
+
+* Step 4: Handle missing values in controls
+foreach x in $cand_cont{
+    gen disp_`x'=`x'==.
+    replace `x'=-1 if `x'==.
+}
+
+* Step 5: Prepare party-year groups
+byso id_yearparty: gen temp=_N
+replace id_yearparty=10000+year if temp<2 
+drop temp
+
+byso id_yearparty: gen temp=_N
+keep if temp>=2 
+drop temp
+
+* Step 6: Estimate selection effects for 1993
+keep if year==1993
+
+* Test selection into running again
+reghdfe rerun_select disp_* $cand_cont pred_dons_firms std_dons_firms, ///
+    absorb(id_yearparty) cluster(id_circo)
+
+* Test selection into manifesto availability
+reghdfe nomissing_manif disp_* $cand_cont pred_dons_firms std_dons_firms ///
+    if rerun_select==1, absorb(id_yearparty) cluster(id_circo)
+
+* Step 7: Test party-level selection
+use "$temp/analysis", clear
+keep if sample_rest==1 & sample_did==1
+keep if bigparty!="other" & bigparty!=""
+
+* Generate party-level controls
+foreach x in $cand_cont{
+    byso id_partycirc year: egen p_`x'=mean(`x')
+    gen disp_`x'=p_`x'==.
+    replace p_`x'=-1 if p_`x'==.
+}
+
+* Test selection at party level
+reghdfe party_select disp_* $cand_cont pred_dons_firms std_dons_firms, ///
+    absorb(id_yearparty) cluster(id_circo)
+```
+
+This code performs three main robustness checks:
+
+1. **Selection into Running Again**:
+   - Tests if firm donations affect probability of running in 1997
+   - Uses candidate-level controls and party-year fixed effects
+   - Clusters standard errors at district level
+
+2. **Manifesto Availability**:
+   - Tests if firm donations affect availability of manifestos
+   - Considers only candidates who ran again
+   - Controls for same factors as main selection test
+
+3. **Party-Level Selection**:
+   - Tests if firm donations affect party presence in 1997
+   - Focuses on main parties (excludes "other" and independent candidates)
+   - Uses party-level averages of control variables
+
+Each regression includes controls for candidate characteristics and predicted firm donations, while absorbing party-year fixed effects to account for party-specific patterns.
+
+
+# 6.Extensions and Discussion
+## 6.1.Alternative Approach
+
+In this section, we explore alternative methodological approaches to estimate the effect of banning firm donations on how candidates focus on different policy topics in their campaigns.
+
+Note that the original paper employs the `reghdfe` command to make difference-in-differences analysis. This is the powerful Stata tool for handling high-dimensional fixed effects in panel data analysis. This command is particularly useful in difference-in-differences settings as it efficiently absorbs multiple levels of fixed effects while allowing for clustered standard errors. The `reghdfe` command has become a standard tool in applied econometrics due to its computational efficiency and ability to handle multiple fixed effects that would be computationally intensive or impossible with traditional regression commands.
+
+In this section, we attempted to replicate this analysis using `didregress`, a newer Stata command specifically designed for difference-in-differences estimation. The `didregress` command offers several advantages, including built-in handling of treatment effects in panel data and specialized tools for dealing with treatment intensity in difference-in-differences settings. However, our implementation faced several methodological challenges when analyzing the impact on policy topics.
+
+The main challenge arose from fundamental differences in how fixed effects are handled between the two commands. In the original paper, `reghdfe` allows for direct absorption of party-year fixed effects through the `absorb(id_yearparty)` option, which flexibly controls for any time-varying party-specific patterns in how parties emphasize different policy topics. 
+
+In contrast, `didregress` doesn't have a direct mechanism for absorbing such high-dimensional fixed effects. Instead, we had to approximate this structure by creating explicit party-year interactions:
+
+```stata
+* Original reghdfe approach
+reghdfe `out' ... , absorb(id_indiv id_yearparty) cluster(id_circo)
+
+* Our didregress adaptation
+levelsof party, local(parties)
+foreach p of local parties {
+    gen party_`p' = (party=="`p'")
+    gen party_`p'_post = party_`p' * (year==1997)
+}
+didregress (`out' ... party_*_post) (treat, continuous), time(year) group(id_indiv) vce(cluster id_circo)
+```
+
+This difference in fixed effects handling is substantively important for analyzing policy topics because party-year fixed effects in the original specification capture all unobserved, time-varying party characteristics that might affect how parties prioritize different policy areas in their campaigns. For example, a party might shift its emphasis between economic and social issues over time in response to changing political circumstances. The original `reghdfe` specification flexibly captures such patterns. However, our `didregress` approximation with party-post interactions is more restricted, only capturing party-specific changes between 1993 and 1997 in how parties emphasize different policy topics.
+
+The key changes in this adaptation:
+
+1. Specified that `out` refers to policy topic probabilities
+2. Added examples of how party-year effects might matter specifically for policy topic emphasis
+3. Clarified how the fixed effects limitations affect our ability to capture changes in parties' policy focus over time
+
+In order to make an attempt to use `didregress` our revised specification for analyzing policy topics took the form:
+
+$$Y_{it} = \alpha_i + \lambda_t + (W'_i \times \text{Post}_t)\delta + \beta\text{Treat}_i \times \text{Post}_t + \gamma \widehat{\text{FD}}_{i93} \times \text{Post}_t + \sum_p(\text{Party}_{pi} \times \text{Post}_t)\theta + \varepsilon_{it}$$
+
+
+Here we find several unique terms different from the original specification:
+
+1. $\lambda_t$ represents time fixed effects, which appear separately in our specification instead of being absorbed into the party-year fixed effects ($\eta_{pt}$). This means we can only capture general time trends in policy emphasis rather than party-specific evolution of policy priorities.
+
+2. $(W'_i \times \text{Post}_t)\delta$ shows that our control variables are interacted with the post-treatment indicator, whereas the original specification uses direct control effects ($W'_{it}\lambda$). This changes how candidate characteristics like incumbency or mayoral status affect policy emphasis.
+
+3. $\sum_p(\text{Party}_{pi} \times \text{Post}_t)\theta$ represents our treatment of party effects, where we interact party indicators with the post-treatment period. This is more restrictive than the original specification's party-year fixed effects ($\eta_{pt}$), as it only captures one-time shifts in how parties emphasize different policies after the ban.
+
+4. $\text{Treat}_i \times \text{Post}_t$ is our treatment specification, which explicitly shows the interaction between treatment intensity and the post period, while the original paper uses $\text{Firm_Donations}_{it}$ directly to measure how losing donations affects policy focus.
+
+We implement this analysis using the following Stata code:
+
+```stata
+didregress (`out' v1_female_post v1_rerun_post v1_incumb_post v1_mayor_post v1_other_post party_*_post inter_pred_dons_firms) (treat, continuous), time(year) group(id_indiv) vce(cluster id_circo)
+```
+
+The key differences between the approaches (`reghdfe` and `didregress`) in analyzing policy topics lie in their treatment of fixed effects and control variables. 
+
+While `reghdfe` allows for more flexible party-year fixed effects ($η_{pt}$) that can capture complex evolution in parties' policy priorities, our `didregress` specification uses separate time effects ($λ_t$) combined with party-post interactions that only capture discrete shifts in policy emphasis.
+
+Furthermore, the treatment effect structure differs: `reghdfe` estimates a direct effect of firm donations on policy topic probabilities, while `didregress` implements this through a treatment-time interaction. This changes how we interpret the impact of losing donations on candidates' policy focus. The final results of `didregress` analysis are presented below:
+
+
+```{r table_did, echo=FALSE}
+
+library(kableExtra)
+table_data <- data.frame(
+ Variable = c(
+   "Firm donations (loss)", "", 
+   "Observations", 
+   "Mean outcome before ban",
+   "R2-Within"
+ ),
+ Economic = c(
+   "-1.121", "(0.783)",
+   "2602",
+   "23.507",
+   "0.076"
+ ),
+ Social = c(
+   "1.279", "(0.826)",
+   "2602", 
+   "36.203",
+   "0.041"
+ ),
+ Homeland = c(
+   "-0.928", "(0.788)",
+   "2602",
+   "19.243",
+   "0.013"
+ ),
+ Foreign = c(
+   "0.252", "(0.195)",
+   "2602",
+   "4.244",
+   "0.006"
+ )
+)
+
+kable(table_data, 
+     caption = "Table 4 - Results using didregress approach - Impact of Ban on Policy Topics",
+     col.names = c("", "Economic\npolicy", "Social\npolicy", "Homeland and\nadministration", "Foreign\npolicy"),
+     align = c("l", rep("c", 4))) %>%
+ kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+               full_width = TRUE) %>%
+ footnote(
+   general = "Standard errors clustered by district in parentheses.",
+   symbol = c("* p<0.10", "** p<0.05", "*** p<0.01")
+ ) %>%
+ add_header_above(c(" " = 1, "Policy Topics" = 4))
+
+```
+
+
+These methodological differences resulted in slightly different estimates. For instance, for the economic policy outcome, the original paper found a coefficient of -1.213 (SE: 0.563), while our `didregress` approach yielded -1.121 (SE: 0.783). Similar patterns emerged for other outcomes, with our estimates showing comparable magnitudes but losing statistical significance due to larger standard errors. The effect on social policy (1.279 vs 1.324) and homeland administration (-0.928 vs -0.982) maintained similar magnitudes and directions, though with reduced precision in our estimates.
+
+Despite these differences, the original `reghdfe` approach appears more suitable for analyzing policy topics. Its ability to handle high-dimensional fixed effects more flexibly, particularly the party-year interactions, better captures how different parties might evolve their policy emphasis over time. While `didregress` offers a more modern approach to difference-in-differences estimation, the specific requirements of this study - particularly the need to control for time-varying party characteristics in policy priorities and the treatment of control variables - are better served by the original specification. The loss of statistical significance in our estimates, despite similar point estimates, suggests that the more restricted fixed effects structure of `didregress` may be less effective at isolating the ban's impact on policy topics from other time-varying factors.
+
+## 6.2. Testing Parallel Trends Assumption
+
+A key challenge in implementing our alternative `didregress` approach is properly testing the parallel trends assumption. While `didregress` offers built-in functionality for testing pre-treatment parallel trends, applying these tests in our context faces several important limitations that the original paper carefully addresses.
+
+First, as noted in the paper, testing for parallel trends is particularly challenging due to the series of campaign finance reforms that preceded the 1993 election. The institutional context creates complications:
+
+- Firm donations were first legalized immediately before the 1988 election
+
+- The campaign finance oversight body (Commission nationale des comptes de campagne et des financements politiques or CNCCFP) was only created in 1990
+
+- There is no systematic data on which candidates received donations before 1993
+
+Second, extending the analysis further back in time is complicated by significant changes in the French electoral system:
+
+- The 1986 election used a different electoral rule with a list system at the departmental level
+
+- No candidate-level manifestos were issued in that electoral year
+
+- The 1981 election was followed by a nationwide redistricting
+
+- This redistricting prevents linking candidates in 1988 to past district-level outcomes
+
+The paper addresses these challenges by providing suggestive evidence for the identification assumption through an alternative approach:
+
+1. Constructing mean trends in manifestos at the party × department level over elections held since 1967
+
+2. Restricting analysis to Communist, Socialist, and right-wing parties that span the whole period
+
+3. Testing whether these pre-trends in local prevalence correlate with firm donations received in 1993
+
+Our `didregress` implementation, while offering a more modern approach to difference-in-differences estimation, cannot readily incorporate these historical complexities. The command's built-in parallel trends testing assumes the availability of clean pre-treatment periods, which our institutional context does not provide. This limitation, combined with the more restricted treatment of fixed effects discussed earlier, further supports the paper's choice of the `reghdfe` approach for this specific analysis.
+
+The comparison between approaches highlights an important **methodological lesson**: while newer econometric tools often offer valuable features, their effectiveness depends crucially on the institutional context and data structure of the specific application. In this case, the flexibility of `reghdfe` in handling high-dimensional fixed effects and the paper's careful construction of alternative tests for the identification assumption appear more suitable than a standard parallel trends test through `didregress`.
+
+## 6.2.Heterogeneity Analysis
+
+While the original paper focuses on heterogeneity across party types and donor characteristics, we extend the analysis to explore additional dimensions of heterogeneous effects. Specifically, we conduct subgroup analysis focusing on key candidate characteristics: gender and incumbent status. This extension allows us to investigate whether individual-level characteristics influenced how candidates responded to the loss of firm donations, though these patterns were not examined in the original study. Table 5 presents the results of this supplementary analysis:
+
+```{r table_heterogeneity, echo=FALSE}
+library(kableExtra)
+
+hetero_data <- data.frame(
+  Variable = c(
+    "Firm donations (loss)", "", 
+    "Observations", 
+    "Mean outcome before ban"
+  ),
+  Male = c(
+    "-1.324**", "(0.579)",
+    "2270",
+    "23.441"
+  ),
+  Female = c(
+    "1.207", "(1.963)",
+    "330",
+    "24.039"
+  ),
+  Non_Incumbent = c(
+    "-3.538**", "(1.445)",
+    "1722",
+    "22.068"
+  ),
+  Incumbent = c(
+    "0.489", "(0.848)",
+    "348",
+    "27.243"
+  ),
+  Non_Mayor = c(
+    "-1.155*", "(0.641)",
+    "2236",
+    "22.987"
+  ),
+  Mayor = c(
+    "-3.128**", "(1.514)",
+    "184",
+    "27.206"
+  )
+)
+
+kable(hetero_data, 
+      caption = "Table 5 - Heterogeneous Effects of the Ban on Economic Policy Focus",
+      col.names = c("", "Male", "Female", "Non-Incumbent", "Incumbent", "Non-Mayor", "Mayor"),
+      align = c("l", rep("c", 6))) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = TRUE) %>%
+  add_header_above(c(" " = 1, 
+                     "Gender" = 2,
+                     "Incumbent Status" = 2,
+                     "Mayor Status" = 2)) %>%
+  footnote(
+    general = "Standard errors clustered by district in parentheses.",
+    symbol = c("* p<0.10", "** p<0.05", "*** p<0.01")
+  )
+```
+
+
+To implement our extension of heterogeneity analysis we analyze each subgroup separately through the following steps:
+
+1. **Initialize Loop Structure**
+```stata
+estimates clear
+local j = 0
+foreach het in female Dincumbent mayor {
+    forvalues val = 0/1 {
+```
+This creates nested loops to analyze each subgroup (female/male, incumbent/non-incumbent, mayor/non-mayor).
+
+2. **Sample Selection and Subgroup Definition**
+
+```stata
+use "$temp/analysis", clear
+keep if economy2_prob1!=. & sample_rest==1 & sample_did==1
+keep if `het' == `val'
+```
+
+For each iteration, loads the full dataset and restricts to the relevant subgroup (e.g., only female candidates when `female == 1`).
+
+3. **Panel Structure**
+
+```stata
+byso id_indiv: gen temp=_N
+keep if temp>1
+drop temp
+```
+
+Ensures panel structure by keeping only candidates appearing in both years.
+
+4. **Control Variable Preparation**
+
+```stata
+foreach x in $cand_cont {
+    gen disp_`x'=`x'==.
+    replace `x'=-1 if `x'==.
+}
+```
+
+Handles missing values in control variables following the original paper's approach.
+
+5. **Party-Year Group Preparation**
+
+```stata
+byso id_yearparty: gen temp=_N
+replace id_yearparty=10000+year if temp<2 
+drop temp
+byso id_yearparty: gen temp=_N
+keep if temp>=2 
+drop temp
+```
+
+Prepares party-year groups, handling small parties consistently with the main analysis.
+
+6. **Treatment Variable**
+
+```stata
+replace std_dons_firms=-std_dons_firms
+label var std_dons_firms "Firm donations (loss)"
+```
+Flips the sign of firm donations to interpret effects as losses.
+
+7. **Main Estimation**
+
+```stata
+reghdfe economy2_prob1 disp_* $cand_cont inter_pred_dons_firms std_dons_firms, ///
+    absorb(id_indiv id_yearparty) cluster(id_circo)
+```
+
+Estimates the effect for each subgroup using the original reghdfe specification with appropriate fixed effects and clustering.
+
+8. **Store Results**
+
+```stata
+sum economy2_prob1 if year==1993
+estadd scalar ymean=r(mean)
+estimate store hetero_`het'_`val'
+```
+
+Stores results and pre-ban means for each subgroup.
+
+This implementation maintains consistency with the original paper's methodology while allowing us to examine heterogeneous effects across different candidate types.
+
+The results of our treatment heterogeneity analysis reveal several interesting and statistically significant patterns in how different groups responded to the ban on firm donations. Looking at gender differences, male candidates show a significant negative response (-1.324, significant at 5% level) to losing firm donations, while female candidates show a positive but highly imprecise effect (1.207). However, the much smaller sample size for female candidates (330 vs 2,270 for males) makes this comparison less reliable and difficult to draw strong conclusions from.
+
+When examining incumbent status, we find that non-incumbents show a substantially larger and statistically significant negative response (-3.538, significant at 5% level) compared to incumbents (0.489, not significant). This pattern suggests that challengers were more affected by the loss of firm donations in terms of their economic policy focus. The higher pre-ban mean for incumbents (27.243 vs 22.068) also indicates that they generally emphasized economic policy more in their campaign manifestos.
+
+The analysis of mayor status reveals that both groups show negative responses, but with different magnitudes and precision. Non-mayors show a marginally significant negative response (-1.155, significant at 10% level), while mayors exhibit a stronger and more significant negative response (-3.128, significant at 5% level). This suggests that local office holders might have been particularly affected by the loss of firm donations in their economic policy emphasis, possibly due to their stronger connections with firms in their municipalities.
+
+
+# Conclusion
+
+This replication study examines the causal impact of banning corporate donations on political discourse in France, following the 1995 campaign finance reform. Through our replication efforts, we have successfully validated the main findings of Cagé et al. (2024) while also extending their analysis in several important ways.
+
+The core findings of our replication confirm that the ban on corporate donations significantly altered candidates' policy focus. Specifically, we found that losing firm donations led to a significant decrease in emphasis on economic policy (-1.213 standard deviations) and homeland/administrative issues (-0.982), along with an increase in focus on social policy (1.324) and foreign policy (0.274). These effects are both statistically significant and economically meaningful, representing changes of 3-5% relative to pre-ban means.
+
+Our methodological contribution comes through the comparison of different estimation approaches. While we successfully replicated the original results using `reghdfe`, our attempt to implement the analysis using the newer `didregress` command revealed important insights about the strengths and limitations of different econometric tools. The `reghdfe` approach better handles the complex fixed effects structure needed to control for time-varying party characteristics. While the `didregress` implementation offered a more modern approach to difference-in-differences estimation, it produced similar point estimates but with reduced precision. This comparison highlights the importance of choosing estimation methods that align with the institutional context and data structure of the specific application.
+
+Our extension to heterogeneity analysis revealed new insights not explored in the original paper. Non-incumbent candidates showed stronger responses to losing firm donations compared to incumbents, while mayors exhibited particularly strong negative responses in their economic policy emphasis. We also found gender differences, though the small sample of female candidates limits the reliability of these comparisons.
+
+These findings contribute to our understanding of how campaign finance reforms can reshape political discourse, suggesting that funding sources may influence not just campaign resources but also the substance of political debate. The results have important implications for policy makers considering campaign finance reforms, highlighting how such reforms might affect political communication and representation.
+
+This replication exercise not only validates the robustness of the original findings but also demonstrates the value of exploring alternative methodological approaches and extending the analysis to uncover new patterns in political behavior. We hope that this replication exercise contributes to the broader understanding of different econometric methods and tools available for causal inference in political economy research, particularly in the context of difference-in-differences estimation with complex fixed effects structures. The comparison between traditional and modern estimation approaches provides valuable insights for researchers choosing between different econometric tools based on their specific research context and data requirements.
+
+# Acknowledgements
+
+We would like to express our sincere gratitude to our Professors, Laurine Martinoty and Morgane Laouenan, for their invaluable help and support throughout the semester. Their guidance and advice were instrumental in the completion of this project.  
+
+We also extend our heartfelt thanks to Professor Julia Cagé and her colleagues, whose paper we sought to replicate in this project. Her seminar presentation inspired us to select this paper, and her assistance in granting us access to her work was a tremendous contribution. It reinforced our confidence that we are on the right track.  
+
+
+---
+Authors: Constanza CONRRADO ALMEIDA and Serik ISKAKOV, students in the **Masters 2 programme in Development Economics and Sustainable Development (2024-2025)**, Sorbonne School of Economics, Université Paris 1 Panthéon Sorbonne.
+
+Date: December 2024.
